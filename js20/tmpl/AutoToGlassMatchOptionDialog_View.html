@@ -1,0 +1,122 @@
+<div id="{{id}}">	
+	<fieldset>
+		<legend>Автомобили
+		</legend>
+		<!-- ID list -->
+		<div class="{{bsCol}}3">
+			<h6>ID
+			</h6>
+			<input id="{{id}}:edit_id:all" type="checkbox" title="Установить/снять отметку для всех ID">
+			</input>
+			
+			<table id="{{id}}:edit_id" class="table table-bordered table-responsive table-striped">
+				<tbody>
+					{{#ID_LIST}}
+					<tr>
+						<td>
+							<input class="edit_id_val" id="{{id}}:edit_id:{{ID}}" edit_id="{{ID}}" type="checkbox" {{#CHECKED}}checked="checked"{{/CHECKED}}>
+							</input>
+						</td>
+						<td class="edit_id_descr">{{ID}}
+						</td>
+					</tr>
+					{{/ID_LIST}}
+				</tbody>
+			</table>
+		</div>
+		
+		<!-- body door list -->
+		<div class="{{bsCol}}3">
+			<h6>Двери
+			</h6>
+			<input id="{{id}}:edit_body_door:all" type="checkbox" title="Установить/снять отметку для всех типов дверей">
+			</input>
+			<table id="{{id}}:edit_body_door" class="table table-bordered table-responsive table-striped">
+				<tbody>
+					{{#BODY_DOOR_LIST}}
+					<tr>
+						<td>
+							<input class="edit_body_door_val" id="{{id}}:edit_body_door:{{ID}}" edit_body_door_descr="{{DESCR}}" edit_body_door="{{ID}}" type="checkbox" {{#CHECKED}}checked="checked"{{/CHECKED}}>
+							</input>
+						</td>
+						<td class="edit_body_door_descr">{{DESCR}}
+						</td>
+					</tr>
+					{{/BODY_DOOR_LIST}}
+				</tbody>
+			</table>
+		</div>
+
+		<!-- body type list -->
+		<div class="{{bsCol}}3">
+			<h6>Типы кузовов
+			</h6>
+			<input id="{{id}}:edit_body_type:all" type="checkbox" title="Установить/снять отметку для всех типов кузовов">
+			</input>
+			<table id="{{id}}:edit_body_type" class="table table-bordered table-responsive table-striped">
+				<tbody>
+					{{#BODY_TYPE_LIST}}
+					<tr>
+						<td>
+							<input class="edit_body_type_val" id="{{id}}:edit_body_type:{{ID}}" edit_body_type_descr="{{DESCR}}" edit_body_type="{{ID}}" type="checkbox" {{#CHECKED}}checked="checked"{{/CHECKED}}>
+							</input>
+						</td>
+						<td class="edit_body_type_descr">{{DESCR}}
+						</td>
+					</tr>
+					{{/BODY_TYPE_LIST}}
+				</tbody>
+			</table>
+		</div>
+
+		<!-- body model list -->
+		<div class="{{bsCol}}3">
+			<h6>Модели кузовов
+			</h6>
+			<input id="{{id}}:edit_body_model:all" type="checkbox" title="Установить/снять отметку для всех моделей">
+			</input>
+			<table id="{{id}}:edit_body_model" class="table table-bordered table-responsive table-striped">
+				<tbody>
+					{{#BODY_MODEL_LIST}}
+					<tr>
+						<td>
+							<input class="edit_body_model_val" id="{{id}}:edit_body_model:{{HASH}}" type="checkbox" edit_body_model="{{DESCR}}"{{#CHECKED}} checked="checked"{{/CHECKED}}>
+							</input>
+						</td>
+						<td class="edit_body_model_descr">{{DESCR}}
+						</td>
+					</tr>
+					{{/BODY_MODEL_LIST}}
+				</tbody>
+			</table>
+		</div>
+		
+	</fieldset>
+	
+	<!-- option list-->
+	<fieldset>
+		<legend>Список опций
+		</legend>
+		<div>
+			{{#OPTION_LIST}}
+			<div id="{{id}}:opt:{{ID}}">
+			</div>
+			{{/OPTION_LIST}}
+		</div>
+	</fieldset>
+	
+	<!-- minimal quant-->
+	<fieldset>
+		<legend>Минимальные остатки
+		</legend>
+		<div>
+			<div id="{{id}}:quant_econom">
+			</div>
+			<div id="{{id}}:quant_standart">
+			</div>			
+			<div id="{{id}}:quant_premium">
+			</div>						
+		</div>
+	</fieldset>
+	
+</div>

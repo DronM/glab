@@ -1,0 +1,30 @@
+CREATE OR REPLACE FUNCTION public.cash_flow_in_out_list(
+	in_date_time_from timestamp,
+	in_date_time_to timestamp,
+	in_cash_location_id int
+	)
+    RETURNS TABLE(
+    	date_time timestamp,
+    	cash_location_id int,
+    	cash_location_descr text,
+    	total_balance_start numeric(15,2),    	
+    	total_in numeric(15,2),
+    	total_out numeric(15,2),
+    	fin_expense_type1_id int,
+    	fin_expense_type1_descr text,
+    	fin_expense_type2_id int,
+    	fin_expense_type2_descr text,
+    	total_balance_end numeric(15,2)
+    ) 
+    LANGUAGE 'sql'
+    COST 100
+    VOLATILE
+    ROWS 1000
+
+AS $BODY$
+
+$BODY$;
+
+ALTER FUNCTION public.material_actions_prod_base1(timestamp without time zone, timestamp without time zone)
+    OWNER TO ;
+

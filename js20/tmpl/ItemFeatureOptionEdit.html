@@ -1,0 +1,48 @@
+<div id="{{id}}">	
+	<div id="{{id}}:mainOptionSwitch" class="panel">
+		<h6 class="panel-header optionTitle" title="Показать/скрыть основные опции">Основные фильтруемые опции
+		</h6>		
+		<!-- main options-->	
+		<div id="{{id}}:mainOptions">
+			{{#FEATURE_OPTIONS_MAIN}}
+			<div>
+			{{FEATURE_OPT_DESCR}}					
+			
+				<div class="itemFeatureOptionCont" feature_opt_id="{{FEATURE_OPT_ID}}" title="{{FEATURE_OPT_COMMENT}}" prior_list="{{PRIOR_LIST}}">
+					<input type="radio" id="{{id}}:{{FEATURE_OPT_ID}}:true" opt_id="{{FEATURE_OPT_ID}}" name="featureOpt_{{FEATURE_OPT_ID}}" value="true" class="itemFeatureOption"/>
+					<label for="{{id}}:{{FEATURE_OPT_ID}}:true">Да</label>	
+					
+					<input type="radio" id="{{id}}:{{FEATURE_OPT_ID}}:null" opt_id="{{FEATURE_OPT_ID}}" name="featureOpt_{{FEATURE_OPT_ID}}" value="null" class="itemFeatureOption" checked="checked"/>
+					<label for="{{id}}:{{FEATURE_OPT_ID}}:null">?</label>	
+
+					<input type="radio" id="{{id}}:{{FEATURE_OPT_ID}}:false" opt_id="{{FEATURE_OPT_ID}}" name="featureOpt_{{FEATURE_OPT_ID}}" value="false" class="itemFeatureOption"/>
+					<label for="{{id}}:{{FEATURE_OPT_ID}}:false">Нет</label>				
+				</div>
+			</div>			
+			{{/FEATURE_OPTIONS_MAIN}}
+		</div>		
+	</div>
+	
+	<div id="{{id}}:addOptionSwitch" class="panel">
+		<h6 class="panel-header optionTitle" title="Показать/скрыть дополнительные опции">Дополнительные фильтруемые опции
+		</h6>
+		<!-- additional options-->
+		<div id="{{id}}:additionlOptions" class="hidden">
+			{{#FEATURE_OPTIONS_ADD}}
+			<div>
+				{{FEATURE_OPT_DESCR}}		
+				<div class="itemFeatureOptionCont" feature_opt_id="{{FEATURE_OPT_ID}}" title="{{FEATURE_OPT_COMMENT}}" prior_list="{{PRIOR_LIST}}">
+					<input type="radio" id="{{id}}:add_{{FEATURE_OPT_ID}}:true" opt_id="{{FEATURE_OPT_ID}}" name="addFeatureOpt_{{FEATURE_OPT_ID}}" value="true" class="itemFeatureOption"/>
+					<label for="{{id}}:add_{{FEATURE_OPT_ID}}:true">Да</label>	
+					
+					<input type="radio" id="{{id}}:add_{{FEATURE_OPT_ID}}:null" opt_id="{{FEATURE_OPT_ID}}" name="addFeatureOpt_{{FEATURE_OPT_ID}}" value="null" class="itemFeatureOption" checked="checked"/>
+					<label for="{{id}}:add_{{FEATURE_OPT_ID}}:null">?</label>	
+
+					<input type="radio" id="{{id}}:add_{{FEATURE_OPT_ID}}:false" opt_id="{{FEATURE_OPT_ID}}" name="addFeatureOpt_{{FEATURE_OPT_ID}}" value="false" class="itemFeatureOption"/>
+					<label for="{{id}}:add_{{FEATURE_OPT_ID}}:false">Нет</label>				
+				</div>
+			</div>	
+			{{/FEATURE_OPTIONS_ADD}}
+		</div>
+	</div>	
+</div>

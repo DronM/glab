@@ -1,0 +1,59 @@
+<div id="{{id}}">
+	<div id="{{id}}:cmd-cont">
+		<div id="{{id}}:cmdOk"/>
+		<div id="{{id}}:cmdSave"/>
+		<div id="{{id}}:cmdCancel"/>
+	</div>
+
+	<div class="row">
+		<h1 class="page-header">Карточка номенклатуры</h1>
+	</div>
+	
+	<div class="tabbable">
+		<ul class="nav nav-tabs nav-tabs-highlight">
+			<li class="active">
+				<a href="#attrs" data-toggle="tab" aria-expanded="true">Реквизиты</a>
+			</li>
+			<li>
+				<a href="#features" data-toggle="tab" aria-expanded="false">Характеристики</a>
+			</li>
+		</ul>
+	</div>
+		
+	<!-- Tab panes -->
+	<div class="tab-content dialogForm">	
+		<div class="tab-pane fade in active" id="attrs">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">Реквизиты номенклатуры</h4>
+				</div>
+				
+				<div id="{{id}}:item_folders_ref"/>
+				<div id="{{id}}:auto_makes_ref"/>
+				<div id="{{id}}:auto_models_ref"/>
+				<div id="{{id}}:auto_model_generations_ref"/>
+				<div id="{{id}}:auto_bodies_ref"/>
+				<div id="{{id}}:manufacturers_ref"/>
+				<div id="{{id}}:manufacturer_brands_ref"/>
+				<div id="{{id}}:pictures"/>
+			</div>
+		</div>		
+		<div class="tab-pane fade" id="features">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">Характеристики</h4>
+				</div>
+				{{#FEATURE_GROUPS}}
+				<div class="panel panel-body">
+					<div class="panel-heading">
+						<h6 class="panel-title">{{DESCR}}</h6>
+					</div>
+					{{#FEATURES}}
+					<div id="{{id}}:ctrl_{{ID}}"/>
+					{{/FEATURES}}
+				</div>
+				{{/FEATURE_GROUPS}}
+			</div>
+		</div>
+	</div>		
+</div>	

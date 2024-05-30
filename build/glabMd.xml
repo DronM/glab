@@ -1,0 +1,252 @@
+		<model id="AutoFrameType" parent="ModelSQL" dataTable="auto_frame_types" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="TRUE"/>
+			<field id="auto_make_id" dataType="Int" refTable="auto_makes" refField="id" alias="Марка"/>
+			<field id="name" dataType="Text" required="TRUE"/>
+			<field id="name_variants" dataType="Text" alias="Варианты наименования"/>
+			<index id="auto_models_name_idx" unique="TRUE">
+				<expression>auto_make_id, lower(name)</expression>
+			</index>
+		</model>
+
+		<model id="AutoModel" parent="ModelSQL" dataTable="auto_models" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="TRUE"/>
+			<field id="auto_make_id" dataType="Int" refTable="auto_makes" refField="id" alias="Марка"/>
+			<field id="name" dataType="Text" required="TRUE"/>
+			<field id="name_variants" dataType="Text" alias="Варианты наименования"/>
+			<index id="auto_models_name_idx" unique="TRUE">
+				<expression>auto_make_id, lower(name)</expression>
+			</index>
+		</model>
+		<model id="AutoModelList" parent="ModelSQL" dataTable="auto_models_list" virtual="TRUE">
+			<defaultOrder>
+				<field id="name"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="auto_make_id" dataType="Int" refTable="auto_makes" refField="id"/>
+			<field id="auto_makes_ref" dataType="JSON"/>
+			<field id="name" dataType="Text"/>
+			<field id="name_variants" dataType="Text"/>
+			<field id="auto_make_name_variants" dataType="Text"/>
+		</model>
+		<model id="AutoGeneration" parent="ModelSQL" dataTable="auto_generations" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="TRUE"/>
+			<field id="auto_model_id" dataType="Int" refTable="auto_models" refField="id" alias="Модель"/>
+			<field id="generation_id" dataType="Int" alias="Поколения модели"/>
+			<field id="prod_index" dataType="Text" alias="Заводской индекс модели"/>
+			<field id="prod_from" dataType="Int" alias="Начало производства поколения модели"/>
+			<field id="prod_to" dataType="Int" alias="Окончание производства поколения модели"/>
+			<field id="prod_restyle" dataType="Array" arrayType="Int" alias="год(-ы) рестайлинга"/>
+			<index id="auto_generations_name_idx" unique="TRUE">
+				<expression>auto_model_id, lower(name)</expression>
+			</index>
+		</model>
+		<model id="AutoGenerationList" parent="ModelSQL" dataTable="auto_generations_list" virtual="FALSE">
+			<defaultOrder>
+				<field id="name"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="TRUE"/>
+			<field id="auto_make_id" dataType="Int" alias="Марка"/>
+			<field id="auto_model_id" dataType="Int" alias="Модель"/>
+			<field id="auto_makes_ref" dataType="JSON"/>
+			<field id="auto_models_ref" dataType="JSON"/>
+			<field id="name" dataType="Text" alias="Наименование"/>
+		</model>
+
+		<model id="Auto" parent="ModelSQL" dataTable="autos" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="TRUE"/>
+			<field id="auto_model_id" dataType="Int" refTable="auto_models" refField="id" alias="Модель"/>
+			<field id="auto_generation_id" dataType="Int" refTable="auto_generations" refField="id" alias="Поколение"/>
+			<field id="name" dataType="Text" alias="Кузов"/>
+			<index id="autos_name_idx" unique="TRUE">
+				<field id="auto_model_id"/>
+				<field id="auto_generation_id"/>
+				<field id="name"/>
+			</index>
+		</model>
+		<model id="AutoList" parent="ModelSQL" dataTable="autos_list" virtual="TRUE">
+			<defaultOrder>
+				<field id="name"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="auto_make_id" dataType="Int"/>
+			<field id="auto_model_id" dataType="Int"/>
+			<field id="auto_generation_id" dataType="Int"/>
+			<field id="auto_makes_ref" dataType="JSON"/>
+			<field id="auto_models_ref" dataType="JSON"/>
+			<field id="auto_generations_ref" dataType="JSON"/>
+			<field id="name" dataType="Text"/>
+			<field id="ref" dataType="JSON"/>
+		</model>
+		<model id="Warehouse" parent="ModelSQL" dataTable="warehouses" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="TRUE"/>
+			<field id="name" dataType="Text" alias="Наименование"/>
+			<index id="warehouses_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>
+		</model>
+		<model id="Producer" parent="ModelSQL" dataTable="producers" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="TRUE"/>
+			<field id="name" dataType="Text" alias="Наименование"/>
+			<field id="original" dataType="Bool" alias="Оригинал"/>
+			<index id="producers_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>
+		</model>
+		<model id="Supplier" parent="ModelSQL" dataTable="suppliers" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="TRUE"/>
+			<field id="name" dataType="Text" alias="Наименование"/>
+			<index id="suppliers_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>
+		</model>
+		<model id="GlassKind" parent="ModelSQL" dataTable="glass_kinds" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="TRUE"/>
+			<field id="name" dataType="Text" alias="Наименование"/>
+			<field id="options" dataType="JSONB" alias="Возможные опции"/>
+			<index id="glass_types_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>
+		</model>
+		<model id="GlassType" parent="ModelSQL" dataTable="glass_types" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="TRUE"/>
+			<field id="auto_id" dataType="Int" refTable="autos" refField="id" alias="Автомобиль"/>
+			<field id="glass_kind_id" dataType="Int" refTable="glass_kinds" refField="id" alias="Тип стекла"/>
+			<field id="min_stock" dataType="Float" length="19" precision="4" alias="Минимальный остаток"/>
+			<field id="option_values" dataType="JSONB" alias="Значения опций"/>
+			<index id="glass_types_auto_idx">
+				<field id="auto_id"/>
+			</index>
+			<index id="glass_types_kind_idx">
+				<field id="glass_kind_id"/>
+			</index>
+		</model>
+		
+
+
+		<controller id="AutoGeneration" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="AutoGeneration"/>
+			<publicMethod id="update" modelId="AutoGeneration"/>
+			<publicMethod id="delete" modelId="AutoGeneration"/>
+			<publicMethod id="get_list" modelId="AutoGenerationList"/>
+			<publicMethod id="get_object" modelId="AutoGenerationList"/>
+			<publicMethod id="complete_for_model" modelId="AutoGenerationList">
+				<field id="make_id" dataType="Int" required="TRUE"/>
+				<field id="model_id" dataType="Int"/>
+				<field id="name" dataType="Int" length="500"/>
+			</publicMethod>
+		</controller>
+		<controller id="Auto" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="Auto"/>
+			<publicMethod id="update" modelId="Auto"/>
+			<publicMethod id="delete" modelId="Auto"/>
+			<publicMethod id="get_list" modelId="AutoList"/>
+			<publicMethod id="get_object" modelId="AutoList"/>
+			<publicMethod id="complete_for_generation" modelId="AutoGeneration">
+				<field id="make_id" dataType="Int"/>
+				<field id="model_id" dataType="Int"/>
+				<field id="name" dataType="Int" length="500"/>
+			</publicMethod>
+
+		</controller>
+		<controller id="Warehouse" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="Warehouse"/>
+			<publicMethod id="update" modelId="Warehouse"/>
+			<publicMethod id="delete" modelId="Warehouse"/>
+			<publicMethod id="get_list" modelId="Warehouse"/>
+			<publicMethod id="get_object" modelId="Warehouse"/>
+			<publicMethod id="complete" modelId="Warehouse" patternFieldId="name"/>
+		</controller>
+		<controller id="Producer" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="Producer"/>
+			<publicMethod id="update" modelId="Producer"/>
+			<publicMethod id="delete" modelId="Producer"/>
+			<publicMethod id="get_list" modelId="Producer"/>
+			<publicMethod id="get_object" modelId="Producer"/>
+			<publicMethod id="complete" modelId="Producer" patternFieldId="name"/>
+		</controller>
+		<controller id="Supplier" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="Supplier"/>
+			<publicMethod id="update" modelId="Supplier"/>
+			<publicMethod id="delete" modelId="Supplier"/>
+			<publicMethod id="get_list" modelId="Supplier"/>
+			<publicMethod id="get_object" modelId="Supplier"/>
+			<publicMethod id="complete" modelId="Supplier" patternFieldId="name"/>
+		</controller>
+		<controller id="GlassType" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="GlassType"/>
+			<publicMethod id="update" modelId="GlassType"/>
+			<publicMethod id="delete" modelId="GlassType"/>
+			<publicMethod id="get_list" modelId="GlassType"/>
+			<publicMethod id="get_object" modelId="GlassType"/>
+			<publicMethod id="complete" modelId="GlassType" patternFieldId="name"/>
+		</controller>
+		<controller id="GlassKind" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="GlassKind"/>
+			<publicMethod id="update" modelId="GlassKind"/>
+			<publicMethod id="delete" modelId="GlassKind"/>
+			<publicMethod id="get_list" modelId="GlassKind"/>
+			<publicMethod id="get_object" modelId="GlassKind"/>
+		</controller>
+		
+
+
+		
+		<view id="10004" c="AutoModel_Controller" t="AutoModelList" f="get_list" section="Справочники" descr="Модели автомобилей"/>
+		<view id="10005" c="AutoGeneration_Controller" t="AutoGenerationList" f="get_list" section="Справочники" descr="Поколения автомобилей"/>
+		<view id="10006" c="Auto_Controller" t="AutoList" f="get_list" section="Справочники" descr="Автомобили"/>
+		<view id="10007" c="Warehouse_Controller" t="WarehouseList" f="get_list" section="Справочники" descr="Склады"/>
+		<view id="10008" c="Producer_Controller" t="ProducerList" f="get_list" section="Справочники" descr="Производители"/>
+		<view id="10009" c="Supplier_Controller" t="SupplierList" f="get_list" section="Справочники" descr="Поставщики"/>
+		<view id="10010" c="Department_Controller" t="DepartmentList" f="get_list" section="Справочники" descr="Отделы"/>
+
+		<view id="10011" c="GlassKind_Controller" t="GlassKindList" f="get_list" section="Справочники" descr="Виды стекол"/>
+
+
+	<serverTemplates>
+		<serverTemplate id="About"/>
+		<serverTemplate id="ConstantList" class="list"/>
+		<serverTemplate id="MainMenuConstructorList" class="list"/>		
+		<serverTemplate id="ViewList" class="list"/>	
+		<serverTemplate id="UserList" class="list"/>
+		<serverTemplate id="LoginList" class="list"/>
+		<serverTemplate id="LoginDeviceList" class="list"/>
+		<serverTemplate id="AutoModelList" class="list"/>
+		<serverTemplate id="AutoGenerationlList" class="list"/>
+		<serverTemplate id="AutoList" class="list"/>
+		<serverTemplate id="WarehouseList" class="list"/>
+		<serverTemplate id="SupplierList" class="list"/>
+		<serverTemplate id="ProducerList" class="list"/>
+		<serverTemplate id="DepartmentList" class="list"/>
+		<serverTemplate id="GlassKindList" class="list"/>
+		<serverTemplate id="GlassTypeList" class="list"/>
+	</serverTemplates>
+
+
+
+
+<jsScript file="views/AutoGenerationList_View.js"/>
+<jsScript file="views/AutoList_View.js"/>
+<jsScript file="views/WarehouseList_View.js"/>
+<jsScript file="views/DepartmentList_View.js"/>
+<jsScript file="views/ProducerList_View.js"/>
+<jsScript file="views/SupplierList_View.js"/>
+<jsScript file="views/GlassKindList_View.js"/>
+<jsScript file="views/GlassTypeList_View.js"/>
+
+
+
+<jsScript file="views/AutoModelEdit.js"/>
+<jsScript file="views/AutoGenerationEdit.js"/>
+<jsScript file="views/AutoEdit.js"/>
+		
+
+
+<jsScript file="forms/AutoModelList_Form.js"/>
+<jsScript file="forms/AutoGenerationList_Form.js"/>
+<jsScript file="forms/AutoList_Form.js"/>
+<jsScript file="forms/WarehouseList_Form.js"/>
+<jsScript file="forms/DepartmentList_Form.js"/>
+<jsScript file="forms/ProducerList_Form.js"/>
+<jsScript file="forms/SupplierList_Form.js"/>
+
+

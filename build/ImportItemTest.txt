@@ -1,0 +1,21 @@
+
+curl -d "@/home/andrey/www/htdocs/glab/build/ImportItemTestData.txt" -H "Content-Type: application/x-www-form-urlencoded" -X POST http://192.168.1.3:59000
+
+token	"9cd1501b-3235-27c3-fea9-8a2fed097aae"
+{
+"Make":"Toyota"
+"model":"Camry",
+Model_generation string `json:"model_generation"`
+"body":"VI(XV40)",
+"supplier":"AGC",
+"name":"Тест1",
+"picture": null,
+"options":[
+	{"id":"vin_window", "val": "vin"},
+	{"id":"wheel_pos", "val": "LHD"},
+	{"id":"accessories", "val": true},
+	{"id":"comment", "val": "Произвольный комментарий"},
+	{"id":"holes", "val": 3},
+	{"id":"weight", "val": 1.5}
+]
+}

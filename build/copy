@@ -1,0 +1,96 @@
+copy (SELECT
+	m.id,
+	m.name,
+	(select
+		string_agg(s.syns,',') from (select jsonb_array_elements(t.car_brand_synonyms)::text AS syns from car_brands AS t where t.id=m.id) as s
+	)
+FROM car_brands AS m)
+to '/tmp/makes.csv' with csv
+
+copy (SELECT
+	m.id,	
+	m.car_brand_id,
+	m.name,
+	(select
+		string_agg(s.syns,',') from (select jsonb_array_elements(t.car_model_synonyms)::text AS syns from car_models AS t where t.id=m.id) as s
+	)
+FROM car_models AS m)
+to '/tmp/models.csv' with csv
+
+
+
+copy (SELECT
+	m.id,
+	m.name
+FROM manufacturers AS m)
+to '/tmp/manufacturers.csv' with csv
+
+
+
+copy (SELECT
+	m.id,
+	m.name
+FROM suppliers AS m)
+to '/tmp/suppliers.csv' with csv
+
+
+
+
+copy (
+SELECT
+	t.body,
+	b_tp.name AS body_type,
+	t.car_model_id,
+	tp.name AS car_type,
+	t.production_year_start,
+	t.production_year_end
+FROM cars AS t
+LEFT JOIN car_body_types AS b_tp ON b_tp.id = t.car_body_type_id
+LEFT JOIN car_types AS tp ON tp.id = t.car_type_id
+)
+to '/tmp/cars.csv' with csv
+
+update cars
+set  auto_body_type_id =
+	CASE
+		WHEN body_type = 'SUV 5D' THEN (SELECT id FROM auto_body_types WHERE name='5D SUV')
+		WHEN body_type = 'Хэтчбек 3D' THEN (SELECT id FROM auto_body_types WHERE name='3D Hbk')
+		WHEN body_type = 'Лифтбек' THEN (SELECT id FROM auto_body_types WHERE name='5D Lbk')
+		WHEN body_type = 'Кабриолет' THEN (SELECT id FROM auto_body_types WHERE name='2D Cbr')
+		WHEN body_type = 'Пикап' THEN (SELECT id FROM auto_body_types WHERE name='4D Pick-up')
+		WHEN body_type = 'Минивен' THEN (SELECT id FROM auto_body_types WHERE name='5D Van')
+		WHEN body_type = 'SUV 3D' THEN (SELECT id FROM auto_body_types WHERE name='3D SUV')
+		WHEN body_type = 'Купе' THEN (SELECT id FROM auto_body_types WHERE name='2D Cpe')
+		WHEN body_type = 'Седан' THEN (SELECT id FROM auto_body_types WHERE name='4D Sed')
+		WHEN body_type = 'Универсал' THEN (SELECT id FROM auto_body_types WHERE name='5D Hbk')
+		WHEN body_type = 'Хэтчбек 5D' THEN (SELECT id FROM auto_body_types WHERE name='5D Hbk')
+		WHEN body_type = 'Фургон' THEN (SELECT id FROM auto_body_types WHERE name='5D Wgn')
+	END
+	
+	
+	
+*****************************
+INSERT INTO auto_model_generations
+(auto_model_id,generation_num, year_from, year_to)
+SELECT
+	car_model_id,
+	body,
+	min(cars.year_from),
+	max(cars.year_end)
+FROM cars
+--WHERE car_model_id IN (1,2,3,4)
+GROUP BY car_model_id, body
+--order by car_model_id	
+	
+	
+	
+update cars
+SET auto_model_generation_id = (
+		SELECT t.id
+	FROM auto_model_generations AS t
+	WHERE t.auto_model_id = cars.car_model_id AND t.generation_num = cars.body
+)
+
+
+
+	

@@ -1,0 +1,51 @@
+<metadata>
+	<!-- Шаблон нового перечисления -->
+	<!--
+	<enums>
+		<enum cmd="add" id="#ENUM_ID#">
+			<value id="#VAL_ID#">
+				<ru descr="#DESCRIPTION#"/>
+			</value>
+		</enum>	
+	<enums>
+	-->
+	
+	<!-- Шаблон новой модели -->
+	<!--
+	<models>
+		<model cmd="add" id="#ID#" parent="ModelSQL" dataTable="#DATA_TABLE#" virtual="FALSE">
+			<defaultOrder>
+				<field id="name"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="TRUE" alias="Код"/>
+			<field id="name" dataType="String" required="TRUE" length="100"/>
+			<index id="#DATA_TABLE#_#COL#_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>
+		</model>
+	</models>
+	-->
+	
+	<!-- Шаблон новой константы -->
+	<!--
+	<constants>
+		<constant cmd="add" id="#ID#" name="#DESCR#" descr="#FULL_DESCR#" dataType="Int" defaultValue="60" autoload="TRUE"/>
+	</constants>
+	-->
+	
+	<!-- Шаблон нового контроллера -->
+	<controllers>
+		<controller cmd="add" id="#ID#" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="#MODEL_ID#"/>
+			<publicMethod id="update" modelId="#MODEL_ID#"/>
+			<publicMethod id="delete" modelId="#MODEL_ID#"/>
+			<publicMethod id="get_list" modelId="#MODEL_ID#"/>
+			<publicMethod id="get_object" modelId="#MODEL_ID#"/>
+			<publicMethod id="complete" modelId="#MODEL_ID#" patternFieldId="name"/>
+		</controller>
+	</controllers>
+	
+	<views>
+		<view cmd="add" id="10000" c="#ID#_Controller" t="#ID#List" f="get_list" section="Справочники" descr="#DESCRIPTION#"/>
+	<views>
+</metadata>

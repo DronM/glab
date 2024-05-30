@@ -1,0 +1,2028 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE metadata SYSTEM "metadata.dtd">
+<metadata debug="TRUE" owner="glab" dataSchema="public">
+	<versions>
+		<version dateOpen="2022-12-06 19:12:32">1.001</version>
+	<version dateOpen="2022-12-06 19:12:32">1.001<lastBuild>2023-02-06 08:49:49</lastBuild></version></versions>
+	<!--
+	<globalFilters>
+		<field id="_id"/>
+	</globalFilters>
+	-->	
+	<enums>
+		<enum id="locales">
+			<value id="ru">
+				<ru descr="Русский"/>
+			</value>
+		</enum>	
+		<enum id="role_types">
+			<value id="admin">
+				<ru descr="Администратор"/>
+			</value>
+		</enum>	
+		<enum id="data_types" descr="Типы данных">
+			<value id="users">
+				<ru descr="Пользователи"/>
+			</value>
+		</enum>	
+		<enum id="object_mod_actions" descr="Действия с объектами">
+			<value id="insert">
+				<ru descr="Добавление"/>
+			</value>
+			<value id="update">
+				<ru descr="Изменение"/>
+			</value>
+			<value id="delete">
+				<ru descr="Удаление"/>
+			</value>			
+		</enum>			
+		<enum id="mail_types" descr="Типы писем">
+			<value id="password_recover">
+				<ru descr="Восстановление пароля"/>
+			</value>
+		</enum>	
+		<enum id="item_feature_filter_option_types" descr="Типы фильтруемых опций характеристик номенклатуы">
+			<value id="main">
+				<ru descr="Основная фильтруемая опция"/>
+			</value>
+			<value id="additional">
+				<ru descr="Дополнительная фильтруемая опция"/>
+			</value>
+			<value id="distinctive">
+				<ru descr="Отличительная опция"/>
+			</value>
+			
+		</enum>	
+		<enum id="quality_levels" descr="Уровени качества">
+			<value id="econom">
+				<ru descr="Эконом"/>
+			</value>
+			<value id="standart">
+				<ru descr="Стандарт"/>
+			</value>
+			<value id="premium">
+				<ru descr="Премиум"/>
+			</value>			
+		</enum>		
+		<enum id="screen_width_types" descr="Типы размера экрана">
+			<value id="sm">
+				<ru descr="Маленький"/>
+			</value>
+			<value id="md">
+				<ru descr="Средний"/>
+			</value>
+			<value id="lg">
+				<ru descr="Большой"/>
+			</value>			
+		</enum>		
+		
+	</enums>
+	
+	<modules>
+	</modules>
+	
+	<models limitConstant="doc_per_page_count">
+		<model id="TimeZoneLocale" parent="ModelSQL" dataTable="time_zone_locales" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="TRUE" alias="Код"/>
+			<field id="descr" dataType="String" required="TRUE" length="100"/>
+			<field id="name" dataType="String" required="TRUE" length="50"/>
+			<field id="hour_dif" dataType="Float" length="5" precision="1" required="TRUE"/>
+		</model>
+		
+		<model id="Department" parent="ModelSQL" dataTable="departments" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="TRUE"/>
+			<field id="name" dataType="Text" alias="Наименование"/>
+			<index id="departments_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>
+		</model>
+		<model id="Post" parent="ModelSQL" dataTable="posts" virtual="FALSE">
+			<defaultOrder>
+				<field id="name"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" sysCol="TRUE"/>
+			<field id="name" dataType="String" required="TRUE" length="250" alias="Наименование"/>
+			<index id="posts_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>
+		</model>
+		<model id="Contact" parent="ModelSQL" dataTable="contacts" virtual="FALSE">
+			<defaultOrder>
+				<field id="descr"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" sysCol="TRUE"/>
+			<field id="name" dataType="String" required="TRUE" length="250" alias="Наименование"/>
+			<field id="post_id" dataType="Int" refTable="posts" refField="id" alias="Должность"/>
+			<field id="email" dataType="String" length="100" required="FALSE" alias="Email"/>
+			<field id="tel" dataType="String" length="11" required="FALSE" alias="Телефон"/>
+			<field id="tel_ext" dataType="String" length="20" alias="Добавочный номер"/>
+			<field id="descr" dataType="Text" alias="Описание для поиска"/>
+			<field id="comment_text" dataType="Text" alias="Комментарий"/>
+			<field id="email_confirmed" dataType="Bool" alias="Адрес электр.почты подтвержден" defaultValue="FALSE"/>
+			<index id="contacts_descr_idx" unique="TRUE">
+				<expression>lower(descr)</expression>
+			</index>
+			<index id="contacts_tel_idx" unique="TRUE">
+				<field id="tel"/>
+			</index>			
+		</model>
+		<model id="ContactList" parent="ModelSQL" dataTable="contacts_list" virtual="FALSE">
+			<defaultOrder>
+				<field id="descr"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="name" dataType="String" alias="Наименование"/>
+			<field id="posts_ref" dataType="JSON"/>
+			<field id="email" dataType="String" alias="Email"/>
+			<field id="tel" dataType="String" alias="Телефон"/>
+			<field id="tel_ext" dataType="String" alias="Добавочный номер"/>
+			<field id="descr" dataType="Text" alias="Описание для поиска"/>
+			<field id="comment_text" dataType="Text" alias="Комментарий"/>
+			<field id="tm_photo" dataType="Text"/>
+			<field id="tm_first_name" dataType="String"/>
+			<field id="tm_exists" dataType="Bool"/>
+			<field id="tm_activated" dataType="Bool"/>
+			<field id="ext_id" dataType="Int"/>
+		</model>
+		<model id="ContactDialog" parent="ModelSQL" dataTable="contacts_dialog" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="name" dataType="String" alias="Наименование"/>
+			<field id="posts_ref" dataType="JSON"/>
+			<field id="email" dataType="String" alias="Email"/>
+			<field id="tel" dataType="String" alias="Телефон"/>
+			<field id="tel_ext" dataType="String" alias="Добавочный номер"/>
+			<field id="comment_text" dataType="Text" alias="Комментарий"/>
+			<field id="tm_exists" dataType="Bool"/>
+			<field id="tm_activated" dataType="Bool"/>
+			<field id="tm_photo" dataType="String"/>
+			<field id="ext_id" dataType="Int"/>
+			<field id="tm_first_name" dataType="String"/>
+		</model>
+		
+		<model id="EntityContact" parent="ModelSQL" dataTable="entity_contacts" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" sysCol="TRUE"/>
+			<field id="entity_type" dataType="Enum" required="TRUE" enumId="data_types"/>
+			<field id="entity_id" dataType="Int" required="TRUE"/>
+			<field id="contact_id" dataType="Int" required="TRUE" refTable="contacts" refField="id"/>
+			<field id="mod_date_time" dataType="DateTimeTZ" required="TRUE" defaultValue="CURRENT_TIMESTAMP"/>
+			<index id="entity_contacts_id_idx" unique="TRUE">
+				<field id="entity_type"/>
+				<field id="entity_id"/>
+				<field id="contact_id"/>
+			</index>			
+			<index id="entity_contacts_contact_idx">
+				<field id="entity_type"/>
+				<field id="contact_id"/>
+			</index>						
+		</model>
+		<model id="EntityContactList" parent="ModelSQL" dataTable="entity_contacts_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" sysCol="TRUE"/>
+			<field id="entity_type" dataType="String"/>
+			<field id="entity_id" dataType="Int"/>
+			<field id="entities_ref" dataType="JSON"/>
+			<field id="contact_id" dataType="Int"/>
+			<field id="contact_name" dataType="String"/>
+			<field id="contact_attrs" dataType="JSON"/>
+			<field id="contacts_ref" dataType="JSON"/>
+			<field id="tm_exists" dataType="Bool"/>
+			<field id="tm_activated" dataType="Bool"/>
+		</model>
+		<model id="ObjectModLog" parent="ModelSQL" dataTable="object_mod_log" virtual="FALSE" alias="Журнал изменения объектов">
+			<defaultOrder>
+				<field id="date_time" sortDirect="DESC"/>
+			</defaultOrder>	
+			<field id="id" dataType="Int" primaryKey="TRUE" required="FALSE" autoInc="TRUE"/>						
+			<field id="object_type" dataType="Enum" enumId="data_types" required="TRUE" alias="Вид объекта"/>
+			<field id="object_id" dataType="Int" required="TRUE" alias="Идентификатор объекта"/>
+			<field id="object_descr" dataType="Text" required="TRUE" alias="Представление объекта"/>
+			<field id="user_descr" dataType="Text" alias="Пользователь"/>
+			<field id="date_time" dataType="DateTimeTZ" alias="Дата"/>
+			<field id="action" dataType="Enum" enumId="object_mod_actions" alias="Действие"/>
+			<field id="details" dataType="Text" alias="Подробности"/>
+			<index id="object_mod_log_date_time_idx">
+				<field id="date_time"/>
+			</index>
+			<index id="object_mod_log_user_descr_idx">
+				<field id="user_descr"/>
+			</index>			
+			<index id="object_mod_log_object_type_idx">
+				<field id="object_type"/>
+			</index>			
+			<index id="object_mod_log_object_id_idx">
+				<field id="object_id"/>
+			</index>			
+			
+		</model>
+	
+		<model id="User" parent="ModelSQL" dataTable="users" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="TRUE"/>
+			<field id="name" dataType="String" required="TRUE" length="100"/>
+			<field id="role_id" dataType="Enum" enumId="role_types" required="TRUE"/>
+			<field id="pwd" dataType="Password" length="32"/>
+			<field id="create_dt" dataType="DateTimeTZ" defaultValue="CURRENT_TIMESTAMP"/>
+			<field id="banned" dataType="Bool" defaultValue="FALSE"/>
+			<field id="time_zone_locale_id" dataType="Int" refTable="time_zone_locales" refField="id"/>			
+			<field id="locale_id" dataType="Enum" enumId="locales"/>
+			<field id="photo" dataType="Bytea"/>
+			
+			<field id="department_id" dataType="Int" refTable="departments" refField="id"/>			
+			<index id="users_name_index" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>
+			<index unique="TRUE" id="users_email_idx">
+				<expression>lower(email)</expression>
+			</index>
+			<index id="users_role_id_idx">
+				<field id="role_id"/>
+			</index>						
+		</model>
+		<model id="UserList" parent="ModelSQL" dataTable="users_list" virtual="TRUE">
+			<defaultOrder>
+				<field id="name"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="name" dataType="String"/>
+			<field id="role_id" dataType="Enum" enumId="role_types"/>
+			<field id="last_update" dataType="DateTimeTZ"/>
+			<field id="last_update_user" dataType="String"/>
+			
+		</model>
+		<model id="UserDialog" parent="ModelSQL" dataTable="users_dialog" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" alias="Код"/>
+			<field id="name" dataType="String" alias="Имя"/>
+			<field id="role_id" dataType="String"/>
+			<field id="create_dt" dataType="DateTimeTZ"/>
+			<field id="banned" dataType="Bool"/>
+			<field id="time_zone_locales_ref" dataType="JSON"/>
+			<field id="locale_id" dataType="String"/>
+		</model>
+		<model id="UserLogin" parent="ModelSQL" dataTable="users_login" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" alias="Код"/>
+			<field id="name" dataType="String" alias="Имя"/>
+			<field id="role_id" dataType="String"/>
+			<field id="create_dt" dataType="DateTimeTZ"/>
+			<field id="banned" dataType="Bool"/>
+			<field id="time_zone_locales_ref" dataType="JSON"/>
+			<field id="locale_id" dataType="String"/>
+			<field id="pwd" dataType="String"/>
+			<field id="ban_hash" dataType="String"/>
+		</model>
+		
+		<model id="UserProfile" parent="ModelSQL" dataTable="users_profile" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" alias="Код"/>
+			<field id="name" dataType="String" alias="Имя"/>
+			<field id="name_full" dataType="String"/>
+			<field id="locale_id" dataType="String"/>
+			<field id="time_zone_locales_ref" dataType="JSON"/>
+		</model>
+		<model id="SessionVal" parent="ModelSQL" dataTable="session_vals" virtual="FALSE">
+			<field id="id" dataType="String" length="36" primaryKey="TRUE" autoInc="FALSE" dbRequired="TRUE"/>
+			<field id="accessed_time" dataType="DateTimeTZ" defaultValue="CURRENT_TIMESTAMP"/>
+			<field id="create_time" dataType="DateTimeTZ" defaultValue="CURRENT_TIMESTAMP"/>
+			<field id="val" dataType="Bytea"/>
+			<!--
+			<index id="session_vals_accessed_time_idx">
+				<field id="accessed_time"/>
+			</index>			
+			<index id="session_vals_create_time_idx">
+				<field id="create_time"/>
+			</index>
+			-->
+		</model>
+		<model id="Login" parent="ModelSQL" dataTable="logins" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="FALSE"/>
+			<field id="date_time_in" dataType="DateTimeTZ"/>
+			<field id="date_time_out" dataType="DateTimeTZ"/>
+			<field id="ip" dataType="String" length="15"/>
+			<field id="session_id" dataType="String" length="128"/>
+			<field id="user_id" dataType="Int"/>
+			<field id="pub_key" dataType="String" length="15"/>
+			<field id="set_date_time" dataType="DateTimeTZ"/>
+			<field id="headers" dataType="JSONB"/>
+			<field id="user_agent" dataType="JSONB"/>
+			<index id="logins_session_idx">
+				<field id="session_id"/>
+			</index>
+			<index id="logins_user_idx">
+				<field id="user_id"/>
+			</index>
+			<index id="logins_pub_key_idx">
+				<field id="pub_key"/>
+			</index>
+		</model>
+		<model id="LoginList" parent="ModelSQL" dataTable="logins_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="FALSE" sysCol="TRUE"/>
+			<field id="date_time_in" dataType="DateTimeTZ" alias="Дата входа"/>
+			<field id="date_time_out" dataType="DateTimeTZ" alias="Дата выхода"/>
+			<field id="ip" dataType="String" length="15" alias="IP адрес"/>
+			<field id="user_id" dataType="Int" sysCol="TRUE"/>
+			<field id="users_ref" dataType="JSON" alias="Пользователь"/>
+			<field id="pub_key" dataType="String" length="15" sysCol="TRUE"/>
+			<field id="set_date_time" dataType="DateTimeTZ" alias="Время последнего обращения"/>
+			<field id="user_agent_descr" dataType="String"/>
+			<field id="user_agent" dataType="JSON"/>
+			<field id="headers" dataType="JSON"/>
+			<field id="sess_create_time" dataType="DateTimeTZ"/>
+			<field id="sess_accessed_time" dataType="DateTimeTZ"/>
+		</model>
+		<model id="LoginDeviceList" parent="ModelSQLBeton" dataTable="login_devices_list" virtual="TRUE">
+			<field id="user_id" dataType="Int" sysCol="TRUE" primaryKey="TRUE"/>
+			<field id="user_agent" dataType="Text" primaryKey="TRUE"/>
+			<field id="user_descr" dataType="String" alias="Имя пользователя"/>
+			<field id="date_time_in" dataType="DateTimeTZ" alias="Дата входа"/>
+			<field id="banned" dataType="Bool" alias="Вход запрещен"/>
+			<field id="ban_hash" dataType="String"/>
+		</model>
+		<model id="LoginDeviceBan" parent="ModelSQLBeton" dataTable="login_device_bans" virtual="FALSE">
+			<field id="user_id" dataType="Int" sysCol="TRUE" primaryKey="TRUE"/>
+			<field id="hash" dataType="String" length="32" primaryKey="TRUE"/>
+			<field id="create_dt" dataType="DateTimeTZ" alias="Дата создания" defaultValue="CURRENT_TIMESTAMP"/>
+		</model>
+	
+		<model id="ConstantList" parent="ModelSQL" dataTable="constants_list_view" virtual="TRUE">
+			<defaultOrder>
+				<field id="name"/>
+			</defaultOrder>
+			<field id="id" dataType="String" primaryKey="TRUE"/>
+			<field id="name" dataType="String"/>
+			<field id="descr" dataType="Text"/>
+			<field id="val" dataType="Text"/>
+			<field id="val_type" dataType="Text"/>
+			<field id="ctrl_class" dataType="Text"/>
+			<field id="ctrl_options" dataType="JSON"/>
+			<field id="view_class" dataType="Text"/>
+			<field id="view_options" dataType="JSON"/>
+		</model>
+		<model id="View" parent="ModelSQL" dataTable="views" virtual="FALSE">
+			<defaultOrder>
+				<field id="section"/>
+				<field id="descr"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="FALSE" alias="Код"/>
+			<field id="c" dataType="Text"/>
+			<field id="f" dataType="Text"/>
+			<field id="t" dataType="Text"/>			
+			<field id="section" dataType="Text" required="TRUE"/>
+			<field id="descr" dataType="Text" required="TRUE"/>
+			<field id="limited" dataType="Bool"/>
+			<index id="views_section_descr_idx" unique="TRUE">
+				<field id="section"/>
+				<field id="descr"/>
+			</index>																		
+		</model>
+		<model id="ViewList" parent="ModelSQL" dataTable="views_list" virtual="TRUE">
+			<defaultOrder>
+				<field id="user_descr"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="FALSE" alias="Код"/>
+			<field id="c" dataType="Text"/>
+			<field id="f" dataType="Text"/>
+			<field id="t" dataType="Text"/>						
+			<field id="href" dataType="Text"/>
+			<field id="user_descr" dataType="Text"/>
+			<field id="section" dataType="Text"/>						
+		</model>
+		<model id="ViewSectionList" parent="ModelSQL" dataTable="views_section_list" virtual="TRUE">
+			<field id="section" dataType="Text"/>
+		</model>
+		
+		<model id="MainMenuConstructor" parent="ModelSQL" dataTable="main_menus" virtual="FALSE">
+			<defaultOrder>
+				<field id="role_id"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="FALSE" alias="Код"/>
+			<field id="role_id" dataType="Enum" enumId="role_types" required="TRUE"/>
+			<field id="user_id" dataType="Int" refTable="users" refField="id"/>
+			<field id="content" dataType="Text" required="TRUE" alias="Содержание"/>
+			<field id="model_content" dataType="Text" required="FALSE" alias="Содержание для модели,заполняется при записи из контроллера!"/>
+			<index id="main_menus_role_user_idx" unique="TRUE">
+				<field id="role_id"/>
+				<field id="user_id"/>
+			</index>						
+		</model>
+		
+		<model id="MainMenuConstructorList" parent="ModelSQL" dataTable="main_menus_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" sysCol="TRUE"/>
+			<field id="role_id" dataType="String"/>
+			<field id="user_id" dataType="String"/>
+			<field id="user_descr" dataType="String"/>
+		</model>
+		<model id="MainMenuConstructorDialog" parent="ModelSQL" dataTable="main_menus_dialog" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" sysCol="TRUE"/>
+			<field id="role_id" dataType="String"/>
+			<field id="user_id" dataType="String"/>
+			<field id="user_descr" dataType="String"/>
+			<field id="content" dataType="Text"/>
+		</model>
+		
+		<model id="MainMenuContent" parentJS="ModelXMLTree" parent="Model" virtual="TRUE" server="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
+			<field id="descr" dataType="String"/>
+			<field id="viewid" dataType="String"/>
+			<field id="viewdescr" dataType="String"/>
+			<field id="default" dataType="Bool"/>
+			<field id="glyphclass" dataType="String"/>
+		</model>
+			
+		<model id="VariantStorage" parent="ModelSQL" dataTable="variant_storages" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="TRUE"/>
+			<field id="user_id" dataType="Int" refTable="users" refField="id"/>
+			<field id="storage_name" dataType="Text" required="TRUE"/>
+			<field id="variant_name" dataType="Text" required="TRUE"/>
+			<field id="default_variant" dataType="Bool"/>
+			<field id="filter_data" dataType="JSONB"/>
+			<field id="col_visib_data" dataType="Text"/>
+			<field id="col_order_data" dataType="Text"/>
+			<index id="variant_storages_user_idx" unique="TRUE">
+				<field id="user_id"/>
+				<field id="storage_name"/>
+			</index>
+		</model>
+		<model id="VariantStorageList" parent="ModelSQL" dataTable="variant_storages_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="user_id" dataType="Int" refTable="users" refField="id"/>
+			<field id="storage_name" dataType="Text"/>
+			<field id="default_variant" dataType="Bool"/>
+			<field id="variant_name" dataType="Text"/>
+		</model>
+
+		<model id="About" parent="ModelSQL" virtual="TRUE">
+			<field id="author" dataType="String"/>
+			<field id="tech_mail" dataType="String"/>
+			<field id="app_name" dataType="String"/>
+			<field id="fw_version" dataType="String"/>
+			<field id="app_version" dataType="String"/>
+			<field id="db_name" dataType="String"/>
+		</model>
+		<model id="MailMessage" parent="ModelSQL" dataTable="mail_messages" virtual="FALSE">
+			<defaultOrder>
+				<field id="date_time" sortDirect="DESC"/>
+			</defaultOrder>			
+			<field id="id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="TRUE"/>
+			<field id="date_time" dataType="DateTime" defaultValue="current_timestamp"/>
+			<field id="from_addr" dataType="String" length="50"/>
+			<field id="from_name" dataType="String" length="255"/>
+			<field id="to_addr" dataType="String" length="50"/>
+			<field id="to_name" dataType="String" length="255"/>
+			<field id="reply_addr" dataType="String" length="50"/>
+			<field id="reply_name" dataType="String" length="255"/>
+			<field id="body" dataType="Text"/>
+			<field id="sender_addr" dataType="String" length="50"/>
+			<field id="subject" dataType="String" length="255"/>
+			<field id="sent" dataType="Bool" defaultValue="false"/>
+			<field id="sent_date_time" dataType="DateTime"/>
+			<field id="mail_type" dataType="Enum" enumId="mail_types"/>			
+			<field id="error_str" dataType="Text"/>
+			<index id="mail_messages_date_time_idx" unique="FALSE">
+				<field id="date_time"/>
+			</index>
+			<index id="mail_messages_email_type_idx" unique="FALSE">
+				<field id="email_type"/>
+			</index>
+			<index id="mail_messages_to_addr_idx" type="gin">
+				<expression>to_addr gin_trgm_ops</expression>
+			</index>			
+			<index id="mail_messages_to_name_idx" type="gin">
+				<expression>to_name gin_trgm_ops</expression>
+			</index>			
+			<index id="mail_messages_subject_idx" type="gin">
+				<expression>subject gin_trgm_ops</expression>
+			</index>			
+			<index id="mail_messages_error_str_idx" type="gin">
+				<expression>error_str gin_trgm_ops</expression>
+			</index>						
+		</model>
+		<model id="MailMessageList" parent="ModelSQL" dataTable="mail_messages_list" virtual="TRUE">
+			<defaultOrder>
+				<field id="date_time" sortDirect="DESC"/>
+			</defaultOrder>			
+			<field id="id" dataType="Int" primaryKey="TRUE" required="TRUE" autoInc="TRUE"/>
+			<field id="date_time" dataType="DateTime" defaultValue="current_timestamp"/>
+			<field id="from_addr" dataType="String" length="50"/>
+			<field id="from_name" dataType="String" length="255"/>
+			<field id="to_addr" dataType="String" length="50"/>
+			<field id="to_name" dataType="String" length="255"/>
+			<field id="reply_addr" dataType="String" length="50"/>
+			<field id="reply_name" dataType="String" length="255"/>
+			<field id="body_begin" dataType="Text"/>
+			<field id="sender_addr" dataType="String" length="50"/>
+			<field id="subject" dataType="String" length="255"/>
+			<field id="sent" dataType="Bool" defaultValue="false"/>
+			<field id="sent_date_time" dataType="DateTime"/>
+			<field id="mail_type" dataType="Enum" enumId="mail_types"/>			
+			<field id="error_str" dataType="Text"/>
+			<field id="attachment_count" dataType="Int"/>
+		</model>
+		
+		<model id="MailMessageAttachment" parent="ModelSQL" dataTable="mail_message_attachments" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="TRUE"/>
+			<field id="mail_message_id" dataType="Int" refTable="mail_messages" refField="id"/>
+			<field id="file_name" dataType="String" length="255"/>
+			<index id="mail_message_attachments_mail_id_index" unique="FALSE">
+				<field id="mail_message_id"/>
+			</index>
+		</model>
+		<model id="MailTemplate" parent="ModelSQL" dataTable="mail_templates" virtual="FALSE">
+			<defaultOrder>
+				<field id="mail_type"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="FALSE"/>
+			<field id="mail_type" dataType="Enum" primaryKey="FALSE" enumId="mail_types" autoInc="FALSE" required="TRUE" alias="Тип email"/>
+			<field id="template" dataType="Text" required="TRUE" alias="Шаблон"/>
+			<field id="comment_text" dataType="Text" required="TRUE" alias="Комментарий"/>
+			<field id="mes_subject" dataType="Text" required="TRUE" alias="Тема"/>
+			<field id="fields" dataType="JSON" required="TRUE" alias="Поля"/>
+			<index id="mail_templates_type_idx" unique="TRUE">
+				<field id="mail_type"/>
+			</index>
+		</model>
+		<model id="MailTemplateList" parent="ModelSQL" dataTable="mail_templates_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="mail_type" dataType="String"/>
+			<field id="template" dataType="Text"/>
+		</model>
+		<model id="Attachment" parent="ModelSQL" dataTable="attachments" virtual="FALSE" alias="Вложения документов">
+			<field id="id" dataType="Int" primaryKey="TRUE" required="FALSE" autoInc="TRUE"/>			
+			<field id="date_time" dataType="DateTimeTZ" defaultValue="CURRENT_TIMESTAMP"/>			
+			<field id="ref" dataType="JSONB"/>			
+			<field id="content_info" dataType="JSONB"/>
+			<field id="content_data" dataType="Bytea"/>
+			<field id="content_preview" dataType="Bytea"/>
+			<index id="attachments_idx">
+				<expression>(ref-&gt;&gt;'dataType'),((ref-&gt;'keys'-&gt;&gt;'id')::int)</expression>
+			</index>
+		</model>
+		<model id="AttachmentList" parent="ModelSQL" dataTable="attachments_list" virtual="TRUE" alias="Вложения документов">
+			<defaultOrder>
+				<field id="date_time" sortDirect="DESC"/>
+			</defaultOrder>				
+			<field id="id" dataType="Int" primaryKey="TRUE" required="FALSE" autoInc="TRUE"/>			
+			<field id="date_time" dataType="DateTimeTZ"/>			
+			<field id="ref" dataType="JSONB"/>			
+			<field id="content_info" dataType="JSONB"/>
+			<field id="content_preview" dataType="String"/>
+		</model>
+		<model id="VehicleType" parent="ModelSQL" dataTable="vehicle_types" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE" alias="ID"/>
+			<field id="name" dataType="Text" required="TRUE" alias="Наименование"/>
+			<index id="vehicle_types_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>
+		</model>
+		<model id="ItemPriority" parent="ModelSQL" dataTable="item_priorities" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE" alias="ID"/>
+			<field id="code" dataType="Int" required="TRUE" alias="Код для сортировки"/>
+			<field id="name" dataType="Text" required="TRUE" alias="Наименование"/>
+			<index id="item_priorities_code_idx" unique="TRUE">
+				<field id="code"/>
+			</index>
+		</model>
+		
+		<model id="Manufacturer" parent="ModelSQL" dataTable="manufacturers" virtual="FALSE" alias="Поставщики">
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE" alias="ID"/>
+			<field id="name" dataType="Text" required="TRUE" alias="Наименование"/>
+			<field id="quality_level" dataType="Enum" enumId="quality_levels" required="TRUE" alias="Уровень качества"/>
+			<index id="manufacturers_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>
+		</model>
+		<model id="ManufacturerList" parent="ModelSQL" dataTable="manufacturers_list" virtual="TRUE">
+			<defaultOrder>
+				<field id="name"/>
+			</defaultOrder>				
+			<field id="id" dataType="Int" autoInc="TRUE" alias="ID"/>
+			<field id="name" dataType="Text" alias="Наименование"/>
+			<field id="quality_level" dataType="String" alias="Уровень качества"/>
+		</model>
+		<model id="ManufacturerDialog" parent="ModelSQL" dataTable="manufacturers_dialog" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" alias="ID"/>
+			<field id="name" dataType="Text" alias="Наименование"/>
+			<field id="quality_level" dataType="String" alias="Уровень качества"/>
+		</model>
+		
+		<model id="Supplier" parent="ModelSQL" dataTable="suppliers" virtual="FALSE" alias="Поставщики">
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE" alias="ID"/>
+			<field id="name" dataType="Text" required="TRUE" alias="Наименование"/>
+			<field id="quality_level" dataType="Enum" enumId="quality_levels" required="TRUE" alias="Уровень качества"/>
+			<index id="suppliers_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>
+		</model>
+		<model id="SupplierList" parent="ModelSQL" dataTable="suppliers_list" virtual="TRUE">
+			<defaultOrder>
+				<field id="name"/>
+			</defaultOrder>				
+			<field id="id" dataType="Int" autoInc="TRUE" alias="ID"/>
+			<field id="name" dataType="Text" alias="Наименование"/>
+		</model>
+		<model id="SupplierDialog" parent="ModelSQL" dataTable="suppliers_dialog" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" alias="ID"/>
+			<field id="name" dataType="Text" alias="Наименование"/>
+		</model>
+		<model id="PopularityType" parent="ModelSQL" dataTable="popularity_types" virtual="FALSE" alias="Типы популярности">
+			<defaultOrder>
+				<field id="code" sortDirect="DESC"/>
+			</defaultOrder>				
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE" alias="ID"/>
+			<field id="code" dataType="Int" required="TRUE" alias="Код для сортировки"/>
+			<field id="name" dataType="Text" required="TRUE" alias="Наименование"/>
+			<field id="item_count" dataType="Int" required="FALSE" alias="Количество позиций вывода"/>
+			<field id="screen_width_type" dataType="Enum" enumId="screen_width_types" required="FALSE" alias="Тип экрана"/>
+			<index id="popularity_types_code_idx" unique="TRUE">
+				<field id="code"/>
+			</index>			
+		</model>
+						
+		<model id="AutoMake" parent="ModelSQL" dataTable="auto_makes" virtual="FALSE" alias="Марки автомобилей">
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE" alias="ID"/>
+			<field id="name" dataType="Text" required="TRUE" alias="Наименование"/>
+			<field id="name_variants" dataType="Text" alias="Варианты наименования"/>
+			<field id="popularity_type_id" dataType="Int" refTable="popularity_types" refField="id" alias="Популярность"/>
+			<index id="auto_makes_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>
+			<index id="auto_makes_name_variants_idx" type="gin">
+				<expression>name_variants gin_trgm_ops</expression>
+			</index>			
+		</model>
+		<model id="AutoMakeList" parent="ModelSQL" dataTable="auto_makes_list" virtual="FALSE" alias="Марки автомобилей">
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE" alias="ID"/>
+			<field id="name" dataType="Text" required="TRUE" alias="Наименование"/>
+			<field id="name_variants" dataType="Text" alias="Варианты наименования"/>
+			<field id="logo" dataType="JSON"/>
+			<field id="popularity_types_ref" dataType="JSON" alias="Популярность брэнда"/>
+			<field id="popularity_type_id" dataType="Int" sysCol="TRUE"/>
+		</model>
+		
+		<model id="AutoModel" parent="ModelSQL" dataTable="auto_models" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE"/>
+			<field id="auto_make_id" dataType="Int" refTable="auto_makes" refField="id" alias="Марка"/>
+			<field id="name" dataType="Text" required="TRUE"/>
+			<field id="name_variants" dataType="Text" alias="Варианты наименования"/>
+			<field id="popularity_type_id" dataType="Int" refTable="popularity_types" refField="id" alias="Популярность"/>
+			<field id="vehicle_type_id" dataType="Int" refTable="vehicle_types" refField="id" alias="Тип ТС"/>
+			<index id="auto_models_name_idx" unique="TRUE">
+				<expression>auto_make_id, lower(name)</expression>
+			</index>
+		</model>
+		<model id="AutoModelList" parent="ModelSQL" dataTable="auto_models_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="auto_make_id" dataType="Int" refTable="auto_makes" refField="id"/>
+			<field id="auto_makes_ref" dataType="JSON"/>
+			<field id="name" dataType="Text"/>
+			<field id="name_variants" dataType="Text"/>
+			<field id="popularity_type_id" dataType="Int" sysCol="TRUE"/>
+			<field id="vehicle_type_id" dataType="Int" sysCol="TRUE"/>
+			<field id="popularity_types_ref" dataType="JSON" alias="Популярность"/>
+			<field id="vehicle_types_ref" dataType="JSON" alias="Тип ТС"/>			
+		</model>
+		<model id="AutoModelGeneration" parent="ModelSQL" dataTable="auto_model_generations" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE"/>
+			<field id="auto_model_id" dataType="Int" refTable="auto_madels" refField="id" alias="Марка"/>
+			<field id="generation_num" dataType="Text" dbRequired="TRUE" alias="Номер поколения"/>
+			<field id="prod_index" dataType="Text" alias="Заводской индекс модели"/>
+			<field id="year_from" dataType="Int" alias="Начало производтва"/>
+			<field id="year_to" dataType="Int" alias="Окончание производтва"/>
+			<index id="auto_model_generations_idx" unique="TRUE">
+				<expression>auto_model_id, generation_num</expression>
+			</index>
+		</model>
+		<model id="AutoModelGenerationList" parent="ModelSQL" dataTable="auto_model_generations_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE"/>
+			<field id="auto_make_id" dataType="Int" refTable="auto_makes" refField="id" alias="Марка"/>
+			<field id="auto_makes_ref" dataType="JSON"/>
+			<field id="auto_model_id" dataType="Int" refTable="auto_models" refField="id" alias="Модель"/>
+			<field id="auto_models_ref" dataType="JSON"/>
+			<field id="generation_num" dataType="Text" dbRequired="TRUE" alias="Номер поколения"/>
+			<field id="prod_index" dataType="Text" alias="Заводской индекс модели"/>
+			<field id="year_from" dataType="Int" alias="Начало производтва"/>
+			<field id="year_to" dataType="Int" alias="Окончание производтва"/>
+		</model>
+		
+		<model id="AutoType" parent="ModelSQL" dataTable="auto_types" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE"/>
+			<field id="name" dataType="Text" required="TRUE"/>
+			<index id="auto_types_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>
+		</model>
+		
+		<model id="AutoBodyType" parent="ModelSQL" dataTable="auto_body_types" virtual="FALSE">
+			<defaultOrder>
+				<field id="name"/>
+			</defaultOrder>		
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE"/>
+			<field id="name" dataType="Text" required="TRUE"/>
+			<index id="auto_body_types_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>
+		</model>
+		<model id="AutoBody" parent="ModelSQL" dataTable="auto_bodies" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE"/>
+			<field id="auto_model_generation_id" dataType="Int" refTable="auto_model_generations" refField="id" alias="Поколение модели"/>
+			<field id="name" dataType="Text" required="TRUE" alias="Наименование кузова"/>			
+			<field id="auto_body_type_id" dataType="Int" refTable="auto_body_types" refField="id" alias="Тип кузова"/>
+			<field id="restyle_years" dataType="Text" alias="Годы рестайлинга"/>
+			<field id="ind" dataType="Text" alias="Индекс кузова"/>
+			<field id="year_from" dataType="Int" alias="Начало производтва"/>
+			<field id="year_to" dataType="Int" alias="Окончание производтва"/>
+			<field id="num" dataType="Text" alias="Собственный внутренний номер в базе данных"/>
+		</model>
+		<model id="AutoBodyList" parent="ModelSQL" dataTable="auto_bodies_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
+			<field id="auto_make_id" dataType="Int"/>
+			<field id="auto_makes_ref" dataType="JSON"/>			
+			<field id="auto_model_id" dataType="Int"/>
+			<field id="auto_models_ref" dataType="JSON"/>						
+			<field id="auto_model_generation_id" dataType="Int"/>
+			<field id="auto_model_generations_ref" dataType="JSON"/>			
+			<field id="name" dataType="Text" alias="Наименование кузова"/>
+			<field id="auto_body_type_id" dataType="Int" alias="Тип кузова идентификатор"/>
+			<field id="auto_body_types_ref" dataType="JSON" alias="Тип кузова"/>
+			<field id="restyle_years" dataType="Text" alias="Годы рестайлинга"/>
+			<field id="ind" dataType="Text" alias="Индекс кузова"/>
+			<field id="year_from" dataType="Int" alias="Начало производтва"/>
+			<field id="year_to" dataType="Int" alias="Окончание производтва"/>
+			<field id="num" dataType="Text" alias="Собственный внутренний номер в базе данных"/>
+		</model>
+		<model id="ItemFolder" parent="ModelSQL" dataTable="item_folders" virtual="FALSE">
+			<defaultOrder>
+				<field id="code"/>
+			</defaultOrder>		
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE"/>
+			<field id="name" dataType="Text" required="TRUE" alias="Наименование"/>			
+			<field id="parent_item_folder_id" dataType="Int" refTable="item_folders" refField="id" alias="Родитель"/>
+			<field id="code" dataType="Int" required="TRUE" alias="Код"/>
+			<field id="item_priority_id" dataType="Int" refTable="item_priorities" refField="id" alias="Приоритет вывода"/>
+			<field id="vehicle_type_id" dataType="Int" refTable="vehicle_types" refField="id" alias="Тип транпорта"/>
+			<index id="item_folders_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>			
+			<index id="item_folders_parent_item_folder_idx">
+				<field id="parent_item_folder_id"/>
+			</index>						
+		</model>
+		<model id="ItemFolderList" parent="ModelSQL" dataTable="item_folders_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="name" dataType="Text" alias="Наименование"/>			
+			<field id="parent_item_folder_id" dataType="Int" alias="Родитель"/>
+			<field id="code" dataType="Int" required="TRUE" alias="Код"/>
+			<field id="item_feature_groups_list" dataType="JSON"/>
+			<field id="supplier_item_feature_groups_list" dataType="JSON"/>
+			<field id="vehicle_types_ref" dataType="JSON"/>
+			<field id="item_priorities_ref" dataType="JSON"/>																								
+		</model>
+		
+		<model id="ItemFeature" parent="ModelSQL" dataTable="item_features" virtual="FALSE">
+			<defaultOrder>
+				<field id="name"/>
+			</defaultOrder>		
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE"/>
+			<field id="name" dataType="Text" required="TRUE" alias="Наименование"/>
+			<field id="comment_text" dataType="Text" alias="Комментарий"/>
+			<field id="filter_option_type" dataType="Enum" enumId="item_feature_filter_option_types" required="TRUE" alias="Тип фильтра"/>
+			<field id="value_attrs" dataType="JSONB" alias="Реквизиты значения: тип данных, длина, точность, значения списка"/>
+			<index id="item_features_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>			
+		</model>
+		<model id="ItemFeatureList" parent="ModelSQL" dataTable="item_features_list" virtual="TRUE">
+			<defaultOrder>
+				<field id="name"/>
+			</defaultOrder>		
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE"/>
+			<field id="name" dataType="Text" alias="Наименование"/>			
+			<field id="comment_text" dataType="Text" alias="Комментарий"/>						
+			<field id="filter_option_type" dataType="Text" alias="Тип фильтра"/>			
+		</model>
+		
+		<model id="ItemFeatureValueList" parentJS="ModelJSON" virtual="TRUE" server="FALSE">
+			<field id="code" dataType="Int" primaryKey="TRUE" autoInc="FALSE"/>
+			<field id="name" dataType="String"/>
+			<field id="descr" dataType="String"/>
+		</model>
+		<model id="ItemFeatureGroup" parent="ModelSQL" dataTable="item_feature_groups" virtual="FALSE">
+			<defaultOrder>
+				<field id="name"/>
+			</defaultOrder>		
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE"/>
+			<field id="name" dataType="Text" required="TRUE" alias="Наименование"/>
+			<index id="item_feature_groups_name_idx" unique="TRUE">
+				<expression>lower(name)</expression>
+			</index>			
+		</model>
+		<model id="ItemFeatureGroupItem" parent="ModelSQL" dataTable="item_feature_group_items" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE"/>
+			<field id="item_feature_group_id" dataType="Int" refTable="item_feature_groups" refField="id" required="TRUE" alias="Группа"/>
+			<field id="item_feature_id" dataType="Int" refTable="item_features" refField="id" required="TRUE" alias="Харктеристика"/>
+			<index id="item_feature_group_items_idx" unique="TRUE">
+				<field id="item_feature_group_id"/>
+				<field id="item_feature_id"/>
+			</index>			
+		</model>
+		<model id="ItemFeatureGroupItemList" parent="ModelSQL" dataTable="item_feature_group_items_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
+			<field id="item_feature_group_id" dataType="Int" alias="Группа"/>
+			<field id="item_feature_id" dataType="Int" alias="Харктеристика"/>
+			<field id="item_features_ref" dataType="JSON" alias="Харктеристика"/>
+		</model>
+		<model id="ItemFolderFeatureGroup" parent="ModelSQL" dataTable="item_folder_feature_groups" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE"/>
+			<field id="item_folder_id" dataType="Int" refTable="item_folders" refField="id" alias="Папка" dbRequired="TRUE"/>
+			<field id="item_feature_group_id" dataType="Int" refTable="item_feature_groups" refField="id" dbRequired="TRUE" alias="Характеристика"/>
+			<index id="item_folder_feature_groups_idx" unique="TRUE">
+				<field id="item_folder_id"/>
+				<field id="item_feature_group_id"/>
+			</index>			
+		</model>
+		<model id="ItemFolderFeatureGroupList" parent="ModelSQL" dataTable="item_folder_feature_groups_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE"/>
+			<field id="item_folder_id" dataType="Int" alias="Папка"/>
+			<field id="item_feature_group_id" dataType="Int" alias="Группа характеристик ID"/>
+			<field id="item_feature_groups_ref" dataType="JSON" alias="Группа характеристик"/>
+		</model>
+		<model id="Item" parent="ModelSQL" dataTable="items" virtual="FALSE" descr="Каталог товров">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" dbRequired="TRUE"/>
+			<field id="name" dataType="Text" alias="Наименование"/>
+			<field id="item_folder_id" dataType="Int" refTable="item_folders" refField="id" alias="Группа товаров"/>
+			<field id="auto_make_id" dataType="Int" refTable="auto_makes" refField="id" alias="Для какой марки"/>
+			<field id="auto_model_id" dataType="Int" refTable="auto_models" refField="id" alias="Для какой модели"/>
+			<field id="auto_model_generation_id" dataType="Int" refTable="auto_model_generations" refField="id" alias="Для какого поколения модели"/>
+			<field id="auto_body_id" dataType="Int" refTable="auto_bodies" refField="id" alias="Для какого кузова"/>
+			<field id="manufacturer_id" dataType="Int" refTable="manufacturers" refField="id" alias="Производитель"/>
+			<index id="items_auto_idx">
+				<field id="auto_make_id"/>
+				<field id="auto_model_id"/>
+				<field id="auto_model_generation_id"/>
+				<field id="auto_body_id"/>
+			</index>			
+			<index id="items_name_idx" type="gin">
+				<expression>name gin_trgm_ops</expression>
+			</index>						
+		</model>
+		<model id="ItemList" parent="ModelSQL" dataTable="items_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" dbRequired="TRUE"/>
+			<field id="name" dataType="Text" alias="Наименование"/>
+			<field id="item_folder_id" dataType="Int" sysCol="TRUE"/>
+			<field id="item_folders_ref" dataType="JSON" alias="Группа товаров"/>
+			<field id="auto_make_id" dataType="Int" sysCol="TRUE"/>
+			<field id="auto_makes_ref" dataType="JSON" alias="Для какой марки"/>			
+			<field id="auto_model_id" dataType="Int" sysCol="TRUE"/>
+			<field id="auto_models_ref" dataType="JSON" alias="Для какой модели"/>
+			<field id="auto_model_generation_id" dataType="Int" sysCol="TRUE"/>
+			<field id="auto_model_generations_ref" dataType="JSON" alias="Для какого поколения модели"/>
+			<field id="auto_body_id" dataType="Int" sysCol="TRUE"/>
+			<field id="auto_bodies_ref" dataType="JSON" alias="Для какого кузова"/>
+			<field id="manufacturer_id" dataType="Int" sysCol="TRUE"/>
+			<field id="manufacturers_ref" dataType="JSON" alias="Производитель"/>
+		</model>
+		<model id="ItemDialog" parent="ModelSQL" dataTable="items_dialog" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" dbRequired="TRUE"/>
+			<field id="name" dataType="Text" alias="Наименование"/>
+			<field id="item_folders_ref" dataType="JSON" alias="Группа товаров"/>
+			<field id="auto_makes_ref" dataType="JSON" alias="Для какой марки"/>			
+			<field id="auto_models_ref" dataType="JSON" alias="Для какой модели"/>
+			<field id="auto_model_generations_ref" dataType="JSON" alias="Для какого поколения модели"/>
+			<field id="auto_bodies_ref" dataType="JSON" alias="Для какого кузова"/>
+			<field id="manufacturers_ref" dataType="JSON" alias="Производитель"/>
+			<field id="features_list" dataType="JSON" alias="Характеристики"/>
+		</model>		
+		<model id="ItemFeatureVal" parent="ModelSQL" dataTable="item_feature_vals" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" dbRequired="TRUE"/>
+			<field id="item_feature_id" dataType="Int" refTable="item_features" refField="id" required="TRUE" alias="Харктеристика"/>
+			<field id="item_id" dataType="Int" refTable="items" refField="id" required="TRUE" alias="Номенклатура"/>
+			<field id="val" dataType="Text" required="TRUE" alias="Значение"/>
+			<index id="item_feature_values_item_idx" unique="TRUE">
+				<field id="item_id"/>
+				<field id="item_feature_id"/>
+			</index>						
+		</model>
+		<model id="SupplierItem" parent="ModelSQL" dataTable="supplier_items" virtual="FALSE" descr="Товары поставщика">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" dbRequired="TRUE"/>
+			<field id="item_id" dataType="Int" refTable="items" refField="id" alias="Базовый товар"/>
+			<field id="supplier_id" dataType="Int" refTable="suppliers" refField="id" alias="Поставщик"/>
+			<index id="supplier_items_item_idx">
+				<field id="item_id"/>
+			</index>			
+		</model>
+		<model id="SupplierItemList" parent="ModelSQL" dataTable="supplier_items_list" virtual="TRUE" descr="Товары поставщика">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" dbRequired="TRUE"/>
+			<field id="item_id" dataType="Int" sysCol="TRUE"/>
+			<field id="items_ref" dataType="JSON" alias="Базовый товар"/>
+			<field id="item_folders_ref" dataType="JSON" alias="Группа товаров"/>
+			<field id="supplier_id" dataType="Int" sysCol="TRUE"/>
+			<field id="suppliers_ref" dataType="JSON" alias="Поставщик"/>
+		</model>
+		<model id="SupplierItemDialog" parent="ModelSQL" dataTable="supplier_items_dialog" virtual="TRUE" descr="Товары поставщика">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" dbRequired="TRUE"/>
+			<field id="items_ref" dataType="JSON" alias="Базовый товар"/>
+			<field id="item_folders_ref" dataType="JSON" alias="Группа товаров"/>
+			<field id="suppliers_ref" dataType="JSON" alias="Поставщик"/>
+			<field id="features_list" dataType="JSON" alias="Характеристики"/>
+			<field id="item_auto_makes_ref" dataType="JSON" alias="Для какой марки"/>			
+			<field id="item_auto_models_ref" dataType="JSON" alias="Для какой модели"/>
+			<field id="item_auto_model_generations_ref" dataType="JSON" alias="Для какого поколения модели"/>
+			<field id="item_auto_bodies_ref" dataType="JSON" alias="Для какого кузова"/>
+			<field id="item_features_list" dataType="JSON" alias="Характеристики"/>
+		</model>
+		<model id="SupplierItemFolderFeatureGroup" parent="ModelSQL" dataTable="supplier_item_folder_feature_groups" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE"/>
+			<field id="item_folder_id" dataType="Int" refTable="item_folders" refField="id" alias="Папка" dbRequired="TRUE"/>
+			<field id="item_feature_group_id" dataType="Int" refTable="item_feature_groups" refField="id" dbRequired="TRUE" alias="Характеристика"/>
+			<index id="supplier_item_folder_feature_groups_idx" unique="TRUE">
+				<field id="item_folder_id"/>
+				<field id="item_feature_group_id"/>
+			</index>			
+		</model>
+		<model id="SupplierItemFolderFeatureGroupList" parent="ModelSQL" dataTable="supplier_item_folder_feature_groups_list" virtual="TRUE">
+			<field id="id" dataType="Int" primaryKey="TRUE" dbRequired="TRUE" autoInc="TRUE"/>
+			<field id="item_folder_id" dataType="Int" alias="Папка"/>
+			<field id="item_feature_group_id" dataType="Int" alias="Группа характеристик ID"/>
+			<field id="item_feature_groups_ref" dataType="JSON" alias="Группа характеристик"/>
+		</model>		
+		<model id="ItemSearchResult" parent="ModelSQL" virtual="TRUE" alias="Возвращается из запроса поиска">
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="name" dataType="String"/>
+			<field id="suppliers_ref" dataType="JSON"/>
+			<field id="auto_makes_ref" dataType="JSON"/>
+			<field id="auto_models_ref" dataType="JSON"/>
+			<field id="auto_model_generations_ref" dataType="JSON"/>
+			<field id="auto_bodies_ref" dataType="JSON"/>
+			<field id="item_folders_ref" dataType="JSON"/>
+			<field id="item_priorities_ref" dataType="JSON"/>
+		</model>		
+		
+	</models>
+	
+	<constants>
+		<constant id="doc_per_page_count" name="Количество документов на странице" descr="Количество документов на странице в журнале документов" dataType="Int" defaultValue="60" autoload="TRUE"/>
+		<constant id="grid_refresh_interval" name="Период обновления таблиц" descr="Период обновления таблиц в секундах" dataType="Int" defaultValue="15" autoload="TRUE"/>
+		<constant id="session_live_time" name="Время жизни сессии" descr="Время, в течении которого сессия не будет удаляться на сервере" dataType="Interval" defaultValue="48:00" viewOptions="{&quot;dateFormat&quot;:&quot;H:i&quot;}" ctrlOptions="{&quot;editMask&quot;:&quot;99:99&quot;}"/>
+		<constant id="mail_server" name="Сервер электронной почты" descr="Параметры сервера электронной почты" dataType="JSON" ctrClass="Constant_mail_server_Edit"/>
+		<constant id="item_feature_quality_level" name="Характеристика уровней товара" descr="Характеристика" dataType="JSON" ctrClass="ItemFeatureEdit"/>
+	</constants>
+	
+	<controllers>	
+		<controller id="Event" parentId="ControllerSQL">
+			<publicMethod id="subscribe">
+				<field id="events" dataType="Array" required="TRUE"/>
+			</publicMethod>
+			<publicMethod id="unsubscribe">
+				<field id="events" dataType="Array" required="TRUE"/>
+			</publicMethod>
+			<publicMethod id="publish">
+				<field id="events" dataType="Array" required="TRUE"/>
+			</publicMethod>
+		</controller>
+		<controller id="Constant" parentId="ControllerSQL">
+			<publicMethod id="set_value">
+				<field id="id" dataType="String" required="TRUE"/>
+				<field id="val" dataType="String"/>
+			</publicMethod>
+			<publicMethod id="get_list" modelId="ConstantList"/>
+			<publicMethod id="get_object" modelId="ConstantList"/>
+			<publicMethod id="get_values">
+				<field id="id_list" dataType="String"/>
+				<field id="field_sep" dataType="String" length="1"/>
+			</publicMethod>
+		</controller>
+		<controller id="Enum" parentId="ControllerSQL">
+			<publicMethod id="get_enum_list">
+				<field id="id" dataType="String"/>
+			</publicMethod>
+		</controller>							
+		<controller id="MainMenuConstructor" parentId="ControllerSQL">
+			<publicMethod id="insert" modelId="MainMenuConstructor"/>
+			<publicMethod id="update" modelId="MainMenuConstructor"/>
+			<publicMethod id="delete" modelId="MainMenuConstructor"/>
+			<publicMethod id="get_list" modelId="MainMenuConstructorList"/>
+			<publicMethod id="get_object" modelId="MainMenuConstructorDialog"/>
+		</controller>
+		<controller id="MainMenuContent" parentIdJS="ControllerObjClient" server="FALSE">
+			<publicMethod id="insert" modelId="MainMenuContent"/>
+			<publicMethod id="update" modelId="MainMenuContent"/>
+			<publicMethod id="delete" modelId="MainMenuContent"/>
+			<publicMethod id="get_list" modelId="MainMenuContent"/>
+			<publicMethod id="get_object" modelId="MainMenuContent"/>
+		</controller>
+		
+		<controller id="View" parentId="ControllerSQL">
+			<publicMethod id="get_list" modelId="ViewList"/>
+			<publicMethod id="complete" modelId="ViewList" patternFieldId="user_descr"/>
+			<publicMethod id="get_section_list" modelId="ViewSectionList"/>
+		</controller>				
+		<controller id="VariantStorage" parentId="ControllerSQL">
+			<publicMethod id="insert" modelId="VariantStorage"/>
+			<publicMethod id="upsert_filter_data" modelId="VariantStorage">
+				<field id="storage_name" dataType="String" required="TRUE"/>
+				<field id="variant_name" dataType="String" required="TRUE"/>
+				<field id="filter_data" dataType="String" required="TRUE"/>
+				<field id="default_variant" dataType="Bool" required="TRUE"/>
+			</publicMethod>			
+			<publicMethod id="upsert_col_visib_data" modelId="VariantStorage">
+				<field id="storage_name" dataType="String" required="TRUE"/>
+				<field id="variant_name" dataType="String" required="TRUE"/>
+				<field id="col_visib" dataType="String" required="TRUE"/>
+				<field id="default_variant" dataType="Bool" required="TRUE"/>
+			</publicMethod>			
+			<publicMethod id="upsert_col_order_data" modelId="VariantStorage">
+				<field id="storage_name" dataType="String" required="TRUE"/>
+				<field id="variant_name" dataType="String" required="TRUE"/>
+				<field id="col_order" dataType="String" required="TRUE"/>
+				<field id="default_variant" dataType="Bool" required="TRUE"/>
+			</publicMethod>						
+			<publicMethod id="update" modelId="VariantStorage"/>
+			<publicMethod id="delete" modelId="VariantStorage"/>
+			<publicMethod id="get_list">
+				<field id="storage_name" dataType="String" required="TRUE"/>
+				<field id="variant_name" dataType="String"/>
+			</publicMethod>
+			<publicMethod id="get_object" modelId="VariantStorage"/>
+			<publicMethod id="get_filter_data" modelId="VariantStorage">
+				<field id="storage_name" dataType="String" required="TRUE"/>
+				<field id="variant_name" dataType="String"/>
+			</publicMethod>
+			<publicMethod id="get_col_visib_data" modelId="VariantStorage">
+				<field id="storage_name" dataType="String" required="TRUE"/>
+				<field id="variant_name" dataType="String"/>
+			</publicMethod>			
+			<publicMethod id="get_col_order_data" modelId="VariantStorage">
+				<field id="storage_name" dataType="String" required="TRUE"/>
+				<field id="variant_name" dataType="String"/>
+			</publicMethod>			
+		</controller>		
+
+		<controller id="About" parentId="ControllerSQL">
+			<publicMethod id="get_object" modelId="About"/>
+		</controller>		
+	
+		<controller id="User" parentId="ControllerSQL" noState="FALSE">
+			<publicMethod id="insert" modelId="User" encType="multipart" requestType="post"/>
+			<publicMethod id="update" modelId="User" encType="multipart" requestType="post"/>
+			<publicMethod id="delete" modelId="User"/>
+			<publicMethod id="get_list" modelId="UserList"/>
+			<publicMethod id="get_object" modelId="UserDialog"/>
+			<publicMethod id="complete" modelId="UserSelect" patternFieldId="descr"/>
+			<publicMethod id="get_profile" modelId="UserDialog"/>
+			<publicMethod id="reset_pwd">
+				<field id="user_id" dataType="Int" required="TRUE"/>
+			</publicMethod>
+			<publicMethod id="login">
+				<field id="name" dataType="String" alias="Имя пользователя" length="50" required="TRUE"/>
+				<field id="pwd" dataType="Password" alias="Пароль" length="20" required="TRUE"/>
+				<field id="width_type" dataType="String" length="2"/>
+			</publicMethod>
+			<publicMethod id="login_refresh">
+				<field id="refresh_token" dataType="String" required="true" length="50"/>
+			</publicMethod>						
+			<publicMethod id="logout"/>
+			<publicMethod id="logout_html"/>			
+			<publicMethod id="download_photo">
+				<field id="user_id" dataType="Int" required="TRUE"/>
+			</publicMethod>
+			<publicMethod id="delete_photo">
+				<field id="user_id" dataType="Int" required="TRUE"/>
+			</publicMethod>
+			<publicMethod id="password_recover">
+				<field id="email" dataType="String" required="TRUE" length="100"/>
+				<field id="captcha_key" dataType="String" required="TRUE" length="10"/>
+			</publicMethod>
+		</controller>	
+		<controller id="Login" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="get_list" modelId="LoginList"/>
+			<publicMethod id="get_object" modelId="LoginList"/>
+			<publicMethod id="logout"/>
+		</controller>
+		<controller id="LoginDevice" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="get_list" modelId="LoginDeviceList"/>
+			<publicMethod id="switch_banned">
+				<field id="banned" dataType="Bool" required="TRUE"/>
+				<field id="hash" dataType="String" length="32" required="TRUE"/>
+				<field id="user_id" dataType="Int" required="TRUE"/>
+			</publicMethod>
+		</controller>
+		<controller id="Captcha" parentId="Controller">
+			<publicMethod id="get">
+				<field id="id" dataType="String" length="50"/>
+			</publicMethod>
+		</controller>
+		
+		<controller id="LoginDeviceBan" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="LoginDeviceBan"/>
+			<publicMethod id="delete" modelId="LoginDeviceBan"/>
+			<publicMethod id="get_list" modelId="LoginDeviceBan"/>
+			<publicMethod id="get_object" modelId="LoginDeviceBan"/>
+		</controller>
+		<controller id="TimeZoneLocale" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="TimeZoneLocale"/>
+			<publicMethod id="update" modelId="TimeZoneLocale"/>
+			<publicMethod id="delete" modelId="TimeZoneLocale"/>
+			<publicMethod id="get_list" modelId="TimeZoneLocale"/>
+			<publicMethod id="get_object" modelId="TimeZoneLocale"/>
+		</controller>
+		<controller id="Department" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="Department"/>
+			<publicMethod id="update" modelId="Department"/>
+			<publicMethod id="delete" modelId="Department"/>
+			<publicMethod id="get_list" modelId="Department"/>
+			<publicMethod id="get_object" modelId="Department"/>
+			<publicMethod id="complete" modelId="Department" patternFieldId="name"/>
+		</controller>
+		<controller id="Post" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="Post"/>
+			<publicMethod id="update" modelId="Post"/>
+			<publicMethod id="delete" modelId="Post"/>
+			<publicMethod id="get_list" modelId="Post"/>
+			<publicMethod id="get_object" modelId="Post"/>
+			<publicMethod id="complete" modelId="Post" patternFieldId="name"/>
+		</controller>
+		<controller id="Contact" parentId="ControllerSQL" noState="FALSE">
+			<publicMethod id="insert" modelId="ContactList"/>
+			<publicMethod id="update" modelId="ContactList"/>
+			<publicMethod id="delete" modelId="ContactList"/>
+			<publicMethod id="get_list" modelId="ContactList"/>
+			<publicMethod id="get_object" modelId="ContactDialog"/>
+			<publicMethod id="complete" modelId="ContactList" patternFieldId="descr"/>
+			<publicMethod id="upsert">
+				<field id="name" dataType="String" length="250" required="TRUE"/>
+				<field id="tel" dataType="String" length="11" required="TRUE"/>
+				<field id="email" dataType="String" length="100" required="FALSE"/>
+				<field id="tel_ext" dataType="String" length="20" required="FALSE"/>
+			</publicMethod>			
+		</controller>
+		<controller id="EntityContact" parentId="ControllerSQL" noState="FALSE">
+			<publicMethod id="insert" modelId="EntityContact"/>
+			<publicMethod id="update" modelId="EntityContact"/>
+			<publicMethod id="delete" modelId="EntityContact"/>
+			<publicMethod id="get_list" modelId="EntityContactList"/>
+			<publicMethod id="get_object" modelId="EntityContactList"/>
+		</controller>		
+		<controller id="ObjectModLog" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="get_list" modelId="ObjectModLog"/>
+			<publicMethod id="get_object" modelId="ObjectModLog"/>
+		</controller>
+		<controller id="MailMessage" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="MailMessage"/>
+			<publicMethod id="update" modelId="MailMessage"/>
+			<publicMethod id="delete" modelId="MailMessage"/>
+			<publicMethod id="get_list" modelId="MailMessageList"/>
+			<publicMethod id="get_object" modelId="MailMessageList"/>
+		</controller>
+		<controller id="MailMessageAttachment" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="MailMessageAttachment"/>
+			<publicMethod id="update" modelId="MailMessageAttachment"/>
+			<publicMethod id="delete" modelId="MailMessageAttachment"/>
+			<publicMethod id="get_list" modelId="MailMessageAttachment"/>
+			<publicMethod id="get_object" modelId="MailMessageAttachment"/>
+		</controller>
+		<controller id="MailTemplate" parentId="ControllerSQL">
+			<publicMethod id="insert" modelId="MailTemplate"/>
+			<publicMethod id="update" modelId="MailTemplate"/>
+			<publicMethod id="get_list" modelId="MailTemplateList"/>
+			<publicMethod id="get_object" modelId="MailTemplate"/>
+		</controller>
+		<controller id="Attachment" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="get_list" modelId="AttachmentList"/>
+			<publicMethod id="get_object" modelId="AttachmentList"/>
+			<publicMethod id="delete_file">
+				<field id="ref" dataType="String" required="TRUE"/>
+				<field id="content_id" dataType="String" required="TRUE"/>
+			</publicMethod>
+			<publicMethod id="get_file">
+				<field id="ref" dataType="String" required="TRUE"/>
+				<field id="content_id" dataType="String" length="36" required="TRUE"/>
+				<field id="inline" dataType="Int"/>
+			</publicMethod>
+			<publicMethod id="add_file" encType="multipart" requestType="post">
+				<field id="ref" dataType="String" required="TRUE"/>
+				<field id="content_data" dataType="Text"/>
+				<field id="content_info" dataType="String" length="500" required="TRUE"/>
+			</publicMethod>			
+		</controller>
+		
+		<controller id="AutoMake" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="AutoMake"/>
+			<publicMethod id="update" modelId="AutoMake"/>
+			<publicMethod id="delete" modelId="AutoMake"/>
+			<publicMethod id="get_list" modelId="AutoMakeList"/>
+			<publicMethod id="get_object" modelId="AutoMakeList"/>
+			<publicMethod id="complete" modelId="AutoMakeList" patternFieldId="name"/>
+		</controller>
+		<controller id="AutoModel" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="AutoModel"/>
+			<publicMethod id="update" modelId="AutoModel"/>
+			<publicMethod id="delete" modelId="AutoModel"/>
+			<publicMethod id="get_list" modelId="AutoModelList"/>
+			<publicMethod id="get_object" modelId="AutoModelList"/>
+			<publicMethod id="complete_for_make" modelId="AutoModelList">
+				<field id="name" dataType="Text"/>
+				<field id="make_id" dataType="Int" required="TRUE"/>
+				<field id="ic" dataType="Int"/>
+				<field id="mid" dataType="Int"/>
+				<field id="count" dataType="Int"/>
+				<field id="ord_directs" dataType="String"/>
+			</publicMethod>
+		</controller>
+		<controller id="AutoModelGeneration" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="AutoModelGeneration"/>
+			<publicMethod id="update" modelId="AutoModelGeneration"/>
+			<publicMethod id="delete" modelId="AutoModelGeneration"/>
+			<publicMethod id="get_list" modelId="AutoModelGenerationList"/>
+			<publicMethod id="get_object" modelId="AutoModelGenerationList"/>
+			<publicMethod id="complete_for_model" modelId="AutoModelGenerationList">
+				<field id="model_id" dataType="Int"/>
+				<field id="descr" dataType="String" length="500"/>
+				<field id="ic" dataType="Int"/>
+				<field id="mid" dataType="Int"/>
+				<field id="count" dataType="Int"/>
+				<field id="ord_directs" dataType="String"/>				
+			</publicMethod>			
+			
+		</controller>
+		
+		<controller id="AutoType" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="AutoType"/>
+			<publicMethod id="update" modelId="AutoType"/>
+			<publicMethod id="delete" modelId="AutoType"/>
+			<publicMethod id="get_list" modelId="AutoType"/>
+			<publicMethod id="get_object" modelId="AutoType"/>
+			<publicMethod id="complete" modelId="AutoType" patternFieldId="name"/>
+		</controller>
+		
+		<controller id="AutoBodyType" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="AutoBodyType"/>
+			<publicMethod id="update" modelId="AutoBodyType"/>
+			<publicMethod id="delete" modelId="AutoBodyType"/>
+			<publicMethod id="get_list" modelId="AutoBodyType"/>
+			<publicMethod id="get_object" modelId="AutoBodyType"/>
+		</controller>
+		<controller id="AutoBody" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="AutoBody"/>
+			<publicMethod id="update" modelId="AutoBody"/>
+			<publicMethod id="delete" modelId="AutoBody"/>
+			<publicMethod id="get_list" modelId="AutoBodyList"/>
+			<publicMethod id="get_object" modelId="AutoBodyList"/>
+			<publicMethod id="complete_for_model_generation" modelId="AutoBodyList">
+				<field id="model_generation_id" dataType="Int"/>
+				<field id="descr" dataType="String" length="500"/>
+				<field id="ic" dataType="Int"/>
+				<field id="mid" dataType="Int"/>
+				<field id="count" dataType="Int"/>
+				<field id="ord_directs" dataType="String"/>				
+			</publicMethod>			
+		</controller>
+		<controller id="ItemFolder" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="ItemFolder"/>
+			<publicMethod id="update" modelId="ItemFolder"/>
+			<publicMethod id="delete" modelId="ItemFolder"/>
+			<publicMethod id="get_list" modelId="ItemFolderList"/>
+			<publicMethod id="get_object" modelId="ItemFolderList"/>
+			<publicMethod id="complete" modelId="ItemFolderList" patternFieldId="name"/>
+		</controller>
+		<controller id="ItemFeature" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="ItemFeature"/>
+			<publicMethod id="update" modelId="ItemFeature"/>
+			<publicMethod id="delete" modelId="ItemFeature"/>
+			<publicMethod id="get_list" modelId="ItemFeatureList"/>
+			<publicMethod id="get_object" modelId="ItemFeature"/>
+			<publicMethod id="complete" modelId="ItemFeatureList" patternFieldId="name"/>
+		</controller>
+		<controller id="ItemFeatureValueList" parentIdJS="ControllerObjClient" server="FALSE">
+			<publicMethod id="insert" modelId="ItemFeatureValueList"/>
+			<publicMethod id="update" modelId="ItemFeatureValueList"/>
+			<publicMethod id="delete" modelId="ItemFeatureValueList"/>
+			<publicMethod id="get_list" modelId="ItemFeatureValueList"/>
+			<publicMethod id="get_object" modelId="ItemFeatureValueList"/>
+		</controller>
+		<controller id="ItemFeatureGroup" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="ItemFeatureGroup"/>
+			<publicMethod id="update" modelId="ItemFeatureGroup"/>
+			<publicMethod id="delete" modelId="ItemFeatureGroup"/>
+			<publicMethod id="get_list" modelId="ItemFeatureGroup"/>
+			<publicMethod id="get_object" modelId="ItemFeatureGroup"/>
+		</controller>
+		<controller id="ItemFeatureGroupItem" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="ItemFeatureGroupItem"/>
+			<publicMethod id="update" modelId="ItemFeatureGroupItem"/>
+			<publicMethod id="delete" modelId="ItemFeatureGroupItem"/>
+			<publicMethod id="get_list" modelId="ItemFeatureGroupItemList"/>
+			<publicMethod id="get_object" modelId="ItemFeatureGroupItemList"/>
+		</controller>
+		<controller id="ItemFolderFeatureGroup" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="ItemFolderFeatureGroup"/>
+			<publicMethod id="update" modelId="ItemFolderFeatureGroup"/>
+			<publicMethod id="delete" modelId="ItemFolderFeatureGroup"/>
+			<publicMethod id="get_list" modelId="ItemFolderFeatureGroupList"/>
+			<publicMethod id="get_object" modelId="ItemFolderFeatureGroupList"/>
+		</controller>
+		<controller id="SupplierItemFolderFeatureGroup" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="SupplierItemFolderFeatureGroup"/>
+			<publicMethod id="update" modelId="SupplierItemFolderFeatureGroup"/>
+			<publicMethod id="delete" modelId="SupplierItemFolderFeatureGroup"/>
+			<publicMethod id="get_list" modelId="SupplierItemFolderFeatureGroupList"/>
+			<publicMethod id="get_object" modelId="SupplierItemFolderFeatureGroupList"/>
+		</controller>
+		
+		<controller id="Item" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="Item"/>
+			<publicMethod id="update" modelId="Item"/>
+			<publicMethod id="delete" modelId="Item"/>
+			<publicMethod id="get_list" modelId="ItemList"/>
+			<publicMethod id="get_object" modelId="ItemDialog"/>
+			<publicMethod id="complete_item" modelId="ItemList">
+				<field id="make_id" dataType="Int"/>
+				<field id="model_id" dataType="Int"/>
+				<field id="model_generation_id" dataType="Int"/>
+				<field id="body_id" dataType="Int"/>
+				<field id="item_folder_id" dataType="Int"/>
+				<field id="descr" dataType="String" length="500"/>
+				<field id="ic" dataType="Int"/>
+				<field id="mid" dataType="Int"/>
+				<field id="count" dataType="Int"/>
+				<field id="ord_directs" dataType="String"/>				
+			</publicMethod>	
+			<publicMethod id="set_feature">
+				<field id="feature_id" dataType="Int" required="TRUE"/>
+				<field id="item_id" dataType="Int" required="TRUE"/>
+				<field id="val" dataType="Text"/>
+			</publicMethod>	
+			<publicMethod id="get_features_filter_list"/>			
+		</controller>
+		<controller id="Manufacturer" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="Manufacturer"/>
+			<publicMethod id="update" modelId="Manufacturer"/>
+			<publicMethod id="delete" modelId="Manufacturer"/>
+			<publicMethod id="get_list" modelId="ManufacturerList"/>
+			<publicMethod id="get_object" modelId="ManufacturerDialog"/>
+			<publicMethod id="complete" modelId="ManufacturerList" patternFieldId="name"/>
+		</controller>
+		<controller id="Supplier" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="Supplier"/>
+			<publicMethod id="update" modelId="Supplier"/>
+			<publicMethod id="delete" modelId="Supplier"/>
+			<publicMethod id="get_list" modelId="SupplierList"/>
+			<publicMethod id="get_object" modelId="SupplierDialog"/>
+			<publicMethod id="complete" modelId="SupplierList" patternFieldId="name"/>
+		</controller>
+		<controller id="VehicleType" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="VehicleType"/>
+			<publicMethod id="update" modelId="VehicleType"/>
+			<publicMethod id="delete" modelId="VehicleType"/>
+			<publicMethod id="get_list" modelId="VehicleType"/>
+			<publicMethod id="get_object" modelId="VehicleType"/>
+			<publicMethod id="complete" modelId="VehicleType" patternFieldId="name"/>
+		</controller>
+		<controller id="ItemPriority" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="ItemPriority"/>
+			<publicMethod id="update" modelId="ItemPriority"/>
+			<publicMethod id="delete" modelId="ItemPriority"/>
+			<publicMethod id="get_list" modelId="ItemPriority"/>
+			<publicMethod id="get_object" modelId="ItemPriority"/>
+			<publicMethod id="complete" modelId="ItemPriority" patternFieldId="name"/>
+		</controller>
+		<controller id="PopularityType" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="PopularityType"/>
+			<publicMethod id="update" modelId="PopularityType"/>
+			<publicMethod id="delete" modelId="PopularityType"/>
+			<publicMethod id="get_list" modelId="PopularityType"/>
+			<publicMethod id="get_object" modelId="PopularityType"/>
+		</controller>		
+		<controller id="SupplierItem" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="SupplierItem"/>
+			<publicMethod id="update" modelId="SupplierItem"/>
+			<publicMethod id="delete" modelId="SupplierItem"/>
+			<publicMethod id="get_list" modelId="SupplierItemList"/>
+			<publicMethod id="get_object" modelId="SupplierItemDialog"/>
+			<publicMethod id="complete" modelId="SupplierItemList" patternFieldId="name"/>
+		</controller>		
+		<controller id="ItemSearch" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="get_object"/>
+			<publicMethod id="find_items" modelId="ItemSearchResult">
+				<field id="criteria" dataType="JSON"/>
+				<field id="from" dataType="Int" required="TRUE"/>
+				<field id="count" dataType="Int" required="TRUE"/>
+			</publicMethod>
+		</controller>		
+		
+	</controllers>
+	
+	<permissions>
+		<permission type="allow" controllerId="all" methodId="all" roleId="admin"/>
+		<permission type="allow" controllerId="User" methodId="login" roleId="guest"/>
+	</permissions>
+	
+	<views>
+		<view id="10000" c="User_Controller" t="UserList" f="get_list" section="Справочники" descr="Пользователи"/>
+		<view id="10001" c="LoginDevice_Controller" t="LoginDeviceList" f="get_list" section="Справочники" descr="Устройства входа пользователей"/>
+		<view id="10003" c="AutoMake_Controller" t="AutoMakeList" f="get_list" section="Справочники" descr="Марки автомобилей"/>
+		<view id="10004" c="AutoModel_Controller" t="AutoModelList" f="get_list" section="Справочники" descr="Модели автомобилей"/>
+		<view id="10005" c="AutoBodyType_Controller" t="AutoBodyTypeList" f="get_list" section="Справочники" descr="Типы кузовов автомобилей"/>
+		<view id="10006" c="AutoBody_Controller" t="AutoBodyList" f="get_list" section="Справочники" descr="Кузовы автомобилей"/>
+		<view id="10007" c="AutoType_Controller" t="AutoTypeList" f="get_list" section="Справочники" descr="Типы автомобилей"/>
+		<view id="10008" c="AutoModelGeneration_Controller" t="AutoModelGenerationList" f="get_list" section="Справочники" descr="Поколения моделей автомобилей"/>
+		<view id="10009" c="ItemFolder_Controller" t="ItemFolderList" f="get_list" section="Справочники" descr="Структура каталога товаров"/>
+		<view id="10010" c="ItemFeature_Controller" t="ItemFeatureList" f="get_list" section="Справочники" descr="Характеристики номенклатуры"/>
+		<view id="10011" c="ItemFeatureGroup_Controller" t="ItemFeatureGroupList" f="get_list" section="Справочники" descr="Группы характеристик номенклатуры"/>
+		<view id="10012" c="Item_Controller" t="ItemList" f="get_list" section="Справочники" descr="Номенклатура"/>
+		<view id="10013" c="Supplier_Controller" t="SupplierList" f="get_list" section="Справочники" descr="Поставщики"/>
+		<view id="10014" c="VehicleType_Controller" t="VehicleTypeList" f="get_list" section="Справочники" descr="Типы транпорта"/>
+		<view id="10015" c="ItemPriority_Controller" t="ItemPriorityList" f="get_list" section="Справочники" descr="Приоритет вывода номенклатуры"/>
+		<view id="10016" c="PopularityType_Controller" t="PopularityTypeList" f="get_list" section="Справочники" descr="Типы популярности"/>
+		<view id="10017" c="SupplierItem_Controller" t="SupplierItemList" f="get_list" section="Справочники" descr="Номенклатура поставщиков"/>
+		<view id="10018" c="Manufacturer_Controller" t="ManufacturerList" f="get_list" section="Справочники" descr="Производитель"/>
+		<view id="20001" c="ItemSearch_Controller" t="ItemSearch" f="get_object" section="Формы" descr="Подбор товара"/>		
+		<view id="40000" c="Constant_Controller" t="ConstantList" f="get_list" section="Константы" descr="Все константы"/>
+	</views>
+	
+	<serverTemplates>
+		<serverTemplate id="About"/>
+		<serverTemplate id="ConstantList" class="list"/>
+		<serverTemplate id="MainMenuConstructorList" class="list"/>		
+		<serverTemplate id="ViewList" class="list"/>	
+		<serverTemplate id="UserList" class="list"/>
+		<serverTemplate id="LoginList" class="list"/>
+		<serverTemplate id="LoginDeviceList" class="list"/>
+		<serverTemplate id="AutoMakeList" class="list"/>
+		<serverTemplate id="AutoModelList" class="list"/>
+		<serverTemplate id="AutoBodyTypeList" class="list"/>
+		<serverTemplate id="AutoBodyList" class="list"/>
+		<serverTemplate id="AutoTypeList" class="list"/>
+		<serverTemplate id="AutoModelGenerationList" class="list"/>
+		<serverTemplate id="ItemFolderList" class="list"/>
+		<serverTemplate id="ItemFeatureList" class="list"/>		
+		<serverTemplate id="ItemFeatureGroupList" class="list"/>
+		<serverTemplate id="ItemFeatureGroupItemList" class="list"/>		
+		<serverTemplate id="ItemFolderFeatureGroupList" class="list"/>
+		<serverTemplate id="SupplierItemFolderFeatureGroupList" class="list"/>
+		<serverTemplate id="ItemList" class="list"/>
+		<serverTemplate id="ItemFeatureValueList" class="list"/>
+		<serverTemplate id="SupplierList" class="list"/>
+		<serverTemplate id="ManufacturerList" class="list"/>
+		<serverTemplate id="VehicleTypeList" class="list"/>
+		<serverTemplate id="PopularityTypeList" class="list"/>
+		<serverTemplate id="SupplierItemList" class="list"/>
+	</serverTemplates>
+	
+	<jsTemplates>
+		<jsTemplate id="ErrorControl" file="tmpl/ErrorControl.html"/>
+		<jsTemplate id="FatalException" file="tmpl/FatalException.html"/>
+		<jsTemplate id="DbException" file="tmpl/DbException.html"/>
+		<jsTemplate id="VersException" file="tmpl/VersException.html"/>
+		<jsTemplate id="IcomoonList" file="tmpl/IcomoonList.html"/>
+		<jsTemplate id="GridCmdContainerAjx" file="controls/tmpl/GridCmdContainerAjx.html"/>
+		<jsTemplate id="ViewGridColManager" file="controls/tmpl/ViewGridColManager.html"/>
+		<jsTemplate id="PopOver" file="controls/tmpl/PopOver.html"/>
+		<jsTemplate id="GridCmdFilterView" file="controls/tmpl/GridCmdFilterView.html"/>
+		<jsTemplate id="EditPeriodDate" file="controls/tmpl/EditPeriodDate.html"/>
+		<jsTemplate id="WindowPrint" file="controls/tmpl/WindowPrint.html"/>
+		<jsTemplate id="VariantStorageSaveView" file="controls/tmpl/VariantStorageSaveView.html"/>
+		<jsTemplate id="VariantStorageOpenView" file="controls/tmpl/VariantStorageOpenView.html"/>
+		<jsTemplate id="EditFile" file="tmpl/EditFile.html"/>
+		<jsTemplate id="EditFileInf" file="tmpl/EditFileInf.html"/>
+		<jsTemplate id="UserPhoto" file="tmpl/UserPhoto.html"/>
+		<jsTemplate id="Captcha" file="tmpl/Captcha.html"/>
+		<jsTemplate id="ItemFeatureOptionEdit" file="tmpl/ItemFeatureOptionEdit.html"/>
+		<jsTemplate id="ItemPriorityCheckEdit" file="tmpl/ItemPriorityCheckEdit.html"/>
+		<jsTemplate id="ItemFeatureQualityEdit" file="tmpl/ItemFeatureQualityEdit.html"/>		
+	</jsTemplates>
+	
+	<packages>
+	</packages>
+	
+	<sqlScripts>
+		<sqlScript file="variant_storages_upsert_col_order_data.sql"/>
+		<sqlScript file="variant_storages_upsert_col_visib_data.sql"/>
+		<sqlScript file="variant_storages_upsert_filter_data.sql"/>
+		<sqlScript file="users_view.sql"/>
+		<sqlScript file="init_db.sql"/>
+	</sqlScripts>
+	
+	<jsScripts>
+		<jsScript file="assets/js/core/libraries/jquery.min.js" compressed="TRUE" standalone="TRUE"/>
+		<jsScript file="assets/js/core/libraries/bootstrap.min.js" compressed="TRUE" standalone="TRUE"/>
+		<jsScript file="assets/js/plugins/loaders/blockui.min.js" compressed="TRUE" standalone="TRUE"/>
+		<jsScript file="assets/js/core/app.js" compressed="TRUE" standalone="TRUE"/>
+		<jsScript file="ext/bootstrap-datepicker/bootstrap-datepicker.min.js" compressed="TRUE" standalone="TRUE" version="1.0"/>
+		<jsScript file="ext/bootstrap-datepicker/bootstrap-datepicker.ru.min.js" compressed="TRUE" standalone="TRUE" version="1.0"/>
+		<jsScript file="jquery.maskedinput.js" compressed="FALSE" standalone="FALSE" version="1.0"/>	
+		<jsScript file="ext/cleave/cleave.min.js" compressed="TRUE" standalone="TRUE" version="1.6"/>
+		<jsScript file="ext/cleave/cleave-phone.ru.js" compressed="TRUE" standalone="TRUE" version="1.6"/>
+		<jsScript file="ext/jshash-2.2/md5-min.js" compressed="TRUE" standalone="TRUE"/>
+		<jsScript file="ext/mustache/mustache.min.js" compressed="TRUE" standalone="TRUE"/>
+		<!--Drag && Drop-->
+		<jsScript file="ext/DragnDrop/DragMaster.js"/>
+		<jsScript file="ext/DragnDrop/DragObject.js"/>
+		<jsScript file="ext/DragnDrop/DropTarget.js"/>		
+
+		<!-- core -->
+		<jsScript file="core/extend.js"/>		
+		<jsScript file="core/App.js"/>
+		<jsScript file="core/AppWin.js"/>				
+		<jsScript file="core/CommonHelper.js"/>
+		<jsScript file="core/DOMHelper.js"/>
+		<jsScript file="core/DateHelper.js"/>
+		<jsScript file="core/EventHelper.js"/>		
+		<jsScript file="core/FatalException.js"/>
+		<jsScript file="core/DbException.js"/>
+		<jsScript file="core/VersException.js"/>		
+		<jsScript file="core/ConstantManager.js"/>
+		
+		<jsScript file="core/AppSrv.js"/>
+		<jsScript file="core/AppSrv.rs_ru.js" resource="ru"/>
+		<jsScript file="core/CookieManager.js"/>
+		<jsScript file="core/ServConnector.js"/>
+		<jsScript file="core/Response.js"/>
+		<jsScript file="core/ResponseXML.js"/>
+		<jsScript file="core/ResponseJSON.js"/>
+		
+		<jsScript file="core/PublicMethod.js"/>
+		<jsScript file="core/PublicMethodServer.js"/>
+		<jsScript file="core/Controller.js"/>
+		<jsScript file="core/ControllerObj.js"/>				
+		<jsScript file="core/ControllerObjServer.js"/>
+		<jsScript file="core/ControllerObjClient.js"/>
+				
+		<jsScript file="core/Model.js"/>
+		<jsScript file="core/ModelXML.js"/>
+		<jsScript file="core/ModelObjectXML.js"/>
+		<jsScript file="core/ModelServRespXML.js"/>
+		
+		<jsScript file="core/ModelJSON.js"/>
+		<jsScript file="core/ModelObjectJSON.js"/>		
+		<jsScript file="core/ModelServRespJSON.js"/>
+		<jsScript file="core/ModelXMLTree.js"/>
+		
+		<jsScript file="core/Validator.js"/>
+		<jsScript file="core/ValidatorString.js"/>
+		<jsScript file="core/ValidatorBool.js"/>
+		<jsScript file="core/ValidatorDate.js"/>
+		<jsScript file="core/ValidatorDateTime.js"/>
+		<jsScript file="core/ValidatorTime.js"/>
+		<jsScript file="core/ValidatorInt.js"/>
+		<jsScript file="core/ValidatorFloat.js"/>
+		<jsScript file="core/ValidatorEnum.js"/>
+		<jsScript file="core/ValidatorJSON.js"/>
+		<jsScript file="core/ValidatorArray.js"/>
+		<jsScript file="core/ValidatorEmail.js"/>								
+		
+		<jsScript file="core/Field.js"/>
+		<jsScript file="core/FieldString.js"/>
+		<jsScript file="core/FieldEnum.js"/>
+		<jsScript file="core/FieldBool.js"/>
+		<jsScript file="core/FieldDate.js"/>
+		<jsScript file="core/FieldDateTime.js"/>
+		<jsScript file="core/FieldDateTimeTZ.js"/>
+		<jsScript file="core/FieldTime.js"/>
+		<jsScript file="core/FieldInt.js"/>
+		<jsScript file="core/FieldBigInt.js"/>
+		<jsScript file="core/FieldSmallInt.js"/>
+		<jsScript file="core/FieldFloat.js"/>
+		<jsScript file="core/FieldPassword.js"/>
+		<jsScript file="core/FieldText.js"/>
+		<jsScript file="core/FieldInterval.js"/>
+		<jsScript file="core/FieldJSON.js"/>
+		<jsScript file="core/FieldJSONB.js"/>
+		<jsScript file="core/FieldArray.js"/>
+		<jsScript file="core/FieldBytea.js"/>
+		<jsScript file="core/ModelFilter.js"/>
+		<jsScript file="core/RefType.js"/>		
+		
+		<jsScript file="core/rs_ru.js" resource="ru"/>
+		
+		<!-- **** controls *** -->		
+		<jsScript file="controls/DataBinding.js"/>
+		<jsScript file="controls/Command.js"/>
+		<jsScript file="controls/CommandBinding.js"/>
+		
+		<jsScript file="controls/Control.js"/>
+		<jsScript file="controls/rs/Control.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ControlContainer.js"/>
+		<jsScript file="controls/rs/ControlContainer.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/View.js"/>
+		<jsScript file="controls/ViewAjx.js"/>
+		<jsScript file="controls/rs/ViewAjx.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ViewAjxList.js"/>
+		<!--<jsScript file="controls/ErrorControl.js"/>-->
+		<jsScript file="controls/Calculator.js"/>
+		<jsScript file="controls/rs/Calculator.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/Button.js"/>
+		<jsScript file="controls/ButtonCtrl.js"/>
+		<jsScript file="controls/ButtonEditCtrl.js"/>
+		<jsScript file="controls/rs/ButtonEditCtrl.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/ButtonCalc.js"/>
+		<jsScript file="controls/rs/ButtonCalc.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ButtonCalendar.js"/>
+		<jsScript file="controls/rs/ButtonCalendar.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ButtonClear.js"/>
+		<jsScript file="controls/rs/ButtonClear.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ButtonCmd.js"/>
+		<jsScript file="controls/ButtonExpToExcel.js"/>
+		<jsScript file="controls/rs/ButtonExpToExcel.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ButtonExpToPDF.js"/>
+		<jsScript file="controls/rs/ButtonExpToPDF.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/ButtonOpen.js"/>
+		<jsScript file="controls/rs/ButtonOpen.rs_ru.js" resource="ru"/>				
+		<jsScript file="controls/ButtonInsert.js"/>
+		<jsScript file="controls/rs/ButtonInsert.rs_ru.js" resource="ru"/>				
+		<jsScript file="controls/ButtonPrint.js"/>
+		<jsScript file="controls/rs/ButtonPrint.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/ButtonPrintList.js"/>		
+		<jsScript file="controls/rs/ButtonPrintList.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ButtonSelectRef.js"/>
+		<jsScript file="controls/rs/ButtonSelectRef.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ButtonSelectDataType.js"/>
+		<jsScript file="controls/rs/ButtonSelectDataType.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ButtonMakeSelection.js"/>
+		<jsScript file="controls/rs/ButtonMakeSelection.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/ButtonToggle.js"/>		
+		
+		<jsScript file="controls/Label.js"/>
+		
+		<jsScript file="controls/Edit.js"/>
+		<jsScript file="controls/rs/Edit.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/EditRef.js"/>
+		<jsScript file="controls/EditString.js"/>
+		<jsScript file="controls/EditText.js"/>
+		<jsScript file="controls/EditNum.js"/>
+		<jsScript file="controls/EditInt.js"/>
+		<jsScript file="controls/EditFloat.js"/>
+		<jsScript file="controls/EditMoney.js"/>
+		<jsScript file="controls/EditPhone.js"/>
+		<jsScript file="controls/EditEmail.js"/>
+		<jsScript file="controls/EditPercent.js"/>
+		<jsScript file="controls/EditDate.js"/>
+		<jsScript file="controls/EditDateTime.js"/>
+		<jsScript file="controls/EditTime.js"/>		
+		<jsScript file="controls/EditPassword.js"/>
+		<jsScript file="controls/EditCheckBox.js"/>
+		<jsScript file="controls/EditContainer.js"/>		
+		<jsScript file="controls/rs/EditContainer.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/EditRadioGroup.js"/>
+		<jsScript file="controls/EditRadio.js"/>		
+		<jsScript file="controls/EditSelect.js"/>		
+		<jsScript file="controls/EditSelectRef.js"/>
+		<jsScript file="controls/rs/EditSelectRef.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/EditSelectOption.js"/>
+		<jsScript file="controls/EditSelectOptionRef.js"/>
+		<jsScript file="controls/EditRadioGroupRef.js"/>
+		<jsScript file="controls/rs/EditRadioGroupRef.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/PrintObj.js"/>				
+		
+		<jsScript file="controls/ControlForm.js"/>
+		<jsScript file="controls/HiddenKey.js"/>
+		<jsScript file="controls/EditJSON.js"/>
+		<jsScript file="controls/EditModalDialog.js"/>
+		<jsScript file="controls/rs/EditModalDialog.rs_ru.js" resource="ru"/>				
+		
+		<jsScript file="controls/GridColumn.js"/>
+		<jsScript file="controls/GridColumnBool.js"/>
+		<jsScript file="controls/GridColumnPhone.js"/>
+		<jsScript file="controls/GridColumnFloat.js"/>
+		<jsScript file="controls/GridColumnByte.js"/>
+		<jsScript file="controls/GridColumnDate.js"/>
+		<jsScript file="controls/GridColumnDateTime.js"/>
+		<jsScript file="controls/GridColumnEnum.js"/>		
+		<jsScript file="controls/GridColumnRef.js"/>
+		<jsScript file="controls/GridColumnPicture.js"/>				
+		<jsScript file="controls/GridCell.js"/>
+		<jsScript file="controls/GridCellHead.js"/>
+		<jsScript file="controls/GridCellFoot.js"/>
+		<jsScript file="controls/GridCellPhone.js"/>
+		<jsScript file="controls/rs/GridCellPhone.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCellDetailToggle.js"/>
+		<jsScript file="controls/rs/GridCellDetailToggle.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridHead.js"/>
+		<jsScript file="controls/GridRow.js"/>
+		<jsScript file="controls/GridFoot.js"/>
+		<jsScript file="controls/GridBody.js"/>
+		<jsScript file="controls/Grid.js"/>
+		<jsScript file="controls/rs/Grid.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/GridSearchInf.js"/>
+		<jsScript file="controls/rs/GridSearchInf.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/VariantStorage.js"/>
+		<jsScript file="controls/GridCommands.js"/>
+		<jsScript file="controls/GridCmd.js"/>
+		<jsScript file="controls/GridCmdContainer.js"/>
+		<jsScript file="controls/rs/GridCmdContainer.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdContainerAjx.js"/>
+		<jsScript file="controls/GridCmdContainerDOC.js"/>
+		<jsScript file="controls/GridCmdInsert.js"/>
+		<jsScript file="controls/rs/GridCmdInsert.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdEdit.js"/>
+		<jsScript file="controls/rs/GridCmdEdit.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdCopy.js"/>
+		<jsScript file="controls/rs/GridCmdCopy.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdDelete.js"/>
+		<jsScript file="controls/rs/GridCmdDelete.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdColManager.js"/>
+		<jsScript file="controls/rs/GridCmdColManager.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdPrint.js"/>
+		<jsScript file="controls/rs/GridCmdPrint.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdRefresh.js"/>
+		<jsScript file="controls/rs/GridCmdRefresh.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdPrintObj.js"/>
+		<jsScript file="controls/GridCmdSearch.js"/>
+		<jsScript file="controls/rs/GridCmdSearch.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdExport.js"/>
+		<jsScript file="controls/rs/GridCmdExport.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdAllCommands.js"/>
+		<jsScript file="controls/rs/GridCmdAllCommands.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/GridCmdDOCUnprocess.js"/>
+		<jsScript file="controls/rs/GridCmdDOCUnprocess.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdDOCShowActs.js"/>
+		<jsScript file="controls/rs/GridCmdDOCShowActs.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdRowUp.js"/>
+		<jsScript file="controls/rs/GridCmdRowUp.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdRowDown.js"/>
+		<jsScript file="controls/rs/GridCmdRowDown.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdFilter.js"/>
+		<jsScript file="controls/rs/GridCmdFilter.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdFilterView.js"/>
+		<jsScript file="controls/rs/GridCmdFilterView.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdFilterSave.js"/>
+		<jsScript file="controls/rs/GridCmdFilterSave.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCmdFilterOpen.js"/>
+		<jsScript file="controls/rs/GridCmdFilterOpen.rs_ru.js" resource="ru"/>
+
+		<jsScript file="controls/ViewGridColManager.js"/>
+		<jsScript file="controls/rs/ViewGridColManager.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/ViewGridColParam.js"/>
+		<jsScript file="controls/rs/ViewGridColParam.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ViewGridColVisibility.js"/>
+		<jsScript file="controls/rs/ViewGridColVisibility.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/ViewGridColOrder.js"/>
+		<jsScript file="controls/rs/ViewGridColOrder.rs_ru.js" resource="ru"/>		
+		
+		<jsScript file="controls/VariantStorageSaveView.js"/>
+		<jsScript file="controls/rs/VariantStorageSaveView.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/VariantStorageOpenView.js"/>
+		<jsScript file="controls/rs/VariantStorageOpenView.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/GridAjx.js"/>
+		<jsScript file="controls/rs/GridAjx.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/TreeAjx.js"/>
+		<jsScript file="controls/GridAjxDOCT.js"/>
+		<jsScript file="controls/GridAjxMaster.js"/>
+		
+		<jsScript file="controls/GridCommandsAjx.js"/>
+		<jsScript file="controls/rs/GridCommandsAjx.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridCommandsDOC.js"/>
+		<jsScript file="controls/rs/GridCommandsDOC.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/GridPagination.js"/>
+		<jsScript file="controls/rs/GridPagination.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/GridFilter.js"/>
+		<jsScript file="controls/rs/GridFilter.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/EditPeriodDate.js"/>
+		<jsScript file="controls/rs/EditPeriodDate.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/EditPeriodDateTime.js"/>		
+		
+		<jsScript file="controls/ConstantGrid.js"/>
+		<jsScript file="controls/rs/ConstantGrid.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/ButtonOK.js"/>
+		<jsScript file="controls/rs/ButtonOK.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ButtonSave.js"/>
+		<jsScript file="controls/rs/ButtonSave.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/ButtonCancel.js"/>
+		<jsScript file="controls/rs/ButtonCancel.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ViewObjectAjx.js"/>
+		<jsScript file="controls/rs/ViewObjectAjx.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/ViewGridEditInlineAjx.js"/>
+		<jsScript file="controls/rs/ViewGridEditInlineAjx.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/ViewDOC.js"/>
+		<jsScript file="controls/rs/ViewDOC.rs_ru.js" resource="ru"/>		
+
+		<jsScript file="controls/WindowPrint.js"/>
+		<jsScript file="controls/rs/WindowPrint.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/WindowQuestion.js"/>
+		<jsScript file="controls/rs/WindowQuestion.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/WindowSearch.js"/>
+		<jsScript file="controls/rs/WindowSearch.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/WindowForm.js"/>
+		<jsScript file="controls/rs/WindowForm.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/WindowFormObject.js"/>
+		<jsScript file="controls/rs/WindowFormObject.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/WindowFormModalBS.js"/>
+		<jsScript file="controls/rs/WindowFormModalBS.rs_ru.js" resource="ru"/>		
+		<jsScript file="controls/WindowMessage.js"/>
+		<jsScript file="controls/WindowTempMessage.js"/>
+		
+		<jsScript file="controls/GridCellHeadDOCProcessed.js"/>
+		<jsScript file="controls/GridCellHeadDOCDate.js"/>
+		<jsScript file="controls/GridCellHeadDOCNumber.js"/>								
+		
+		<jsScript file="controls/actb.js"/>
+		<jsScript file="controls/rs/actb.rs_ru.js" resource="ru"/>
+				
+		<jsScript file="controls/RepCommands.js"/>	
+		<jsScript file="controls/rs/RepCommands.rs_ru.js" resource="ru"/>			
+		
+		<jsScript file="controls/ViewReport.js"/>	
+		<jsScript file="controls/rs/ViewReport.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/PopUpMenu.js"/>								
+		<jsScript file="controls/PopOver.js"/>
+		<jsScript file="controls/PeriodSelect.js"/>
+		<jsScript file="controls/rs/PeriodSelect.rs_ru.js" resource="ru"/>
+		<jsScript file="controls/WindowAbout.js"/>
+		<jsScript file="controls/rs/WindowAbout.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/MainMenuTree.js"/>		
+		<jsScript file="controls/rs/MainMenuTree.rs_ru.js" resource="ru"/>
+		
+		<jsScript file="controls/BigFileUploader.js"/>		
+		<jsScript file="controls/rs/BigFileUploader.rs_ru.js" resource="ru"/>
+
+		<!--
+		<jsScript file="controls/BreadCrum.js"/>		
+		<jsScript file="controls/rs/BreadCrum.rs_ru.js" resource="ru"/>
+		-->
+		
+		
+		<!--
+		<jsScript file="controls/ButtonOrgSearch.js"/>		
+		-->
+
+		<!-- **** Forms *** -->
+		<jsScript file="forms/ViewList_Form.js"/>
+		<jsScript file="forms/MainMenuConstructor_Form.js"/>
+		<jsScript file="forms/User_Form.js"/>
+		<jsScript file="forms/UserList_Form.js"/>
+		<jsScript file="forms/AutoMake_Form.js"/>
+		<jsScript file="forms/AutoMakeList_Form.js"/>
+		<jsScript file="forms/AutoModelList_Form.js"/>
+		<jsScript file="forms/ItemFeature_Form.js"/>
+		<jsScript file="forms/ItemFeatureList_Form.js"/>
+		<jsScript file="forms/ItemFolderList_Form.js"/>
+		<jsScript file="forms/ItemList_Form.js"/>
+		<jsScript file="forms/Item_Form.js"/>
+		<jsScript file="forms/Supplier_Form.js"/>
+		<jsScript file="forms/SupplierList_Form.js"/>
+		<jsScript file="forms/ManufacturerList_Form.js"/>
+		<jsScript file="forms/Manufacturer_Form.js"/>
+		<jsScript file="forms/VehicleTypeList_Form.js"/>																																
+		
+		
+		<!-- **** Controllers && Models *** -->
+		<jsScript file="controllers/User_Controller.js"/>
+		
+		<!-- **** Views *** -->
+		<jsScript file="views/Login_View.js"/>		
+		<jsScript file="views/MainMenuConstructorList_View.js"/>
+		<jsScript file="views/MainMenuConstructor_View.js"/>		
+		<jsScript file="views/ViewList_View.js"/>						
+		<jsScript file="views/About_View.js"/>		
+		<jsScript file="views/ConstantList_View.js"/>
+		<jsScript file="views/ProjectManager_View.js"/>
+		<jsScript file="views/LoginList_View.js"/>
+				
+		<jsScript file="views/UserList_View.js"/>
+		<jsScript file="views/UserDialog_View.js"/>
+		<jsScript file="views/UserProfile_View.js"/>				
+		<jsScript file="views/TimeZoneLocale_View.js"/>
+		<jsScript file="views/LoginDeviceList_View.js"/>																
+		<jsScript file="views/LoginDeviceBanList_View.js"/>
+		<jsScript file="views/ObjectModLog_View.js"/>
+		
+		<jsScript file="views/AutoMakeList_View.js"/>
+		<jsScript file="views/AutoMakeDialog_View.js"/>
+		<jsScript file="views/AutoModelList_View.js"/>
+		<jsScript file="views/AutoBodyTypeList_View.js"/>
+		<jsScript file="views/AutoBodyList_View.js"/>
+		<jsScript file="views/AutoTypeList_View.js"/>
+		<jsScript file="views/AutoModelGenerationList_View.js"/>
+		<jsScript file="views/ItemFolderList_View.js"/>
+		<jsScript file="views/ItemFeatureList_View.js"/>
+		<jsScript file="views/ItemFeatureGroupList_View.js"/>
+		<jsScript file="views/ItemFeatureGroupItemList_View.js"/>
+		<jsScript file="views/ItemFeatureDialog_View.js"/>
+		<jsScript file="views/ItemSearch_View.js"/>
+		<jsScript file="views/ItemFolderFeatureGroupList_View.js"/>
+		<jsScript file="views/SupplierItemFolderFeatureGroupList_View.js"/>								
+		
+		<jsScript file="views/ItemDialog_View.js"/>
+		<jsScript file="views/ItemList_View.js"/>
+		<jsScript file="views/SupplierList_View.js"/>
+		<jsScript file="views/SupplierDialog_View.js"/>												
+		<jsScript file="views/ManufacturerList_View.js"/>
+		<jsScript file="views/ManufacturerDialog_View.js"/>												
+		
+		<jsScript file="views/VehicleTypeList_View.js"/>
+		<jsScript file="views/ItemPriorityList_View.js"/>
+		<jsScript file="views/PopularityTypeList_View.js"/>
+		<jsScript file="views/SupplierItemList_View.js"/>
+		<jsScript file="views/SupplierItemDialog_View.js"/>
+		
+		<jsScript file="tmpl/App.templates.js" compressed="FALSE" standalone="FALSE"/>
+		
+		<jsScript file="custom_controls/App_glab.js"/>
+		
+		<jsScript file="custom_controls/ViewSectionSelect.js"/>
+		<jsScript file="custom_controls/ViewEditRef.js"/>
+		<jsScript file="custom_controls/ErrorControl.js"/>		
+		<jsScript file="custom_controls/Pagination.js"/>
+		<jsScript file="custom_controls/EditFile.js"/>
+		<jsScript file="custom_controls/rs/EditFile.rs_ru.js" resource="ru"/>		
+		<jsScript file="custom_controls/UserNameEdit.js"/>		
+		<jsScript file="custom_controls/UserEditRef.js"/>
+		<jsScript file="custom_controls/TimeZoneLocaleEdit.js"/>		
+		
+		<jsScript file="custom_controls/rs_common_ru.js"/>		
+		<jsScript file="custom_controls/rs_ru.js" resource="ru"/>
+		<jsScript file="custom_controls/ErrorControl.js"/>		
+		<jsScript file="custom_controls/Pagination.js"/>
+		<jsScript file="custom_controls/AutoMakeEdit.js"/>
+		<jsScript file="custom_controls/UserPhotoEdit.js"/>
+		<jsScript file="custom_controls/AttachmentManager.js"/>
+		<jsScript file="custom_controls/AutoBodyTypeEdit.js"/>
+		<jsScript file="custom_controls/AutoTypeEdit.js"/>
+		<jsScript file="custom_controls/AutoModelEdit.js"/>
+		<jsScript file="custom_controls/AutoModelGenerationEdit.js"/>
+		<jsScript file="custom_controls/AutoBodyEdit.js"/>
+		<jsScript file="custom_controls/ItemFeatureDataType_View.js"/>
+		<jsScript file="custom_controls/ItemFeatureValueList_Grid.js"/>
+		<jsScript file="custom_controls/ItemFeatureEdit.js"/>
+		<jsScript file="custom_controls/ItemFeatureGroupEdit.js"/>
+		<jsScript file="custom_controls/ItemFolderEdit.js"/>
+		<jsScript file="custom_controls/ItemEdit.js"/>
+		<jsScript file="custom_controls/SupplierEdit.js"/>
+		<jsScript file="custom_controls/ManufacturerEdit.js"/>
+		<jsScript file="custom_controls/PopularityTypeEdit.js"/>
+		<jsScript file="custom_controls/VehicleTypeEdit.js"/>
+		<jsScript file="custom_controls/ItemPriorityEdit.js"/>
+		<jsScript file="custom_controls/ItemPriorityCheckEdit.js"/>
+		<jsScript file="custom_controls/ItemFeatureQualityEdit.js"/>
+		<jsScript file="custom_controls/ItemFeatureOptionEdit.js"/>
+		<jsScript file="custom_controls/ItemSearchResult_View.js"/>						
+		
+
+		<jsScript file="enum_controls/Enum_data_types.js"/>
+		<jsScript file="enum_controls/EnumGridColumn_data_types.js"/>
+		<jsScript file="enum_controls/EnumGridColumn_locales.js"/>
+		<jsScript file="enum_controls/EnumGridColumn_role_types.js"/>
+		<jsScript file="enum_controls/Enum_locales.js"/>
+		<jsScript file="enum_controls/Enum_role_types.js"/>
+		
+		<jsScript file="models/TimeZoneLocale_Model.js"/>
+		<jsScript file="models/User_Model.js"/>
+		<jsScript file="models/UserList_Model.js"/>
+		<jsScript file="models/UserDialog_Model.js"/>
+		<jsScript file="models/Session_Model.js"/>
+		<jsScript file="models/Login_Model.js"/>
+		<jsScript file="models/LoginList_Model.js"/>
+		<jsScript file="models/ConstantList_Model.js"/>
+		<jsScript file="models/View_Model.js"/>
+		<jsScript file="models/ViewList_Model.js"/>
+		<jsScript file="models/ViewSectionList_Model.js"/>
+		<jsScript file="models/MainMenuConstructor_Model.js"/>
+		<jsScript file="models/MainMenuConstructorList_Model.js"/>
+		<jsScript file="models/MainMenuConstructorDialog_Model.js"/>
+		<jsScript file="models/MainMenuContent_Model.js"/>
+		<jsScript file="models/VariantStorage_Model.js"/>
+		<jsScript file="models/VariantStorageList_Model.js"/>
+		<jsScript file="models/About_Model.js"/>
+		
+		<jsScript file="views/rs_ru.js"/>
+		<jsScript file="views/rs_common_ru.js" resource="ru"/>
+		<jsScript file="models/UserLogin_Model.js"/>
+		<jsScript file="models/UserProfile_Model.js"/>
+		<jsScript file="controllers/TimeZoneLocale_Controller.js"/>
+		<jsScript file="controllers/Constant_Controller.js"/>
+		<jsScript file="controllers/Enum_Controller.js"/>
+		<jsScript file="controllers/MainMenuConstructor_Controller.js"/>
+		<jsScript file="controllers/MainMenuContent_Controller.js"/>
+		<jsScript file="controllers/SrvStatistics_Controller.js"/>
+		<jsScript file="controllers/VariantStorage_Controller.js"/>
+		<jsScript file="controllers/View_Controller.js"/>
+		<jsScript file="controllers/About_Controller.js"/>
+	<jsScript file="custom_controls/App.enums.js"/>
+	<jsScript file="models/Department_Model.js"/>
+	<jsScript file="models/Post_Model.js"/>
+	<jsScript file="models/Contact_Model.js"/>
+	<jsScript file="models/ContactList_Model.js"/>
+	<jsScript file="models/ContactDialog_Model.js"/>
+	<jsScript file="models/EntityContact_Model.js"/>
+	<jsScript file="models/EntityContactList_Model.js"/>
+	<jsScript file="models/ObjectModLog_Model.js"/>
+	<jsScript file="enum_controls/Enum_object_mod_actions.js"/>
+	<jsScript file="enum_controls/EnumGridColumn_object_mod_actions.js"/>
+	<jsScript file="models/SessionVal_Model.js"/>
+	<jsScript file="models/LoginDeviceList_Model.js"/>
+	<jsScript file="models/LoginDeviceBan_Model.js"/><jsScript file="enum_controls/Enum_mail_types.js"/><jsScript file="enum_controls/EnumGridColumn_mail_types.js"/><jsScript file="models/MailMessage_Model.js"/><jsScript file="models/MailMessageAttachment_Model.js"/><jsScript file="models/MailTemplate_Model.js"/><jsScript file="controllers/AutoMake_Controller.js"/><jsScript file="models/AutoMake_Model.js"/><jsScript file="controllers/Login_Controller.js"/><jsScript file="controllers/LoginDevice_Controller.js"/><jsScript file="controllers/ObjectModLog_Controller.js"/><jsScript file="models/AutoModel_Model.js"/><jsScript file="models/AutoModelList_Model.js"/><jsScript file="controllers/AutoModel_Controller.js"/><jsScript file="models/Attachment_Model.js"/><jsScript file="controllers/Attachment_Controller.js"/><jsScript file="models/AttachmentList_Model.js"/><jsScript file="models/AutoMakeList_Model.js"/><jsScript file="models/AutoBodyType_Model.js"/><jsScript file="controllers/AutoBodyType_Controller.js"/><jsScript file="models/AutoBody_Model.js"/><jsScript file="models/AutoBodyList_Model.js"/><jsScript file="controllers/AutoBody_Controller.js"/><jsScript file="models/AutoType_Model.js"/><jsScript file="controllers/AutoType_Controller.js"/><jsScript file="models/AutoModelGeneration_Model.js"/><jsScript file="models/AutoModelGenerationList_Model.js"/><jsScript file="controllers/AutoModelGeneration_Controller.js"/><jsScript file="models/ItemFolder_Model.js"/><jsScript file="controllers/ItemFolder_Controller.js"/><jsScript file="models/ItemFeature_Model.js"/>
+	<jsScript file="controllers/ItemFeature_Controller.js"/>
+	<jsScript file="models/ItemFeatureList_Model.js"/><jsScript file="models/ItemFeatureValueList_Model.js"/><jsScript file="controllers/ItemFeatureValueList_Controller.js"/><jsScript file="enum_controls/Enum_item_feature_filter_option_types.js"/><jsScript file="enum_controls/EnumGridColumn_item_feature_filter_option_types.js"/><jsScript file="models/ItemFeatureGroup_Model.js"/><jsScript file="controllers/ItemFeatureGroup_Controller.js"/><jsScript file="controllers/ItemFeatureGroupItem_Controller.js"/><jsScript file="models/ItemFeatureGroupItem_Model.js"/><jsScript file="models/ItemFeatureGroupItemList_Model.js"/><jsScript file="models/ItemFolderList_Model.js"/><jsScript file="controllers/ItemFolderFeatureGroup_Controller.js"/><jsScript file="models/ItemFolderFeatureGroup_Model.js"/><jsScript file="models/ItemFolderFeatureGroupList_Model.js"/><jsScript file="models/Item_Model.js"/><jsScript file="models/ItemList_Model.js"/><jsScript file="controllers/Item_Controller.js"/><jsScript file="models/ItemFeatureVal_Model.js"/><jsScript file="models/ItemDialog_Model.js"/><jsScript file="enum_controls/Enum_quality_levels.js"/><jsScript file="enum_controls/EnumGridColumn_quality_levels.js"/><jsScript file="models/Supplier_Model.js"/><jsScript file="models/SupplierList_Model.js"/><jsScript file="models/SupplierDialog_Model.js"/><jsScript file="controllers/Supplier_Controller.js"/><jsScript file="models/VehicleType_Model.js"/><jsScript file="controllers/VehicleType_Controller.js"/><jsScript file="controllers/ItemPriority_Controller.js"/><jsScript file="models/ItemPriority_Model.js"/><jsScript file="models/PopularityType_Model.js"/><jsScript file="controllers/PopularityType_Controller.js"/><jsScript file="enum_controls/Enum_screen_width_types.js"/><jsScript file="enum_controls/EnumGridColumn_screen_width_types.js"/><jsScript file="models/SupplierItem_Model.js"/><jsScript file="models/SupplierItemList_Model.js"/><jsScript file="models/SupplierItemFolderFeatureGroup_Model.js"/><jsScript file="models/SupplierItemFolderFeatureGroupList_Model.js"/><jsScript file="controllers/SupplierItemFolderFeatureGroup_Controller.js"/><jsScript file="controllers/ItemSearch_Controller.js"/><jsScript file="models/ItemSearchResult_Model.js"/><jsScript file="models/Manufacturer_Model.js"/><jsScript file="models/ManufacturerList_Model.js"/><jsScript file="models/ManufacturerDialog_Model.js"/><jsScript file="controllers/Manufacturer_Controller.js"/></jsScripts>	
+	<cssScripts>
+		<cssScript file="ext/Limitless v1.4/layout_1/LTR/default/assets/css/icons/icomoon/styles.css" compressed="TRUE" standalone="TRUE"/>
+		<cssScript file="ext/Limitless v1.4/layout_1/LTR/default/assets/css/bootstrap.css" compressed="FALSE" standalone="TRUE"/>
+		<cssScript file="ext/Limitless v1.4/layout_1/LTR/default/assets/css/core.min.css" compressed="TRUE" standalone="TRUE"/>
+		<cssScript file="ext/Limitless v1.4/layout_1/LTR/default/assets/css/components.min.css" compressed="TRUE" standalone="TRUE"/>
+		<cssScript file="ext/Limitless v1.4/layout_1/LTR/default/assets/css/colors.min.css" compressed="TRUE" standalone="TRUE"/>
+		<cssScript file="ext/Limitless v1.4/layout_1/LTR/default/assets/css/icons/fontawesome/styles.min.css" compressed="TRUE" standalone="TRUE"/>
+		<cssScript file="ext/bootstrap-datepicker/bootstrap-datepicker.standalone.min.css" compressed="TRUE" standalone="TRUE"/>
+		<cssScript file="custom-css/style.css" standalone="TRUE"/>
+		<cssScript file="custom-css/print.css" standalone="TRUE"/>
+	</cssScripts>	
+</metadata>

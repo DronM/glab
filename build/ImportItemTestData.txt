@@ -1,0 +1,13 @@
+token=9cd1501b-3235-27c3-fea9-8a2fed097aae&c=SupplierItem&v=ViewXML&f=import&items=[
+	{"make":"Toyota",
+	"model":"Camry",
+	"model_generation":"VI(XV40)",
+	"body":"Седан",
+	"supplier":"AGC",
+	"name":"Тест1",
+	"picture": null,
+	"sale_price": 500,
+	"cost": 250,
+	"options":[{"id":"vin_window", "val": "vin"},{"id":"wheel_pos", "val": "LHD"},{"id":"accessories", "val": true},{"id":"comment", "val": "Произвольный комментарий"},{"id":"holes", "val": 3},{"id":"weight", "val": 1.5}]
+	}
+]

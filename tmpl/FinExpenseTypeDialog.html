@@ -1,0 +1,87 @@
+<div id="{{id}}">
+	<div id="{{id}}:cmd-cont">
+		<div id="{{id}}:cmdOk">
+		</div>
+		<div id="{{id}}:cmdSave">
+		</div>
+		<div id="{{id}}:cmdCancel">
+		</div>
+	</div>
+
+	<div class="panel-heading">
+		<h1 class="page-header">Статья расходов
+		</h1>
+	</div>
+
+	<div class="panel panel-body dialogForm">
+		<div id="{{id}}:name">
+	    </div>
+		<div id="{{id}}:deleted">		
+	    </div>
+		<div id="{{id}}:for_cash">						
+	    </div>
+		<div id="{{id}}:for_bank">		
+	    </div>
+
+		<div id="{{id}}:bank_sec" class="hidden">
+			<div class="alert alert-info alert-styled-left">
+				<p>Импортируемая строка:
+					<strong>"БАНК_КОММЕНТ"
+					</strong>
+				</p>
+				<p>Привести к нижнему регистру:
+					<strong>НРЕГ("строка")
+					</strong>
+
+				</p>
+				<p>Привести к верхнему регистру:
+					<strong>ВРЕГ("строка")</strong>
+				</p>
+				<p>Возможные операции:</p>
+				<ul>
+					<li>
+						<strong>ПОДБНО "%строка_поиска%"</strong>
+					</li>
+					<li>
+						<strong>НЕ ПОДБНО "%строка_поиска%"</strong>
+					</li>
+					<li>
+						<strong>РАВНО "строка_поиска"</strong>
+					</li>
+					<li>
+						<strong>НЕ РАВНО "строка_поиска"</strong>
+					</li>
+				</ul>
+				<p>
+					Символ <strong>%</strong> заменяет любое количество любых символов.
+				</p>
+				<p>
+					<div>Возможные комбинации операций:</div>
+					<ul>
+						<li>
+							<strong>И</strong>
+						</li> 
+						<li>
+							<strong>ИЛИ</strong>
+						</li> 
+					</ul>
+				</p>
+				<p>
+					Пример:
+					<p>
+						<strong>
+						НРЕГ("БАНК_КОММЕНТ") ПОДБНО НРЕГ("%подстрока1%")
+						ИЛИ НРЕГ("БАНК_КОММЕНТ") ПОДБНО НРЕГ("%подстрока2%")
+						</strong>
+					</p>
+				</p>
+			</div>
+
+			<div id="{{id}}:bank_match_rule">
+			</div>
+			<div id="{{id}}:verify_rule">
+			</div>
+		</div>
+	</div>
+
+</div>	

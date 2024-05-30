@@ -1,0 +1,55 @@
+<div id="{{id}}">
+	<div id="{{id}}:cmd-cont">
+		<div id="{{id}}:cmdOk"/>
+		<div id="{{id}}:cmdSave"/>
+		<div id="{{id}}:cmdCancel"/>
+	</div>
+
+	<div class="panel-heading">
+		<h3 class="panel-title">Поколение модели</h3>
+	</div>
+	
+	<div class="tabbable">
+		<ul class="nav nav-tabs nav-tabs-highlight">
+			<li class="active">
+				<a href="#attributes" data-toggle="tab" aria-expanded="true">Основные данные</a>
+			</li>
+			<li>
+				<a href="#body_list" data-toggle="tab" aria-expanded="false">Кузова</a>
+			</li>
+		</ul>
+	</div>
+	
+	<!-- Tab panes -->
+	<div class="tab-content dialogForm">	
+		<div class="tab-pane fade in active" id="attributes">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">Основные данные</h4>
+				</div>
+			
+				<div id="{{id}}:generation_num"/>
+				<div id="{{id}}:model"/>
+				<div id="{{id}}:series"/>
+				<div id="{{id}}:year_from"/>
+				<div id="{{id}}:year_to"/>
+				
+				<div id="{{id}}:eurocode"/>
+				<div id="{{id}}:local_id"/>
+			</div>
+		</div>
+
+		<div class="tab-pane fade" id="body_list">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel">
+					<div class="panel-heading">
+						<h4 class="panel-title">Кузова</h4>
+					</div>
+	
+					<div id="{{id}}:auto_body_list"/>
+				</div>
+				
+			</div>
+		</div>
+	</div>	
+</div>	

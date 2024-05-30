@@ -1,0 +1,47 @@
+<div id="{{id}}">
+	<div id="{{id}}:cmd-cont">
+		<div id="{{id}}:cmdOk"/>
+		<div id="{{id}}:cmdSave"/>
+		<div id="{{id}}:cmdCancel"/>
+	</div>
+
+	<div class="panel-heading">
+		<h1 class="page-header">Статья расходов</h1>
+	</div>
+
+	<div class="panel panel-body dialogForm">
+		<div id="{{id}}:name"/>
+		<div id="{{id}}:deleted"/>		
+		<div id="{{id}}:for_chash"/>						
+		<div id="{{id}}:for_bank"/>		
+		<div class="alert alert-info alert-styled-left">
+			<p>Импортируемая строка: <strong>БАНК_КОММЕНТ</strong>
+			<p>Привести к нижнему регистру: <strong>НРЕГ('строка')</strong>
+			<p>Привести к верхнему регистру: <strong>ВРЕГ('строка')</strong>
+			<p>Возможные операции:</p>
+			<ul>
+				<li>ПОДБНО '%строка_поиска%'</li>
+				<li>НЕ ПОДБНО '%строка_поиска%'</li>
+				<li>РАВНО 'строка_поиска'</li>
+				<li>НЕ РАВНО 'строка_поиска'</li>
+			</ul>
+			<p>
+				Символ % заменяет любое количество любых символов.
+			</p>
+			<p>
+			    <div>Возможные комбинации операций:</div>
+				<ul>
+					<li>И</li> 
+					<li>ИЛИ</li> 
+				</ul>
+			</p>
+			<p>
+				Пример:
+				НРЕГ(БАНК_КОММЕНТ) ПОДБНО НРЕГ('%подстрока1%')
+				ИЛИ НРЕГ(БАНК_КОММЕНТ) ПОДБНО НРЕГ('%подстрока1%')
+			</p>
+		</div>
+		<div id="{{id}}:bank_match_rule"/>
+	</div>
+
+</div>	

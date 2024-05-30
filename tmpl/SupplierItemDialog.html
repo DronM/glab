@@ -1,0 +1,76 @@
+<div id="{{id}}">
+	<div id="{{id}}:cmd-cont">
+		<div id="{{id}}:cmdOk"/>
+		<div id="{{id}}:cmdSave"/>
+		<div id="{{id}}:cmdCancel"/>
+	</div>
+
+	<div class="row">
+		<h1 class="page-header">Карточка номенклатуры поставщика</h1>
+	</div>
+	
+	<div class="tabbable">
+		<ul class="nav nav-tabs nav-tabs-highlight">
+			<li class="active">
+				<a href="#attrs" data-toggle="tab" aria-expanded="true">Реквизиты</a>
+			</li>
+			<li>
+				<a href="#supplier_features" data-toggle="tab" aria-expanded="false">Характеристики</a>
+			</li>
+			<li>
+				<a href="#supplier_store_values" data-toggle="tab" aria-expanded="false">Остатки</a>
+			</li>
+			
+		</ul>
+	</div>
+		
+	<!-- Tab panes -->
+	<div class="tab-content dialogForm">	
+		<div class="tab-pane fade in active" id="attrs">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">Реквизиты номенклатуры</h4>
+				</div>
+				
+				<div id="{{id}}:items_ref"/>
+				<div id="{{id}}:suppliers_ref"/>
+				<div id="{{id}}:cost"/>
+				<div id="{{id}}:sale_price"/>
+				
+				<div id="{{id}}:artikul"/>
+				<div id="{{id}}:comment_text"/>
+				<div id="{{id}}:comment_note"/>
+				
+				<div id="{{id}}:pictures"/>
+				
+			</div>
+		</div>
+		<div class="tab-pane fade" id="supplier_features">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">Характеристики поставщика</h4>
+				</div>
+				{{#SUPPLIER_FEATURE_GROUPS}}
+				<div class="panel panel-body">
+					<div class="panel-heading">
+						<h6 class="panel-title">{{DESCR}}</h6>
+					</div>
+					{{#FEATURES}}
+					<div id="{{id}}:supl_ctrl_{{ID}}"/>
+					{{/FEATURES}}
+				</div>
+				{{/SUPPLIER_FEATURE_GROUPS}}
+			</div>
+		</div>
+
+		<div class="tab-pane fade" id="supplier_store_values">
+			<div class="panel panel-body userDialogTab">
+				<div class="panel-heading">
+					<h4 class="panel-title">Остатки по местам хранения</h4>
+				</div>
+				<div id="{{id}}:supplier_store_values_list"/>
+			</div>
+		</div>
+		
+	</div>	
+</div>	

@@ -1,0 +1,10 @@
+<div id="{{id}}">
+	<div>
+		<input type="radio" id="{{id}}:any" name="qualityType" value="any" checked="checked"/>
+		<label for="{{id}}:any">Любой</label>	
+	{{#QUALITIES}}	
+		<input type="radio" id="{{id}}:{{QUAL_ID}}" name="qualityType" value="{{QUAL_ID}}"/>
+		<label for="{{id}}:{{QUAL_ID}}">{{QUAL_NAME}}</label>	
+	{{/QUALITIES}}
+	</div>
+</div>

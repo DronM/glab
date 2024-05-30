@@ -1,0 +1,1 @@
+/home/andrey/go/osbe/repo/contact/js20/views/PostDialog_View.js
