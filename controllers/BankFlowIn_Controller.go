@@ -90,6 +90,14 @@ func NewController_BankFlowIn() *BankFlowIn_Controller {
 			Fields: model.Cond_Model_fields,
 		},
 	}
+
+	//************************** method apply_rules *************************************
+	c.PublicMethods["apply_rules"] = &BankFlowIn_Controller_apply_rules{
+		gobizap.Base_PublicMethod{
+			ID:     "apply_rules",
+			Fields: fields.GenModelMD(reflect.ValueOf(models.BankFlowIn_apply_rules{})),
+		},
+	}
 	return c
 }
 
@@ -213,6 +221,24 @@ type BankFlowIn_Controller_get_report struct {
 func (pm *BankFlowIn_Controller_get_report) Unmarshal(payload []byte) (reflect.Value, error) {
 	var res reflect.Value
 	argv := &model.Controller_get_list_argv{}
+
+	if err := json.Unmarshal(payload, argv); err != nil {
+		return res, err
+	}
+	res = reflect.ValueOf(&argv.Argv).Elem()
+	return res, nil
+}
+
+// ************************* apply_rules **********************************************
+// Public method: import_from_bank
+type BankFlowIn_Controller_apply_rules struct {
+	gobizap.Base_PublicMethod
+}
+
+// Public method Unmarshal to structure
+func (pm *BankFlowIn_Controller_apply_rules) Unmarshal(payload []byte) (reflect.Value, error) {
+	var res reflect.Value
+	argv := &models.BankFlowIn_apply_rules_argv{}
 
 	if err := json.Unmarshal(payload, argv); err != nil {
 		return res, err

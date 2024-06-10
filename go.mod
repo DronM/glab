@@ -22,8 +22,10 @@ replace github.com/dronm/clbnk => /home/andrey/go/clbnk
 
 require (
 	github.com/dchest/captcha v1.0.0
+	github.com/dronm/clbnk v0.0.0-20240521080150-f5bd63ba77c4
 	github.com/dronm/ds v1.0.1
 	github.com/dronm/gobizap v0.0.0
+	github.com/dronm/gobizap/config v0.0.0-00010101000000-000000000000
 	github.com/jackc/pgconn v1.14.0
 	github.com/jackc/pgx/v5 v5.5.3
 	github.com/labstack/gommon v0.4.0
@@ -34,8 +36,6 @@ require (
 require (
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
-	github.com/dronm/clbnk v0.0.0-20240521080150-f5bd63ba77c4 // indirect
-	github.com/dronm/gobizap/config v0.0.0-00010101000000-000000000000 // indirect
 	github.com/dronm/waitStrat v0.0.0-20230107030139-1373bf8a7e73 // indirect
 	github.com/gobwas/httphead v0.1.0 // indirect
 	github.com/gobwas/pool v0.2.1 // indirect

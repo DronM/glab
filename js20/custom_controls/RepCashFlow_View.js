@@ -11,7 +11,7 @@ function RepCashFlow_View(id,options){
 
 	options = options || {};
 	
-	var contr = new CashFlowIn_Controller();	
+	let contr = new CashFlowIn_Controller();	
 	options.publicMethod = contr.getPublicMethod("get_cash_flow_in_out_list");
 	options.reportViewId = "ViewHTMLXSLT";
 	options.templateId = "RepCashFlow";

@@ -162,6 +162,7 @@ func initMD(md *gobizap.Metadata) {
 	md.Controllers["FinExpenseType"] = controllers.NewController_FinExpenseType()
 	md.Models["FinExpenseType"] = models.NewModelMD_FinExpenseType()
 	md.Models["FinExpenseTypeList"] = models.NewModelMD_FinExpenseTypeList()
+	md.Models["FinExpenseTypeItemList"] = models.NewModelMD_FinExpenseTypeItemList()
 	md.Models["FinExpenseTypeDialog"] = models.NewModelMD_FinExpenseTypeDialog()
 
 	md.Controllers["CashFlowIn"] = controllers.NewController_CashFlowIn()

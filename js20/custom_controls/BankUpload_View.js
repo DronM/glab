@@ -161,5 +161,4 @@ BankUpload_View.prototype.fetchOperationError = function(operationID){
 			self.setResultError(m.getFieldValue('error_text'));
 		}
 	})
-
 }

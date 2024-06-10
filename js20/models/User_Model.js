@@ -30,7 +30,6 @@ function User_Model(options){
 	filed_options.autoInc = true;	
 	
 	options.fields.id = new FieldInt("id",filed_options);
-	options.fields.id.getValidator().setRequired(true);
 	
 				
 	
@@ -41,7 +40,7 @@ function User_Model(options){
 	
 	options.fields.name = new FieldString("name",filed_options);
 	options.fields.name.getValidator().setRequired(true);
-	options.fields.name.getValidator().setMaxLength('50');
+	options.fields.name.getValidator().setMaxLength('100');
 	
 				
 	
@@ -51,7 +50,7 @@ function User_Model(options){
 	filed_options.autoInc = false;	
 	
 	options.fields.role_id = new FieldEnum("role_id",filed_options);
-	filed_options.enumValues = 'admin';
+	filed_options.enumValues = 'admin,accountant';
 	options.fields.role_id.getValidator().setRequired(true);
 	
 				
@@ -92,7 +91,7 @@ function User_Model(options){
 	filed_options.autoInc = false;	
 	
 	options.fields.time_zone_locale_id = new FieldInt("time_zone_locale_id",filed_options);
-				
+	
 				
 	
 	var filed_options = {};
@@ -112,7 +111,6 @@ function User_Model(options){
 	
 	options.fields.photo = new FieldBytea("photo",filed_options);
 	
-			
 				
 	
 	var filed_options = {};
@@ -121,10 +119,10 @@ function User_Model(options){
 	filed_options.autoInc = false;	
 	
 	options.fields.department_id = new FieldInt("department_id",filed_options);
-				
+	
 			
 			
-									
+			
 		User_Model.superclass.constructor.call(this,id,options);
 }
 extend(User_Model,ModelXML);

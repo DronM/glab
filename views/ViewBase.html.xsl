@@ -129,20 +129,13 @@
 	
 	<xsl:call-template name="initAppWin"/>	
 	
-	<xsl:if test="$LOGGED and (/document/model[@id='ServerVars']/row[1]/app_port or /document/model[@id='ServerVars']/row[1]/app_ports) and not(/document/model[@id='ServerVars']/row/role_id='person')">	
+	<xsl:if test="$LOGGED and (/document/model[@id='ServerVars']/row[1]/wsPort or /document/model[@id='ServerVars']/row[1]/wsPortTls) and not(/document/model[@id='ServerVars']/row/role_id='person')">	
 	//event server
 	var ws_host = window.location.host;
 	var ws_sep = ws_host.indexOf(":");
 	application.initAppSrv({		
 		"host": (ws_sep>=0)? ws_host.substring(0,ws_sep) : ws_host
-		<xsl:choose>
-		<xsl:when test="/document/model[@id='ServerVars']/row[1]/app_ports != ''">
-		,"port": (location.protocol !== "https:")? <xsl:value-of select="/document/model[@id='ServerVars']/row[1]/app_port"/> : <xsl:value-of select="/document/model[@id='ServerVars']/row[1]/app_ports"/>
-		</xsl:when>
-		<xsl:otherwise>
-		,"port": <xsl:value-of select="/document/model[@id='ServerVars']/row[1]/app_port"/>
-		</xsl:otherwise>
-		</xsl:choose>		
+		,"port": (location.protocol !== "https:")? <xsl:value-of select="/document/model[@id='ServerVars']/row[1]/wsPort"/> : <xsl:value-of select="/document/model[@id='ServerVars']/row[1]/wsPortTls"/>
 		,"appId":'<xsl:value-of select="/document/model[@id='ServerVars']/row[1]/app_id"/>'
 		,"token":'<xsl:value-of select="/document/model[@id='ServerVars']/row[1]/token"/>'
 		,"tokenExpires":'<xsl:value-of select="/document/model[@id='ServerVars']/row[1]/tokenExpires"/>'

@@ -18,6 +18,7 @@ import (
 
 	"github.com/dronm/ds/pgds"
 	"github.com/dronm/gobizap"
+	"github.com/dronm/gobizap/model"
 	"github.com/dronm/gobizap/response"
 	"github.com/dronm/gobizap/socket"
 	"github.com/dronm/gobizap/srv"
@@ -43,14 +44,17 @@ func (pm *FinExpenseType_Controller_insert) Run(app gobizap.Applicationer, serv 
 	conn := pool_conn.Conn()
 
 	args := rfltArgs.Interface().(*models.FinExpenseType)
-	rule, err := MakeRuleCondition(args.Bank_match_rule.GetValue())
-	if err != nil {
-		return gobizap.NewPublicMethodError(ER_RULE_VERIF_CODE, err.Error())
+	param_rule := args.Bank_match_rule.GetValue()
+	if param_rule != "" {
+		rule, err := MakeRuleCondition(param_rule)
+		if err != nil {
+			return gobizap.NewPublicMethodError(ER_RULE_VERIF_CODE, err.Error())
+		}
+		if err := VerifyExpenseRule(rule, conn); err != nil {
+			return gobizap.NewPublicMethodError(ER_RULE_VERIF_CODE, err.Error())
+		}
+		args.Bank_match_rule_cond.SetValue(rule)
 	}
-	if err := VerifyExpenseRule(rule, conn); err != nil {
-		return gobizap.NewPublicMethodError(ER_RULE_VERIF_CODE, err.Error())
-	}
-	args.Bank_match_rule_cond.SetValue(rule)
 	return gobizap.InsertOnArgs(app, pm, resp, sock, rfltArgs, app.GetMD().Models["FinExpenseType"], &models.FinExpenseType_keys{}, sock.GetPresetFilter("FinExpenseType"))
 }
 
@@ -66,15 +70,20 @@ func (pm *FinExpenseType_Controller_get_object) Run(app gobizap.Applicationer, s
 
 // Method implemenation get_list
 func (pm *FinExpenseType_Controller_get_list) Run(app gobizap.Applicationer, serv srv.Server, sock socket.ClientSocketer, resp *response.Response, rfltArgs reflect.Value) error {
-	// args := rfltArgs.Interface().(*model.Cond_Model)
-	// cond := args.Cond_fields.GetValue()
-	// if cond == "" {
-	// 	//add parent_id is null
-	// 	args.Cond_fields.SetValue("parent_id")
-	// 	args.Cond_vals.SetValue("null")
-	// 	args.Cond_sgns.SetValue("i")
-	// }
+	args := rfltArgs.Interface().(*model.Cond_Model)
+	cond := args.Cond_fields.GetValue()
+	if cond == "" {
+		//add parent_id is null
+		args.Cond_fields.SetValue("parent_id")
+		args.Cond_vals.SetValue("null")
+		args.Cond_sgns.SetValue("i")
+	}
 	return gobizap.GetListOnArgs(app, resp, rfltArgs, app.GetMD().Models["FinExpenseTypeList"], &models.FinExpenseTypeList{}, sock.GetPresetFilter("FinExpenseTypeList"))
+}
+
+// Method implemenation get_item_list
+func (pm *FinExpenseType_Controller_get_item_list) Run(app gobizap.Applicationer, serv srv.Server, sock socket.ClientSocketer, resp *response.Response, rfltArgs reflect.Value) error {
+	return gobizap.GetListOnArgs(app, resp, rfltArgs, app.GetMD().Models["FinExpenseTypeItemList"], &models.FinExpenseTypeItemList{}, sock.GetPresetFilter("FinExpenseTypeItemList"))
 }
 
 // Method implemenation update

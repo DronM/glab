@@ -58,6 +58,19 @@ extend(CashFlowIn_Controller,ControllerObjServer);
 	pm.addField(field);
 	
 	var options = {};
+	options.alias = "Тип родителя";options.required = true;	
+	options.enumValues = 'cash,bank';
+	var field = new FieldEnum("cash_flow_income_type",options);
+	
+	pm.addField(field);
+	
+	var options = {};
+	options.alias = "Источник прихода";
+	var field = new FieldText("income_source",options);
+	
+	pm.addField(field);
+	
+	var options = {};
 	options.alias = "Комментарий";
 	var field = new FieldText("comment_text",options);
 	
@@ -102,6 +115,22 @@ extend(CashFlowIn_Controller,ControllerObjServer);
 	var options = {};
 	
 	var field = new FieldInt("cash_location_id",options);
+	
+	pm.addField(field);
+	
+	var options = {};
+	options.alias = "Тип родителя";	
+	options.enumValues = 'cash,bank';
+	options.enumValues+= (options.enumValues=='')? '':',';
+	options.enumValues+= 'null';
+	
+	var field = new FieldEnum("cash_flow_income_type",options);
+	
+	pm.addField(field);
+	
+	var options = {};
+	options.alias = "Источник прихода";
+	var field = new FieldText("income_source",options);
 	
 	pm.addField(field);
 	

@@ -196,6 +196,7 @@
 <li><a href="#FinExpenseType_Model">FinExpenseType_Model</a></li>
 <li><a href="#FinExpenseTypeList_Model">FinExpenseTypeList_Model</a></li>
 <li><a href="#FinExpenseTypeDialog_Model">FinExpenseTypeDialog_Model</a></li>
+<li><a href="#FinExpenseTypeItemList_Model">FinExpenseTypeItemList_Model</a></li>
 <li><a href="#CashLocation_Model">CashLocation_Model</a></li>
 <li><a href="#CashFlowIn_Model">CashFlowIn_Model</a></li>
 <li><a href="#CashFlowInList_Model">CashFlowInList_Model</a></li>
@@ -236,6 +237,7 @@
 <li><a href="#employee_status_types">employee_status_types</a></li>
 <li><a href="#doc_types">doc_types</a></li>
 <li><a href="#reg_types">reg_types</a></li>
+<li><a href="#cash_flow_income_types">cash_flow_income_types</a></li>
 </ul>
 </div>
 <div class="content">
@@ -619,6 +621,18 @@
 								Нет</p>
 </div>
 </div>
+<h2>apply_rules</h2>
+<p>Arguments:</p>
+<div class="content_item content_item2">
+<h3>operation_id</h3>
+<p></p>
+<div class="content_item content_item3">
+<p>Type:String</p>
+<p>Required:
+								Да</p>
+<p>Length:36</p>
+</div>
+</div>
 </div>
 </div>
 <div id="BankFlowOut_Controller" class="content_box">
@@ -938,7 +952,8 @@
 <a href="#FinExpenseType_Model">Model: FinExpenseType_Model</a><h2>update</h2>
 <a href="#FinExpenseType_Model">Model: FinExpenseType_Model</a><h2>delete</h2>
 <a href="#FinExpenseType_Model">Model: FinExpenseType_Model</a><h2>get_list</h2>
-<a href="#FinExpenseTypeList_Model">Model: FinExpenseTypeList_Model</a><h2>get_object</h2>
+<a href="#FinExpenseTypeList_Model">Model: FinExpenseTypeList_Model</a><h2>get_item_list</h2>
+<a href="#FinExpenseTypeItemList_Model">Model: FinExpenseTypeItemList_Model</a><h2>get_object</h2>
 <a href="#FinExpenseTypeDialog_Model">Model: FinExpenseTypeDialog_Model</a><h2>complete</h2>
 <a href="#FinExpenseTypeList_Model">Model: FinExpenseTypeList_Model</a><h2>verify_rule</h2>
 <p>Arguments:</p>
@@ -3424,6 +3439,18 @@
 <div>Required:</div>
 <div>Length:</div>
 <div>Precision:</div>
+<h2>cash_flow_income_type</h2>
+<div>Type:Enum</div>
+<div>Primary key:</div>
+<div>Required:TRUE</div>
+<div>Length:</div>
+<div>Precision:</div>
+<h2>income_source</h2>
+<div>Type:Text</div>
+<div>Primary key:</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
 <h2>comment_text</h2>
 <div>Type:Text</div>
 <div>Primary key:</div>
@@ -3468,6 +3495,18 @@
 <div>Precision:</div>
 <h2>cash_locations_ref</h2>
 <div>Type:JSON</div>
+<div>Primary key:</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
+<h2>cash_flow_income_type</h2>
+<div>Type:String</div>
+<div>Primary key:</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
+<h2>income_source</h2>
+<div>Type:Text</div>
 <div>Primary key:</div>
 <div>Required:</div>
 <div>Length:</div>
@@ -4656,6 +4695,48 @@
 <div>Precision:</div>
 <h2>deleted</h2>
 <div>Type:Bool</div>
+<div>Primary key:</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
+</div>
+</div>
+<div id="FinExpenseTypeItemList_Model" class="content_box">
+<h1>FinExpenseTypeItemList_Model</h1>
+<div class="content_item">
+<p>Поля:</p>
+<h2>id</h2>
+<div>Type:Int</div>
+<div>Primary key:TRUE</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
+<h2>parent1_id</h2>
+<div>Type:Int</div>
+<div>Primary key:</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
+<h2>parent2_id</h2>
+<div>Type:Int</div>
+<div>Primary key:</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
+<h2>parents1_ref</h2>
+<div>Type:JSON</div>
+<div>Primary key:</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
+<h2>parents2_ref</h2>
+<div>Type:JSON</div>
+<div>Primary key:</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
+<h2>name</h2>
+<div>Type:Text</div>
 <div>Primary key:</div>
 <div>Required:</div>
 <div>Length:</div>
@@ -7315,7 +7396,7 @@
 <h2>id</h2>
 <div>Type:Int</div>
 <div>Primary key:TRUE</div>
-<div>Required:TRUE</div>
+<div>Required:</div>
 <div>Length:</div>
 <div>Precision:</div>
 <h2>name</h2>
@@ -7911,6 +7992,17 @@
 <div>Description:</div>
 </div>
 </div>
+<div id="cash_flow_income_types" class="content_box">
+<h1>cash_flow_income_types</h1>
+<div class="content_item">
+<p class="big"></p>
+<p>Values:</p>
+<h2>cash</h2>
+<div>Description:</div>
+<h2>bank</h2>
+<div>Description:</div>
+</div>
+</div>
 <div id="data_types" class="content_box">
 <h1>data_types</h1>
 <div class="content_item">
@@ -8032,6 +8124,8 @@
 <p class="big"></p>
 <p>Values:</p>
 <h2>admin</h2>
+<div>Description:</div>
+<h2>accountant</h2>
 <div>Description:</div>
 </div>
 </div>

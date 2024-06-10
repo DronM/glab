@@ -54,6 +54,26 @@ function CashFlowIn_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
+	filed_options.alias = 'Тип родителя';
+	filed_options.autoInc = false;	
+	
+	options.fields.cash_flow_income_type = new FieldEnum("cash_flow_income_type",filed_options);
+	filed_options.enumValues = 'cash,bank';
+	options.fields.cash_flow_income_type.getValidator().setRequired(true);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
+	filed_options.alias = 'Источник прихода';
+	filed_options.autoInc = false;	
+	
+	options.fields.income_source = new FieldText("income_source",filed_options);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
 	filed_options.alias = 'Комментарий';
 	filed_options.autoInc = false;	
 	
@@ -79,6 +99,9 @@ function CashFlowIn_Model(options){
 	options.fields.total.getValidator().setMaxLength('15');
 	
 			
+			
+			
+				
 			
 		CashFlowIn_Model.superclass.constructor.call(this,id,options);
 }

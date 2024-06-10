@@ -18,6 +18,8 @@ function EnumGridColumn_role_types(options){
 	options.multyLangValues["ru"] = {};
 	options.multyLangValues["ru"]["admin"] = "Администратор";
 	
+	options.multyLangValues["ru"]["accountant"] = "Бухгалтер";
+	
 	options.ctrlClass = options.ctrlClass || Enum_role_types;
 	options.searchOptions = options.searchOptions || {};
 	options.searchOptions.searchType = options.searchOptions.searchType || "on_match";

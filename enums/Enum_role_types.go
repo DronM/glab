@@ -18,10 +18,10 @@ type ValEnum_role_types struct {
 }
 
 func (e *ValEnum_role_types) GetValues() []string {
-	return []string{ "admin" }
+	return []string{ "admin", "accountant" }
 }
 
 //func (e *ValEnum_role_types) GetDescriptions() map[string]map[string]string {
-//	return make(map[string]{ "admin" }
+//	return make(map[string]{ "admin", "accountant" }
 //}
 

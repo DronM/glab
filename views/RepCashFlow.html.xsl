@@ -25,7 +25,7 @@
 
 <!-- Head -->
 <xsl:template match="model[@id='RepHead']">
-	<h3>Отчет движения по кассе за период <xsl:value-of select="row/period_descr"/></h3>	
+	<!-- <h3>Отчет движения по кассе за период <xsl:value-of select="row/period_descr"/></h3>	 -->
 </xsl:template>
 
 <xsl:template match="model[@id='RepBalanceList']">
@@ -34,17 +34,11 @@
 	<table id="{$model_id}" class="table table-bordered table-responsive table-striped" style="width:60%;">
 		<thead>
 			<tr align="center">
-				<td rowspan="2">Место</td>
-				<td rowspan="2">Начальный остаток</td>
-				<td colspan="2">Приход</td>
-				<td colspan="2">Расход</td>
-				<td rowspan="2">Конечный остаток</td>
-			</tr>
-			<tr align="center">
-				<td>Поступление</td>
-				<td>Перемещение</td>
-				<td>Списание</td>
-				<td>Перемещение</td>
+				<td>Место</td>
+				<td>Начальный остаток</td>
+				<td>Приход</td>
+				<td>Расход</td>
+				<td>Конечный остаток</td>
 			</tr>
 		</thead>
 	
@@ -63,13 +57,13 @@
 					</xsl:call-template>																									
 				</td>
 				
-				<td colspan="2" align="right">
+				<td align="right">
 					<xsl:call-template name="format_money">
 						<xsl:with-param name="val" select="sum(row/total_in)"/>
 					</xsl:call-template>																									
 				</td>
 
-				<td colspan="2" align="right">
+				<td align="right">
 					<xsl:call-template name="format_money">
 						<xsl:with-param name="val" select="sum(row/total_out)"/>
 					</xsl:call-template>																									
@@ -100,17 +94,6 @@
 		<td align="right">
 			<xsl:call-template name="format_money">
 				<xsl:with-param name="val" select="total_in"/>
-			</xsl:call-template>																									
-		</td>	
-		<td align="right">
-			<xsl:call-template name="format_money">
-				<xsl:with-param name="val" select="total_transfer_in"/>
-			</xsl:call-template>																									
-		</td>	
-		
-		<td align="right">
-			<xsl:call-template name="format_money">
-				<xsl:with-param name="val" select="total_transfer_out"/>
 			</xsl:call-template>																									
 		</td>	
 		

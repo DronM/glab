@@ -17694,3 +17694,2538 @@ $$
   COST 100;
 ALTER FUNCTION cash_flow_location_balance_list(in_cash_location_id int, in_date_time_from timestampTZ, in_date_time_to timestampTZ) OWNER TO glab;
 
+
+-- ******************* update 03/06/2024 08:22:13 ******************
+-- VIEW: public.fin_expense_types_items_list
+
+--DROP VIEW public.fin_expense_types_items_list;
+
+CREATE OR REPLACE VIEW public.fin_expense_types_items_list AS
+	SELECT
+		item.id,
+		par1.id AS parent1_id,
+		par2.id AS parent2_id,
+		fin_expense_types_ref(par1) AS parents1_ref,
+		fin_expense_types_ref(par2) AS parents2_ref,
+		item.name
+	FROM fin_expense_types AS item
+	LEFT JOIN fin_expense_types AS par2 ON par2.id = item.parent_id
+	LEFT JOIN fin_expense_types AS par1 ON par1.id = par2.parent_id
+	WHERE par1.id IS NOT NULL
+	ORDER BY item.name
+	;
+	
+ALTER VIEW public.fin_expense_types_items_list OWNER TO glab;
+
+
+-- ******************* update 03/06/2024 08:56:47 ******************
+
+	
+	-- Adding menu item
+	INSERT INTO views
+	(id,c,f,t,section,descr,limited)
+	VALUES (
+	'10031',
+	'FinExpenseType_Controller',
+	'get_list',
+	'FinExpenseTypeItemList',
+	'Справочники',
+	'Элементы расходов',
+	FALSE
+	);
+	
+	
+
+
+-- ******************* update 03/06/2024 09:24:58 ******************
+/**
+ * Andrey Mikhalevich 15/12/21
+ * This file is part of the OSBE framework
+ *
+ * THIS FILE IS GENERATED FROM TEMPLATE build/templates/permissions/permissions.sql.tmpl
+ * ALL DIRECT MODIFICATIONS WILL BE LOST WITH THE NEXT BUILD PROCESS!!!
+ */
+
+/*
+-- If this is the first time you execute the script, uncomment these lines
+-- to create table and insert row
+CREATE TABLE IF NOT EXISTS permissions (
+    rules json NOT NULL
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.permissions OWNER TO glab;
+
+INSERT INTO permissions VALUES ('{"admin":{}}');
+*/
+
+UPDATE permissions SET rules = '{
+	"admin":{
+		"Event":{
+			"subscribe":true
+			,"unsubscribe":true
+			,"publish":true
+		}
+		,"Constant":{
+			"set_value":true
+			,"get_list":true
+			,"get_object":true
+			,"get_values":true
+		}
+		,"Enum":{
+			"get_enum_list":true
+		}
+		,"MainMenuConstructor":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"MainMenuContent":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"View":{
+			"get_list":true
+			,"complete":true
+			,"get_section_list":true
+		}
+		,"VariantStorage":{
+			"insert":true
+			,"upsert_filter_data":true
+			,"upsert_col_visib_data":true
+			,"upsert_col_order_data":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"get_filter_data":true
+			,"get_col_visib_data":true
+			,"get_col_order_data":true
+		}
+		,"About":{
+			"get_object":true
+		}
+		,"Service":{
+			"reload_config":true
+			,"reload_version":true
+		}
+		,"User":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+			,"get_profile":true
+			,"reset_pwd":true
+			,"login":true
+			,"login_refresh":true
+			,"logout":true
+			,"logout_html":true
+			,"download_photo":true
+			,"delete_photo":true
+			,"password_recover":true
+		}
+		,"Login":{
+			"get_list":true
+			,"get_object":true
+			,"logout":true
+		}
+		,"LoginDevice":{
+			"get_list":true
+			,"switch_banned":true
+		}
+		,"Captcha":{
+			"get":true
+		}
+		,"LoginDeviceBan":{
+			"insert":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"TimeZoneLocale":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Department":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"Post":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"Contact":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+			,"upsert":true
+		}
+		,"EntityContact":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"ObjectModLog":{
+			"get_list":true
+			,"get_object":true
+		}
+		,"MailMessage":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"MailMessageAttachment":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"MailTemplate":{
+			"insert":true
+			,"update":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Attachment":{
+			"get_list":true
+			,"get_object":true
+			,"delete_file":true
+			,"get_file":true
+			,"add_file":true
+		}
+		,"AutoMake":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"AutoModel":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_for_make":true
+			,"get_all_years":true
+		}
+		,"AutoModelGeneration":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_for_model":true
+			,"gen_next_id":true
+		}
+		,"AutoType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"AutoBodyType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoBodyDoor":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoBody":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_for_model_generation":true
+			,"complete_for_model":true
+		}
+		,"ItemFolder":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"ItemFeature":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"ItemFeatureValueList":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"SupplierItemFeatureValueList":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"ItemFeatureGroup":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"ItemFeatureGroupItem":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"ItemFolderFeatureGroup":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"SupplierItemFolderFeatureGroup":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Item":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_item":true
+			,"complete":true
+			,"set_feature":true
+			,"get_features_filter_list":true
+		}
+		,"Manufacturer":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"ManufacturerBrand":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"Supplier":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"VehicleType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"ItemPriority":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"PopularityType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"SupplierItem":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"import":true
+			,"set_feature":true
+			,"get_features_filter_list":true
+		}
+		,"ItemSearch":{
+			"get_object":true
+			,"find_items":true
+		}
+		,"ImportItem":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"SupplierStore":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_for_supplier":true
+		}
+		,"SupplierStoreValue":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoPriceCategory":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoToGlassMatchHead":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoToGlassMatchEurocode":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"get_body_list":true
+		}
+		,"AutoToGlassMatchOption":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"get_conf_form":true
+		}
+		,"AutoModelGenerationBody":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"BankCard":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Employee":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"EmployeeStatus":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"PersonDocument":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"PersonDocumentType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"CashLocation":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"FinExpenseType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_item_list":true
+			,"get_object":true
+			,"complete":true
+			,"verify_rule":true
+		}
+		,"CashFlowIn":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"get_report":true
+		}
+		,"CashFlowOut":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"CashFlowTransfer":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Firm":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Bank":{
+			"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"BankAccount":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"BankFlowIn":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"import_from_bank":true
+			,"get_report":true
+		}
+		,"BankFlowOut":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"UserOperation":{
+			"get_object":true
+			,"delete":true
+		}
+	}
+	,"guest":{
+		"User":{
+			"login":true
+		}
+	}
+}';
+
+
+-- ******************* update 03/06/2024 09:26:41 ******************
+	
+	-- Adding menu item
+	update views set f='get_item_list' where id='10031'
+
+
+
+-- ******************* update 03/06/2024 09:35:27 ******************
+
+	-- Adding new type
+	CREATE TYPE cash_flow_income_type AS ENUM (
+	
+		'cash'			
+	,
+		'bank'			
+				
+	);
+	ALTER TYPE cash_flow_income_type OWNER TO glab;
+		
+	/* type get function */
+	CREATE OR REPLACE FUNCTION enum_cash_flow_income_type_val(cash_flow_income_type,locales)
+	RETURNS text AS $$
+		SELECT
+		CASE
+		WHEN $1='cash'::cash_flow_income_type AND $2='ru'::locales THEN 'нал'
+		WHEN $1='bank'::cash_flow_income_type AND $2='ru'::locales THEN 'безнал'
+		ELSE ''
+		END;		
+	$$ LANGUAGE sql;	
+	ALTER FUNCTION enum_cash_flow_income_type_val(cash_flow_income_type,locales) OWNER TO glab;		
+	
+
+-- ******************* update 03/06/2024 09:38:03 ******************
+drop type cash_flow_income_type cascade;
+/*
+	-- Adding new type
+	CREATE TYPE cash_flow_income_types AS ENUM (
+	
+		'cash'			
+	,
+		'bank'			
+				
+	);
+	ALTER TYPE cash_flow_income_type OWNER TO glab;
+		
+	/* type get function */
+	CREATE OR REPLACE FUNCTION enum_cash_flow_income_type_val(cash_flow_income_type,locales)
+	RETURNS text AS $$
+		SELECT
+		CASE
+		WHEN $1='cash'::cash_flow_income_type AND $2='ru'::locales THEN 'нал'
+		WHEN $1='bank'::cash_flow_income_type AND $2='ru'::locales THEN 'безнал'
+		ELSE ''
+		END;		
+	$$ LANGUAGE sql;	
+	ALTER FUNCTION enum_cash_flow_income_type_val(cash_flow_income_type,locales) OWNER TO glab;		
+	*/
+
+
+-- ******************* update 03/06/2024 09:42:46 ******************
+	/* type get function */
+	CREATE OR REPLACE FUNCTION enum_cash_flow_income_types_val(cash_flow_income_types,locales)
+	RETURNS text AS $$
+		SELECT
+		CASE
+		WHEN $1='cash'::cash_flow_income_types AND $2='ru'::locales THEN 'нал'
+		WHEN $1='bank'::cash_flow_income_types AND $2='ru'::locales THEN 'безнал'
+		ELSE ''
+		END;		
+	$$ LANGUAGE sql;	
+	ALTER FUNCTION enum_cash_flow_income_types_val(cash_flow_income_types,locales) OWNER TO glab;		
+	
+
+
+-- ******************* update 03/06/2024 09:51:25 ******************
+	
+		ALTER TABLE public.cash_flow_in ADD COLUMN cash_flow_income_type cash_flow_income_types NOT NULL,ADD COLUMN income_source text;
+
+
+
+-- ******************* update 03/06/2024 09:51:32 ******************
+-- VIEW: public.cash_flow_in_list
+
+--DROP VIEW public.cash_flow_in_list;
+
+CREATE OR REPLACE VIEW public.cash_flow_in_list AS
+	SELECT
+		t.id
+		,t.date_time
+		,t.cash_location_id
+		,cash_locations_ref(cash_locations_ref_t) AS cash_locations_ref
+		,t.comment_text
+		,users_ref(users_ref_t) AS users_ref
+		,t.total
+		,t.cash_flow_income_type
+		,t.income_source
+	FROM public.cash_flow_in AS t
+	LEFT JOIN cash_locations AS cash_locations_ref_t ON cash_locations_ref_t.id = t.cash_location_id
+	LEFT JOIN users AS users_ref_t ON users_ref_t.id = t.user_id
+	ORDER BY t.date_time DESC
+	;
+	
+ALTER VIEW public.cash_flow_in_list OWNER TO glab;
+
+
+-- ******************* update 03/06/2024 14:30:48 ******************
+﻿-- Function: bank_flow_out_apply_rules()
+
+-- DROP FUNCTION bank_flow_out_apply_rules();
+
+CREATE OR REPLACE FUNCTION bank_flow_out_apply_rules()
+  RETURNS void AS
+$$
+DECLARE
+	doc_cursor CURSOR FOR
+	        SELECT
+	        	id,
+	        	pay_comment
+	        FROM bank_flow_out
+	        WHERE fin_expense_type1_id IS NULL;
+	doc_row RECORD;
+	exp_id int;
+	exp_parent_id int;
+BEGIN
+	OPEN doc_cursor;
+
+	LOOP
+		FETCH doc_cursor INTO doc_row;
+		EXIT WHEN NOT FOUND;
+		
+		SELECT
+			id,
+			parent_id
+		INTO
+			exp_id,
+			exp_parent_id
+		FROM bank_flow_out_find_expense_type(doc_row.pay_comment);
+		
+		IF exp_id IS NOT NULL THEN
+			UPDATE bank_flow_out
+			SET
+				fin_expense_type1_id = exp_parent_id,
+				fin_expense_type2_id = exp_id
+			WHERE id = doc_row.id;
+		END IF;
+	END LOOP;
+	
+	CLOSE doc_cursor;
+
+END;
+$$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION bank_flow_out_apply_rules() OWNER TO glab;
+
+
+-- ******************* update 03/06/2024 14:32:03 ******************
+﻿-- Function: bank_flow_out_apply_rules()
+
+-- DROP FUNCTION bank_flow_out_apply_rules();
+
+CREATE OR REPLACE FUNCTION bank_flow_out_apply_rules()
+  RETURNS int AS
+$$
+DECLARE
+	doc_cursor CURSOR FOR
+	        SELECT
+	        	id,
+	        	pay_comment
+	        FROM bank_flow_out
+	        WHERE fin_expense_type1_id IS NULL;
+	doc_row RECORD;
+	exp_id int;
+	exp_parent_id int;
+	cnt int;
+BEGIN
+	OPEN doc_cursor;
+
+	LOOP
+		FETCH doc_cursor INTO doc_row;
+		EXIT WHEN NOT FOUND;
+		
+		SELECT
+			id,
+			parent_id
+		INTO
+			exp_id,
+			exp_parent_id
+		FROM bank_flow_out_find_expense_type(doc_row.pay_comment);
+		
+		IF exp_id IS NOT NULL THEN
+			UPDATE bank_flow_out
+			SET
+				fin_expense_type1_id = exp_parent_id,
+				fin_expense_type2_id = exp_id
+			WHERE id = doc_row.id;
+			cnt = cnt + 1;
+		END IF;
+	END LOOP;
+	
+	CLOSE doc_cursor;
+
+END;
+$$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION bank_flow_out_apply_rules() OWNER TO glab;
+
+
+-- ******************* update 03/06/2024 14:32:29 ******************
+﻿-- Function: bank_flow_out_apply_rules()
+
+-- DROP FUNCTION bank_flow_out_apply_rules();
+
+CREATE OR REPLACE FUNCTION bank_flow_out_apply_rules()
+  RETURNS int AS
+$$
+DECLARE
+	doc_cursor CURSOR FOR
+	        SELECT
+	        	id,
+	        	pay_comment
+	        FROM bank_flow_out
+	        WHERE fin_expense_type1_id IS NULL;
+	doc_row RECORD;
+	exp_id int;
+	exp_parent_id int;
+	cnt int;
+BEGIN
+	cnt = 0;
+	
+	OPEN doc_cursor;
+	LOOP
+		FETCH doc_cursor INTO doc_row;
+		EXIT WHEN NOT FOUND;
+		
+		SELECT
+			id,
+			parent_id
+		INTO
+			exp_id,
+			exp_parent_id
+		FROM bank_flow_out_find_expense_type(doc_row.pay_comment);
+		
+		IF exp_id IS NOT NULL THEN
+			UPDATE bank_flow_out
+			SET
+				fin_expense_type1_id = exp_parent_id,
+				fin_expense_type2_id = exp_id
+			WHERE id = doc_row.id;
+			cnt = cnt + 1;
+		END IF;
+	END LOOP;
+	
+	CLOSE doc_cursor;
+
+	RETURN cnt;
+END;
+$$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION bank_flow_out_apply_rules() OWNER TO glab;
+
+
+-- ******************* update 04/06/2024 09:24:34 ******************
+/**
+ * Andrey Mikhalevich 15/12/21
+ * This file is part of the OSBE framework
+ *
+ * THIS FILE IS GENERATED FROM TEMPLATE build/templates/permissions/permissions.sql.tmpl
+ * ALL DIRECT MODIFICATIONS WILL BE LOST WITH THE NEXT BUILD PROCESS!!!
+ */
+
+/*
+-- If this is the first time you execute the script, uncomment these lines
+-- to create table and insert row
+CREATE TABLE IF NOT EXISTS permissions (
+    rules json NOT NULL
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.permissions OWNER TO glab;
+
+INSERT INTO permissions VALUES ('{"admin":{}}');
+*/
+
+UPDATE permissions SET rules = '{
+	"admin":{
+		"Event":{
+			"subscribe":true
+			,"unsubscribe":true
+			,"publish":true
+		}
+		,"Constant":{
+			"set_value":true
+			,"get_list":true
+			,"get_object":true
+			,"get_values":true
+		}
+		,"Enum":{
+			"get_enum_list":true
+		}
+		,"MainMenuConstructor":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"MainMenuContent":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"View":{
+			"get_list":true
+			,"complete":true
+			,"get_section_list":true
+		}
+		,"VariantStorage":{
+			"insert":true
+			,"upsert_filter_data":true
+			,"upsert_col_visib_data":true
+			,"upsert_col_order_data":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"get_filter_data":true
+			,"get_col_visib_data":true
+			,"get_col_order_data":true
+		}
+		,"About":{
+			"get_object":true
+		}
+		,"Service":{
+			"reload_config":true
+			,"reload_version":true
+		}
+		,"User":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+			,"get_profile":true
+			,"reset_pwd":true
+			,"login":true
+			,"login_refresh":true
+			,"logout":true
+			,"logout_html":true
+			,"download_photo":true
+			,"delete_photo":true
+			,"password_recover":true
+		}
+		,"Login":{
+			"get_list":true
+			,"get_object":true
+			,"logout":true
+		}
+		,"LoginDevice":{
+			"get_list":true
+			,"switch_banned":true
+		}
+		,"Captcha":{
+			"get":true
+		}
+		,"LoginDeviceBan":{
+			"insert":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"TimeZoneLocale":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Department":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"Post":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"Contact":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+			,"upsert":true
+		}
+		,"EntityContact":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"ObjectModLog":{
+			"get_list":true
+			,"get_object":true
+		}
+		,"MailMessage":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"MailMessageAttachment":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"MailTemplate":{
+			"insert":true
+			,"update":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Attachment":{
+			"get_list":true
+			,"get_object":true
+			,"delete_file":true
+			,"get_file":true
+			,"add_file":true
+		}
+		,"AutoMake":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"AutoModel":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_for_make":true
+			,"get_all_years":true
+		}
+		,"AutoModelGeneration":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_for_model":true
+			,"gen_next_id":true
+		}
+		,"AutoType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"AutoBodyType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoBodyDoor":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoBody":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_for_model_generation":true
+			,"complete_for_model":true
+		}
+		,"ItemFolder":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"ItemFeature":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"ItemFeatureValueList":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"SupplierItemFeatureValueList":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"ItemFeatureGroup":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"ItemFeatureGroupItem":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"ItemFolderFeatureGroup":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"SupplierItemFolderFeatureGroup":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Item":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_item":true
+			,"complete":true
+			,"set_feature":true
+			,"get_features_filter_list":true
+		}
+		,"Manufacturer":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"ManufacturerBrand":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"Supplier":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"VehicleType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"ItemPriority":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"PopularityType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"SupplierItem":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"import":true
+			,"set_feature":true
+			,"get_features_filter_list":true
+		}
+		,"ItemSearch":{
+			"get_object":true
+			,"find_items":true
+		}
+		,"ImportItem":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"SupplierStore":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_for_supplier":true
+		}
+		,"SupplierStoreValue":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoPriceCategory":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoToGlassMatchHead":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoToGlassMatchEurocode":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"get_body_list":true
+		}
+		,"AutoToGlassMatchOption":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"get_conf_form":true
+		}
+		,"AutoModelGenerationBody":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"BankCard":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Employee":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"EmployeeStatus":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"PersonDocument":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"PersonDocumentType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"CashLocation":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"FinExpenseType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_item_list":true
+			,"get_object":true
+			,"complete":true
+			,"verify_rule":true
+		}
+		,"CashFlowIn":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"get_report":true
+		}
+		,"CashFlowOut":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"CashFlowTransfer":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Firm":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Bank":{
+			"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"BankAccount":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"BankFlowIn":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"import_from_bank":true
+			,"get_report":true
+			,"apply_rules":true
+		}
+		,"BankFlowOut":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"UserOperation":{
+			"get_object":true
+			,"delete":true
+		}
+	}
+	,"guest":{
+		"User":{
+			"login":true
+		}
+	}
+}';
+
+
+-- ******************* update 04/06/2024 10:19:11 ******************
+
+		UPDATE views SET
+			c=NULL,
+			f=NULL,
+			t='BankUpload',
+			section='Формы',
+			descr='Импорт выписки',
+			limited=FALSE
+		WHERE id='20003';
+	
+	
+	-- Adding menu item
+	INSERT INTO views
+	(id,c,f,t,section,descr,limited)
+	VALUES (
+	'20004',
+	NULL,
+	NULL,
+	'CashFlowInOut',
+	'Формы',
+	'Касса',
+	FALSE
+	);
+	
+	
+
+-- ******************* update 05/06/2024 11:41:52 ******************
+
+					ALTER TYPE role_types ADD VALUE 'accountant';
+					
+	/* type get function */
+	CREATE OR REPLACE FUNCTION enum_role_types_val(role_types,locales)
+	RETURNS text AS $$
+		SELECT
+		CASE
+		WHEN $1='admin'::role_types AND $2='ru'::locales THEN 'Администратор'
+		WHEN $1='accountant'::role_types AND $2='ru'::locales THEN 'Бухгалтер'
+		ELSE ''
+		END;		
+	$$ LANGUAGE sql;	
+	ALTER FUNCTION enum_role_types_val(role_types,locales) OWNER TO glab;		
+	
+
+-- ******************* update 05/06/2024 11:42:27 ******************
+/**
+ * Andrey Mikhalevich 15/12/21
+ * This file is part of the OSBE framework
+ *
+ * THIS FILE IS GENERATED FROM TEMPLATE build/templates/permissions/permissions.sql.tmpl
+ * ALL DIRECT MODIFICATIONS WILL BE LOST WITH THE NEXT BUILD PROCESS!!!
+ */
+
+/*
+-- If this is the first time you execute the script, uncomment these lines
+-- to create table and insert row
+CREATE TABLE IF NOT EXISTS permissions (
+    rules json NOT NULL
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public.permissions OWNER TO glab;
+
+INSERT INTO permissions VALUES ('{"admin":{}}');
+*/
+
+UPDATE permissions SET rules = '{
+	"admin":{
+		"Event":{
+			"subscribe":true
+			,"unsubscribe":true
+			,"publish":true
+		}
+		,"Constant":{
+			"set_value":true
+			,"get_list":true
+			,"get_object":true
+			,"get_values":true
+		}
+		,"Enum":{
+			"get_enum_list":true
+		}
+		,"MainMenuConstructor":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"MainMenuContent":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"View":{
+			"get_list":true
+			,"complete":true
+			,"get_section_list":true
+		}
+		,"VariantStorage":{
+			"insert":true
+			,"upsert_filter_data":true
+			,"upsert_col_visib_data":true
+			,"upsert_col_order_data":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"get_filter_data":true
+			,"get_col_visib_data":true
+			,"get_col_order_data":true
+		}
+		,"About":{
+			"get_object":true
+		}
+		,"Service":{
+			"reload_config":true
+			,"reload_version":true
+		}
+		,"User":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+			,"get_profile":true
+			,"reset_pwd":true
+			,"login":true
+			,"login_refresh":true
+			,"logout":true
+			,"logout_html":true
+			,"download_photo":true
+			,"delete_photo":true
+			,"password_recover":true
+		}
+		,"Login":{
+			"get_list":true
+			,"get_object":true
+			,"logout":true
+		}
+		,"LoginDevice":{
+			"get_list":true
+			,"switch_banned":true
+		}
+		,"Captcha":{
+			"get":true
+		}
+		,"LoginDeviceBan":{
+			"insert":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"TimeZoneLocale":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Department":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"Post":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"Contact":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+			,"upsert":true
+		}
+		,"EntityContact":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"ObjectModLog":{
+			"get_list":true
+			,"get_object":true
+		}
+		,"MailMessage":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"MailMessageAttachment":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"MailTemplate":{
+			"insert":true
+			,"update":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Attachment":{
+			"get_list":true
+			,"get_object":true
+			,"delete_file":true
+			,"get_file":true
+			,"add_file":true
+		}
+		,"AutoMake":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"AutoModel":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_for_make":true
+			,"get_all_years":true
+		}
+		,"AutoModelGeneration":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_for_model":true
+			,"gen_next_id":true
+		}
+		,"AutoType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"AutoBodyType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoBodyDoor":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoBody":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_for_model_generation":true
+			,"complete_for_model":true
+		}
+		,"ItemFolder":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"ItemFeature":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"ItemFeatureValueList":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"SupplierItemFeatureValueList":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"ItemFeatureGroup":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"ItemFeatureGroupItem":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"ItemFolderFeatureGroup":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"SupplierItemFolderFeatureGroup":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Item":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_item":true
+			,"complete":true
+			,"set_feature":true
+			,"get_features_filter_list":true
+		}
+		,"Manufacturer":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"ManufacturerBrand":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"Supplier":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"VehicleType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"ItemPriority":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"PopularityType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"SupplierItem":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"import":true
+			,"set_feature":true
+			,"get_features_filter_list":true
+		}
+		,"ItemSearch":{
+			"get_object":true
+			,"find_items":true
+		}
+		,"ImportItem":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"SupplierStore":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_for_supplier":true
+		}
+		,"SupplierStoreValue":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoPriceCategory":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoToGlassMatchHead":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoToGlassMatchEurocode":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"get_body_list":true
+		}
+		,"AutoToGlassMatchOption":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"get_conf_form":true
+		}
+		,"AutoModelGenerationBody":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"BankCard":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Employee":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"EmployeeStatus":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"PersonDocument":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"PersonDocumentType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"CashLocation":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"FinExpenseType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_item_list":true
+			,"get_object":true
+			,"complete":true
+			,"verify_rule":true
+		}
+		,"CashFlowIn":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"get_report":true
+		}
+		,"CashFlowOut":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"CashFlowTransfer":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Firm":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Bank":{
+			"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"BankAccount":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"BankFlowIn":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"import_from_bank":true
+			,"get_report":true
+			,"apply_rules":true
+		}
+		,"BankFlowOut":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"UserOperation":{
+			"get_object":true
+			,"delete":true
+		}
+	}
+	,"accountant":{
+		"Event":{
+			"subscribe":true
+			,"unsubscribe":true
+			,"publish":true
+		}
+		,"Constant":{
+			"set_value":true
+			,"get_list":true
+			,"get_object":true
+			,"get_values":true
+		}
+		,"Enum":{
+			"get_enum_list":true
+		}
+		,"MainMenuConstructor":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"MainMenuContent":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"View":{
+			"get_list":true
+			,"complete":true
+			,"get_section_list":true
+		}
+		,"VariantStorage":{
+			"insert":true
+			,"upsert_filter_data":true
+			,"upsert_col_visib_data":true
+			,"upsert_col_order_data":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"get_filter_data":true
+			,"get_col_visib_data":true
+			,"get_col_order_data":true
+		}
+		,"About":{
+			"get_object":true
+		}
+		,"Service":{
+			"reload_config":true
+			,"reload_version":true
+		}
+		,"User":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+			,"get_profile":true
+			,"reset_pwd":true
+			,"login":true
+			,"login_refresh":true
+			,"logout":true
+			,"logout_html":true
+			,"download_photo":true
+			,"delete_photo":true
+			,"password_recover":true
+		}
+		,"Login":{
+			"get_list":true
+			,"get_object":true
+			,"logout":true
+		}
+		,"LoginDevice":{
+			"get_list":true
+			,"switch_banned":true
+		}
+		,"Captcha":{
+			"get":true
+		}
+		,"LoginDeviceBan":{
+			"insert":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"TimeZoneLocale":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Department":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"Post":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"Contact":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+			,"upsert":true
+		}
+		,"EntityContact":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"ObjectModLog":{
+			"get_list":true
+			,"get_object":true
+		}
+		,"MailMessage":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"MailMessageAttachment":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"MailTemplate":{
+			"insert":true
+			,"update":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Attachment":{
+			"get_list":true
+			,"get_object":true
+			,"delete_file":true
+			,"get_file":true
+			,"add_file":true
+		}
+		,"AutoMake":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"AutoModel":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_for_make":true
+			,"get_all_years":true
+		}
+		,"AutoModelGeneration":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_for_model":true
+			,"gen_next_id":true
+		}
+		,"AutoType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"AutoBodyType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoBodyDoor":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoBody":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_for_model_generation":true
+			,"complete_for_model":true
+		}
+		,"ItemFolder":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"ItemFeature":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"ItemFeatureValueList":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"SupplierItemFeatureValueList":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"ItemFeatureGroup":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"ItemFeatureGroupItem":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"ItemFolderFeatureGroup":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"SupplierItemFolderFeatureGroup":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Item":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_item":true
+			,"complete":true
+			,"set_feature":true
+			,"get_features_filter_list":true
+		}
+		,"Manufacturer":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"ManufacturerBrand":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"Supplier":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"VehicleType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"ItemPriority":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"PopularityType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"SupplierItem":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"import":true
+			,"set_feature":true
+			,"get_features_filter_list":true
+		}
+		,"ItemSearch":{
+			"get_object":true
+			,"find_items":true
+		}
+		,"ImportItem":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"SupplierStore":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete_for_supplier":true
+		}
+		,"SupplierStoreValue":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoPriceCategory":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoToGlassMatchHead":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"AutoToGlassMatchEurocode":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"get_body_list":true
+		}
+		,"AutoToGlassMatchOption":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"get_conf_form":true
+		}
+		,"AutoModelGenerationBody":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"BankCard":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Employee":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"EmployeeStatus":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"PersonDocument":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"PersonDocumentType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"CashLocation":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"FinExpenseType":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_item_list":true
+			,"get_object":true
+			,"complete":true
+			,"verify_rule":true
+		}
+		,"CashFlowIn":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"get_report":true
+		}
+		,"CashFlowOut":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"CashFlowTransfer":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Firm":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"Bank":{
+			"get_list":true
+			,"get_object":true
+			,"complete":true
+		}
+		,"BankAccount":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"BankFlowIn":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+			,"import_from_bank":true
+			,"get_report":true
+			,"apply_rules":true
+		}
+		,"BankFlowOut":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
+		,"UserOperation":{
+			"get_object":true
+			,"delete":true
+		}
+	}
+	,"guest":{
+		"User":{
+			"login":true
+		}
+	}
+}';
+

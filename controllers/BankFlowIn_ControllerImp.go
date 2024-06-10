@@ -34,9 +34,12 @@ import (
 )
 
 const (
-	IMPORT_BANK_OPERATION_ID  = "import_from_bank"
-	ER_UNSUPPORTED_MIME_CODE  = 1000
-	ER_UNSUPPORTED_MIME_DESCR = "Данное расширение файла не поддерживается"
+	IMPORT_BANK_OPERATION_ID      = "import_from_bank"
+	APPLY_BANK_RULES_OPERATION_ID = "import_from_bank"
+	ER_UNSUPPORTED_MIME_CODE      = 1000
+	ER_UNSUPPORTED_MIME_DESCR     = "Данное расширение файла не поддерживается"
+
+	BATCH_COUNT = 100
 )
 
 // Method implemenation insert
@@ -121,6 +124,7 @@ func importFromBank(app gobizap.Applicationer, file io.ReadCloser, userID int64,
 		return
 	}
 
+	fmt.Printf("Before Unmarshaling documents\n")
 	if err := b_imp.Unmarshal(f_cont); err != nil {
 		userOperation.EndUserOperationWithError(app.GetLogger(), conn, userID, userOperationID, fmt.Errorf("importFromBank: bncl.Umnarshal() failed: %v", err))
 		return
@@ -419,4 +423,50 @@ func (pm *BankFlowIn_Controller_get_report) Run(app gobizap.Applicationer, serv 
 	resp.AddModel(m2)
 
 	return nil
+}
+
+// Method implemenation apply_rules
+func (pm *BankFlowIn_Controller_apply_rules) Run(app gobizap.Applicationer, serv srv.Server, sock socket.ClientSocketer, resp *response.Response, rfltArgs reflect.Value) error {
+	sess := sock.GetSession()
+	user_id := sess.GetInt(SESS_VAR_ID)
+	args := rfltArgs.Interface().(*models.BankFlowIn_apply_rules)
+
+	go applyBankRules(app, user_id, args.Operation_id.GetValue())
+
+	return nil
+}
+
+func applyBankRules(app gobizap.Applicationer, userID int64, userOperationID string) {
+	d_store, _ := app.GetDataStorage().(*pgds.PgProvider)
+	pool_conn, conn_id, err := d_store.GetPrimary()
+	if err != nil {
+		return
+	}
+	defer d_store.Release(pool_conn, conn_id)
+	conn := pool_conn.Conn()
+
+	userOperation.StartUserOperation(conn, APPLY_BANK_RULES_OPERATION_ID, userID, userOperationID)
+
+	query := `SELECT bank_flow_out_apply_rules()`
+	cnt := 0
+	if err := conn.QueryRow(context.Background(), query).Scan(&cnt); err != nil {
+		userOperation.EndUserOperationWithError(app.GetLogger(), conn, userID, userOperationID, fmt.Errorf("apply_rules: conn.Scan() failed: %v", err))
+	}
+
+	//end user (fl) operation
+	if _, err := conn.Exec(context.Background(),
+		fmt.Sprintf(`UPDATE user_operations
+		SET
+			status = 'end',
+			date_time_end = now(),
+			end_wal_lsn = pg_current_wal_lsn()::text,
+			comment_text = (%d)::text
+		WHERE user_id = $1 AND operation_id = $2`, cnt),
+		userID,
+		userOperationID,
+	); err != nil {
+		userOperation.EndUserOperationWithError(app.GetLogger(), conn, userID, userOperationID, fmt.Errorf("EndUserOperation UPDATE user_operations: %v", err))
+	}
+	//update grid
+	EmitEvent(conn, APPLY_BANK_RULES_OPERATION_ID, 0)
 }

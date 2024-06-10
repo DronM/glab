@@ -71,8 +71,6 @@ function UserDialog_View(id,options){
 	var wr_b = [
 		new CommandBinding({"control":this.getElement("name")})
 		,new CommandBinding({"control":this.getElement("role"),"fieldId":"role_id"})
-		,new CommandBinding({"control":this.getElement("phone_cel")})
-		,new CommandBinding({"control":this.getElement("sex")})
 	];
 	if(options.templateOptions.BAN_ALLOWED){
 		wr_b.push(new CommandBinding({"control":this.getElement("banned")}));		

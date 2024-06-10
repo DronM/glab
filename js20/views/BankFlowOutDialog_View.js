@@ -84,7 +84,7 @@ function BankFlowOutDialog_View(id,options){
 				}
 			}
 		}));	
-		this.addElement(new FinExpenseTypeEdit(id+":fin_expense_types3_ref",{
+		this.addElement(new FinExpenseTypeItemEdit(id+":fin_expense_types3_ref",{
 			"labelCaption":"Кому:",
 			"no_filter":true
 		}));	

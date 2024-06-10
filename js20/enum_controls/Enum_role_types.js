@@ -18,6 +18,9 @@ function Enum_role_types(id,options){
 	options.options = [{"value":"admin",
 "descr":this.multyLangValues[window.getApp().getLocale()+"_"+"admin"],
 checked:(options.defaultValue&&options.defaultValue=="admin")}
+	, {"value":"accountant",
+"descr":this.multyLangValues[window.getApp().getLocale()+"_"+"accountant"],
+checked:(options.defaultValue&&options.defaultValue=="accountant")}
 	];
 	
 	Enum_role_types.superclass.constructor.call(this, id, options);
@@ -26,7 +29,7 @@ checked:(options.defaultValue&&options.defaultValue=="admin")}
 extend(Enum_role_types,EditSelect);
 
 Enum_role_types.prototype.multyLangValues = {
-	"ru_admin":"Администратор"
+	"ru_admin":"Администратор", "ru_accountant":"Бухгалтер"
 };
 
 

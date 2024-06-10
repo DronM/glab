@@ -46,7 +46,7 @@ extend(MainMenuConstructor_Controller,ControllerObjServer);
 	
 	var options = {};
 	options.required = true;	
-	options.enumValues = 'admin,client_admin1,client_admin2,person';
+	options.enumValues = 'admin,accountant';
 	var field = new FieldEnum("role_id",options);
 	
 	pm.addField(field);
@@ -89,7 +89,7 @@ extend(MainMenuConstructor_Controller,ControllerObjServer);
 	
 	var options = {};
 		
-	options.enumValues = 'admin,client_admin1,client_admin2,person';
+	options.enumValues = 'admin,accountant';
 	options.enumValues+= (options.enumValues=='')? '':',';
 	options.enumValues+= 'null';
 	
@@ -138,11 +138,13 @@ extend(MainMenuConstructor_Controller,ControllerObjServer);
 	pm.addField(new FieldString(this.PARAM_COND_FIELDS));
 	pm.addField(new FieldString(this.PARAM_COND_SGNS));
 	pm.addField(new FieldString(this.PARAM_COND_VALS));
+	pm.addField(new FieldString(this.PARAM_COND_JOINS));
 	pm.addField(new FieldString(this.PARAM_COND_ICASE));
 	pm.addField(new FieldString(this.PARAM_ORD_FIELDS));
 	pm.addField(new FieldString(this.PARAM_ORD_DIRECTS));
 	pm.addField(new FieldString(this.PARAM_FIELD_SEP));
 	pm.addField(new FieldString(this.PARAM_FIELD_LSN));
+	pm.addField(new FieldString(this.PARAM_EXP_FNAME));
 
 	var f_opts = {};
 	
@@ -152,16 +154,10 @@ extend(MainMenuConstructor_Controller,ControllerObjServer);
 	pm.addField(new FieldString("role_id",f_opts));
 	var f_opts = {};
 	
-	pm.addField(new FieldString("role_descr",f_opts));
-	var f_opts = {};
-	
 	pm.addField(new FieldString("user_id",f_opts));
 	var f_opts = {};
 	
 	pm.addField(new FieldString("user_descr",f_opts));
-	var f_opts = {};
-	
-	pm.addField(new FieldText("content",f_opts));
 }
 
 			MainMenuConstructor_Controller.prototype.addGetObject = function(){

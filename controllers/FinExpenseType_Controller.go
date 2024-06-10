@@ -75,6 +75,13 @@ func NewController_FinExpenseType() *FinExpenseType_Controller {
 		},
 	}
 
+	//************************** method get_list *************************************
+	c.PublicMethods["get_item_list"] = &FinExpenseType_Controller_get_item_list{
+		gobizap.Base_PublicMethod{
+			ID:     "get_item_list",
+			Fields: model.Cond_Model_fields,
+		},
+	}
 	//************************** method complete *************************************
 	c.PublicMethods["complete"] = &FinExpenseType_Controller_complete{
 		gobizap.Base_PublicMethod{
@@ -213,6 +220,24 @@ type FinExpenseType_Controller_verify_rule struct {
 func (pm *FinExpenseType_Controller_verify_rule) Unmarshal(payload []byte) (reflect.Value, error) {
 	var res reflect.Value
 	argv := &models.FinExpenseType_verify_rule_argv{}
+	if err := json.Unmarshal(payload, argv); err != nil {
+		return res, err
+	}
+	res = reflect.ValueOf(&argv.Argv).Elem()
+	return res, nil
+}
+
+// ************************* get_item_list **********************************************
+// Public method: get_list
+type FinExpenseType_Controller_get_item_list struct {
+	gobizap.Base_PublicMethod
+}
+
+// Public method Unmarshal to structure
+func (pm *FinExpenseType_Controller_get_item_list) Unmarshal(payload []byte) (reflect.Value, error) {
+	var res reflect.Value
+	argv := &model.Controller_get_list_argv{}
+
 	if err := json.Unmarshal(payload, argv); err != nil {
 		return res, err
 	}

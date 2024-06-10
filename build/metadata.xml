@@ -4,13 +4,14 @@
 	<versions>
 		<version dateOpen="2022-12-06 19:12:32">1.001</version>
 		<version dateOpen="2022-12-06 19:12:32" dateClose="2023-07-11 16:07:04">1.001 
-		<lastBuild>2024-05-30 10:53:21</lastBuild></version>
+		<lastBuild>2024-06-10 12:31:19</lastBuild></version>
 		<version dateOpen="2023-07-20 10:07:22" dateClose="2023-07-24 08:07:47">1.002</version>
 		<version dateOpen="2023-07-24 10:07:28" dateClose="2023-07-24 14:07:30">1.003</version>
 		<version dateOpen="2023-07-25 06:07:57" dateClose="2023-07-25 07:07:04">1.004</version>
 		<version dateOpen="2023-08-08 16:08:18" dateClose="2023-08-09 08:08:44">1.005</version>
 		<version dateOpen="2023-08-09 09:08:18" dateClose="2023-08-17 16:08:00">1.006</version>
 		<version dateOpen="2024-02-19 16:02:00" dateClose="2024-05-30 10:53:22">1.007</version>
+		<version dateOpen="2024-06-05 10:12:39" dateClose="2024-06-10 12:31:20">1.008</version>
 	</versions>
 	<!--
 	<globalFilters>
@@ -26,6 +27,9 @@
 		<enum id="role_types">
 			<value id="admin">
 				<ru descr="Администратор"/>
+			</value>
+			<value id="accountant">
+				<ru descr="Бухгалтер"/>
 			</value>
 		</enum>
 		<enum id="object_mod_actions" descr="Действия с объектами">
@@ -142,6 +146,14 @@
 			</value>
 			<value id="bank_flow">
 				<ru descr="Остатки на счетах"/>
+			</value>
+		</enum>
+		<enum id="cash_flow_income_types">
+			<value id="cash">
+				<ru descr="нал"/>
+			</value>
+			<value id="bank">
+				<ru descr="безнал"/>
 			</value>
 		</enum>
 	</enums>
@@ -276,7 +288,7 @@
 			</index>
 		</model>
 		<model id="User" parent="ModelSQL" dataTable="users" virtual="FALSE">
-			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" required="TRUE"/>
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" dbRequired="TRUE"/>
 			<field id="name" dataType="String" required="TRUE" length="100"/>
 			<field id="role_id" dataType="Enum" enumId="role_types" required="TRUE"/>
 			<field id="pwd" dataType="Password" length="32"/>
@@ -1441,10 +1453,8 @@
 			<field id="deleted" dataType="Bool" alias="Удален, отображать не всем" defaultValue="FALSE"/>
 			<field id="bank_match_rule" dataType="Text" alias="Правило поиска соответствия для банка"/>
 			<field id="bank_match_rule_cond" dataType="Text"/>
-			<index id="expense_types_parent_idx" unique="FALSE">
-				<field id="parent_id"/>
-			</index>
 			<index id="expense_types_name_idx" unique="TRUE">
+				<field id="parent_id"/>
 				<field id="name"/>
 			</index>
 		</model>
@@ -1468,6 +1478,17 @@
 			<field id="bank_match_rule" dataType="Text" alias="Правило поиска соответствия для банка"/>
 			<field id="deleted" dataType="Bool" alias="Удален, отображать не всем"/>
 		</model>
+		<model id="FinExpenseTypeItemList" parent="ModelSQL" dataTable="fin_expense_types_items_list" virtual="TRUE">
+			<defaultOrder>
+				<field id="name"/>
+			</defaultOrder>
+			<field id="id" dataType="Int" primaryKey="TRUE"/>
+			<field id="parent1_id" dataType="Int" alias="Родитель 1 ID"/>
+			<field id="parent2_id" dataType="Int" alias="Родитель 2 ID"/>
+			<field id="parents1_ref" dataType="JSON" alias="Родитель 1"/>
+			<field id="parents2_ref" dataType="JSON" alias="Родитель 2"/>
+			<field id="name" dataType="Text" alias="Наименование"/>
+		</model>
 		<model id="CashLocation" parent="ModelSQL" dataTable="cash_locations" virtual="FALSE">
 			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
 			<field id="name" dataType="Text" alias="Наименование"/>
@@ -1479,6 +1500,8 @@
 			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
 			<field id="date_time" dataType="DateTimeTZ" dbRequired="TRUE" defaultValue="CURRENT_TIMESTAMP"/>
 			<field id="cash_location_id" dataType="Int" dbRequired="TRUE" refTable="cash_locations" refField="id"/>
+			<field id="cash_flow_income_type" dataType="Enum" required="TRUE" enumId="cash_flow_income_types" alias="Тип родителя"/>
+			<field id="income_source" dataType="Text" alias="Источник прихода"/>
 			<field id="comment_text" dataType="Text" alias="Комментарий"/>
 			<field id="user_id" dataType="Int" dbRequired="TRUE" refTable="users" refField="id"/>
 			<field id="total" dataType="Float" length="15" precision="2"/>
@@ -1503,6 +1526,8 @@
 			<field id="date_time" dataType="DateTimeTZ"/>
 			<field id="cash_location_id" dataType="Int"/>
 			<field id="cash_locations_ref" dataType="JSON"/>
+			<field id="cash_flow_income_type" dataType="String"/>
+			<field id="income_source" dataType="Text" alias="Источник прихода"/>
 			<field id="comment_text" dataType="Text" alias="Комментарий"/>
 			<field id="users_ref" dataType="JSON"/>
 			<field id="total" dataType="Float" length="15" precision="2"/>
@@ -2461,6 +2486,7 @@
 			<publicMethod id="update" modelId="FinExpenseType"/>
 			<publicMethod id="delete" modelId="FinExpenseType"/>
 			<publicMethod id="get_list" modelId="FinExpenseTypeList"/>
+			<publicMethod id="get_item_list" modelId="FinExpenseTypeItemList" condFields="TRUE"/>
 			<publicMethod id="get_object" modelId="FinExpenseTypeDialog"/>
 			<publicMethod id="complete" modelId="FinExpenseTypeList" patternFieldId="name"/>
 			<publicMethod id="verify_rule">
@@ -2525,6 +2551,9 @@
 				<field id="templ" dataType="String"/>
 				<field id="inline" dataType="Int"/>
 			</publicMethod>
+			<publicMethod id="apply_rules">
+				<field id="operation_id" dataType="String" length="36" required="TRUE"/>
+			</publicMethod>
 		</controller>
 		<controller id="BankFlowOut" parentId="ControllerSQL" noState="FALSE">
 			<publicMethod id="insert" modelId="BankFlowOut"/>
@@ -2545,6 +2574,7 @@
 	</structs>
 	<permissions>
 		<permission type="allow" controllerId="all" methodId="all" roleId="admin"/>
+		<permission type="allow" controllerId="all" methodId="all" roleId="accountant"/>
 		<permission type="allow" controllerId="User" methodId="login" roleId="guest"/>
 	</permissions>
 	<views>
@@ -2578,9 +2608,11 @@
 		<view id="10028" c="FinExpenseType_Controller" t="FinExpenseTypeList" f="get_list" section="Справочники" descr="Статьи расходов"/>
 		<view id="10029" c="Firm_Controller" t="FirmList" f="get_list" section="Справочники" descr="Организации"/>
 		<view id="10030" c="Bank_Controller" t="BankList" f="get_list" section="Справочники" descr="Банки"/>
+		<view id="10031" c="FinExpenseType_Controller" t="FinExpenseTypeItemList" f="get_list" section="Справочники" descr="Элементы расходов"/>
 		<view id="20001" c="ItemSearch_Controller" t="ItemSearch" f="get_object" section="Формы" descr="Подбор товара"/>
 		<view id="20002" c="AutoToGlassMatchHead_Controller" t="AutoToGlassMatchHeadList" f="get_list" section="Формы" descr="Конфигуратор комплектаций"/>
-		<view id="20003" t="BankUpload" section="Фомы" descr="Импорт выписки"/>
+		<view id="20003" t="BankUpload" section="Формы" descr="Импорт выписки"/>
+		<view id="20004" t="CashFlowInOut" section="Формы" descr="Касса"/>
 		<view id="30000" c="ImportItem_Controller" t="ImportItemList" f="get_list" section="Документы" descr="Импорт номенклатуры"/>
 		<view id="30001" c="CashFlowIn_Controller" t="CashFlowInList" f="get_list" section="Документы" descr="Приходные кассовые ордера"/>
 		<view id="30002" c="CashFlowOut_Controller" t="CashFlowOutList" f="get_list" section="Документы" descr="Расходные кассовые ордера"/>
@@ -2635,6 +2667,7 @@
 		<serverTemplate id="PersonDocumentList" class="list"/>
 		<serverTemplate id="CashLocationList" class="list"/>
 		<serverTemplate id="FinExpenseTypeList" class="list"/>
+		<serverTemplate id="FinExpenseTypeItemList" class="list"/>
 		<serverTemplate id="FinExpenseTypeDialog"/>
 		<serverTemplate id="CashFlowInList" class="list"/>
 		<serverTemplate id="CashFlowOutList" class="list"/>
@@ -2649,6 +2682,7 @@
 		<serverTemplate id="RepCashFlow"/>
 		<serverTemplate id="RepBankFlow"/>
 		<serverTemplate id="BankUpload"/>
+		<serverTemplate id="CashFlowInOut"/>
 	</serverTemplates>
 	<jsTemplates>
 		<jsTemplate id="ErrorControl" file="tmpl/ErrorControl.html"/>
@@ -2672,6 +2706,7 @@
 		<jsTemplate id="ItemPriorityCheckEdit" file="tmpl/ItemPriorityCheckEdit.html"/>
 		<jsTemplate id="ItemFeatureQualityEdit" file="tmpl/ItemFeatureQualityEdit.html"/>
 		<jsTemplate id="AutoToGlassMatchOptionDialog_View" file="tmpl/AutoToGlassMatchOptionDialog_View.html"/>
+		<!-- <jsTemplate cmd="add" id="EditPeriodDay" file="tmpl/EditPeriodDay.html" /> -->
 	</jsTemplates>
 	<packages/>
 	<sqlScripts>
@@ -3020,6 +3055,7 @@
 		<jsScript file="js20/forms/VehicleTypeList_Form.js"/>
 		<jsScript file="js20/forms/AutoToGlassMatchHead_Form.js"/>
 		<jsScript file="js20/forms/FinExpenseTypeList_Form.js"/>
+		<jsScript file="js20/forms/FinExpenseTypeItemList_Form.js"/>
 		<jsScript file="js20/forms/FirmList_Form.js"/>
 		<jsScript file="js20/forms/Firm_Form.js"/>
 		<jsScript file="js20/forms/BankList_Form.js"/>
@@ -3099,6 +3135,7 @@
 		<jsScript file="js20/views/PersonDocumentList_View.js"/>
 		<jsScript file="js20/views/CashLocationList_View.js"/>
 		<jsScript file="js20/views/FinExpenseTypeList_View.js"/>
+		<jsScript file="js20/views/FinExpenseTypeItemList_View.js"/>
 		<jsScript file="js20/views/FinExpenseTypeDialog_View.js"/>
 		<jsScript file="js20/views/CashFlowInList_View.js"/>
 		<jsScript file="js20/views/CashFlowOutList_View.js"/>
@@ -3163,9 +3200,13 @@
 		<jsScript file="js20/custom_controls/PersonDocumentEdit.js"/>
 		<jsScript file="js20/custom_controls/CashLocationEdit.js"/>
 		<jsScript file="js20/custom_controls/FinExpenseTypeEdit.js"/>
+		<jsScript file="js20/custom_controls/FinExpenseTypeItemEdit.js"/>
 		<jsScript file="js20/custom_controls/BankAccountEdit.js"/>
 		<jsScript file="js20/custom_controls/BankUpload_View.js"/>
 		<jsScript file="js20/custom_controls/FirmEdit.js"/>
+		<jsScript file="js20/custom_controls/BankFlowGridCmdApplyRules.js"/>
+		<jsScript file="js20/custom_controls/BankFlowGridCmdApplyRulesBtn.js"/>
+		<jsScript file="js20/custom_controls/CashFlowInOut_View.js"/>
 		<jsScript file="js20/enum_controls/Enum_data_types.js"/>
 		<jsScript file="js20/enum_controls/EnumGridColumn_data_types.js"/>
 		<jsScript file="js20/enum_controls/EnumGridColumn_locales.js"/>
@@ -3390,6 +3431,9 @@
 		<jsScript file="js20/models/UserOperation_Model.js"/>
 		<jsScript file="js20/models/UserOperationDialog_Model.js"/>
 		<jsScript file="js20/controllers/UserOperation_Controller.js"/>
+		<jsScript file="js20/models/FinExpenseTypeItemList_Model.js"/>
+		<jsScript file="js20/enum_controls/Enum_cash_flow_income_types.js"/>
+		<jsScript file="js20/enum_controls/EnumGridColumn_cash_flow_income_types.js"/>
 	</jsScripts>
 	<cssScripts>
 		<cssScript file="js20/assets/css/icons/icomoon/styles.css" compressed="TRUE" standalone="TRUE"/>

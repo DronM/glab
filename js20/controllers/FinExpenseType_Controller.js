@@ -28,6 +28,7 @@ function FinExpenseType_Controller(options){
 	this.addUpdate();
 	this.addDelete();
 	this.addGetList();
+	this.add_get_item_list();
 	this.addGetObject();
 	this.addComplete();
 	this.add_verify_rule();
@@ -199,6 +200,26 @@ extend(FinExpenseType_Controller,ControllerObjServer);
 	pm.addField(new FieldBool("deleted",f_opts));
 	pm.getField(this.PARAM_ORD_FIELDS).setValue("name");
 	
+}
+
+			FinExpenseType_Controller.prototype.add_get_item_list = function(){
+	var opts = {"controller":this};	
+	var pm = new PublicMethodServer('get_item_list',opts);
+	
+	pm.addField(new FieldInt(this.PARAM_COUNT));
+	pm.addField(new FieldInt(this.PARAM_FROM));
+	pm.addField(new FieldString(this.PARAM_COND_FIELDS));
+	pm.addField(new FieldString(this.PARAM_COND_SGNS));
+	pm.addField(new FieldString(this.PARAM_COND_VALS));
+	pm.addField(new FieldString(this.PARAM_COND_JOINS));
+	pm.addField(new FieldString(this.PARAM_COND_ICASE));
+	pm.addField(new FieldString(this.PARAM_ORD_FIELDS));
+	pm.addField(new FieldString(this.PARAM_ORD_DIRECTS));
+	pm.addField(new FieldString(this.PARAM_FIELD_SEP));
+	pm.addField(new FieldString(this.PARAM_FIELD_LSN));
+	pm.addField(new FieldString(this.PARAM_EXP_FNAME));
+
+	this.addPublicMethod(pm);
 }
 
 			FinExpenseType_Controller.prototype.addGetObject = function(){

@@ -17,7 +17,7 @@ import (
 )
 
 func initMD(md *github.Metadata){
-	md.Controllers["UserOperation"] = controllers.NewController_UserOperation()
-	md.Models["UserOperation"] = models.NewModelMD_UserOperation()md.Models["UserOperation"] = models.NewModelMD_UserOperation()
+	md.Controllers["MainMenuConstructor"] = controllers.NewController_MainMenuConstructor()
+	md.Models["MainMenuConstructor"] = models.NewModelMD_MainMenuConstructor()md.Models["MainMenuConstructor"] = models.NewModelMD_MainMenuConstructor()md.Models["MainMenuConstructor"] = models.NewModelMD_MainMenuConstructor()
 
 }

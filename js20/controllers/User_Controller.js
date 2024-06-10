@@ -66,7 +66,7 @@ extend(User_Controller,ControllerObjServer);
 	
 	var options = {};
 	options.required = true;	
-	options.enumValues = 'admin';
+	options.enumValues = 'admin,accountant';
 	var field = new FieldEnum("role_id",options);
 	
 	pm.addField(field);
@@ -144,7 +144,7 @@ extend(User_Controller,ControllerObjServer);
 	
 	var options = {};
 		
-	options.enumValues = 'admin';
+	options.enumValues = 'admin,accountant';
 	options.enumValues+= (options.enumValues=='')? '':',';
 	options.enumValues+= 'null';
 	
@@ -267,6 +267,11 @@ extend(User_Controller,ControllerObjServer);
 	pm.addField(new FieldString("name",f_opts));
 	pm.addField(new FieldInt("count", {}));
 	pm.getField(this.PARAM_ORD_FIELDS).setValue("name");	
+	
+	//conditions
+	pm.addField(new FieldString(this.PARAM_COND_FIELDS));
+	pm.addField(new FieldString(this.PARAM_COND_SGNS));
+	pm.addField(new FieldString(this.PARAM_COND_VALS));	
 }
 
 			User_Controller.prototype.add_get_profile = function(){
@@ -349,7 +354,7 @@ extend(User_Controller,ControllerObjServer);
 			
 	this.addPublicMethod(pm);
 }
-						
+
 			User_Controller.prototype.add_logout = function(){
 	var opts = {"controller":this};	
 	var pm = new PublicMethodServer('logout',opts);
@@ -363,7 +368,7 @@ extend(User_Controller,ControllerObjServer);
 	
 	this.addPublicMethod(pm);
 }
-			
+
 			User_Controller.prototype.add_download_photo = function(){
 	var opts = {"controller":this};	
 	var pm = new PublicMethodServer('download_photo',opts);

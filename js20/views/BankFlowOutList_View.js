@@ -70,7 +70,10 @@ function BankFlowOutList_View(id,options){
 		},
 		"commands":new GridCmdContainerAjx(id+":grid:cmd",{
 			"exportFileName" :"БанковскиеВыписки",
-			"filters": filters
+			"filters": filters,
+			"addCustomCommandsAfter":function(commands){
+				commands.push(new BankFlowGridCmdApplyRules(id+":grid:cmd:applyRules"));
+			}
 		}),		
 		"popUpMenu":popup_menu,
 		"filters":(options.detailFilters&&options.detailFilters.BankFlowOutList_Model)? options.detailFilters.BankFlowOutList_Model:null,	

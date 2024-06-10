@@ -31,6 +31,7 @@ function BankFlowIn_Controller(options){
 	this.addGetObject();
 	this.add_import_from_bank();
 	this.add_get_report();
+	this.add_apply_rules();
 		
 }
 extend(BankFlowIn_Controller,ControllerObjServer);
@@ -189,6 +190,12 @@ extend(BankFlowIn_Controller,ControllerObjServer);
 	
 	pm.addField(new FieldJSON("bank_accounts_ref",f_opts));
 	var f_opts = {};
+	
+	pm.addField(new FieldInt("firm_id",f_opts));
+	var f_opts = {};
+	
+	pm.addField(new FieldJSON("firms_ref",f_opts));
+	var f_opts = {};
 	f_opts.alias = "Период";
 	pm.addField(new FieldDateTimeTZ("date_time",f_opts));
 	var f_opts = {};
@@ -278,6 +285,24 @@ extend(BankFlowIn_Controller,ControllerObjServer);
 	var options = {};
 	
 		pm.addField(new FieldInt("inline",options));
+	
+			
+	this.addPublicMethod(pm);
+}
+
+			BankFlowIn_Controller.prototype.add_apply_rules = function(){
+	var opts = {"controller":this};	
+	var pm = new PublicMethodServer('apply_rules',opts);
+	
+				
+	
+	var options = {};
+	
+		options.required = true;
+	
+		options.maxlength = "36";
+	
+		pm.addField(new FieldString("operation_id",options));
 	
 			
 	this.addPublicMethod(pm);

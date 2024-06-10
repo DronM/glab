@@ -16,7 +16,7 @@ import (
 )
 
 type User struct {
-	Id fields.ValInt `json:"id" required:"true" primaryKey:"true" autoInc:"true"`
+	Id fields.ValInt `json:"id" primaryKey:"true" autoInc:"true"`
 	Name fields.ValText `json:"name" required:"true"`
 	Role_id enums.ValEnum_role_types `json:"role_id" required:"true"`
 	Pwd fields.ValText `json:"pwd"`
@@ -48,7 +48,6 @@ func NewModelMD_User() *model.ModelMD{
 		AggFunctions: []*model.AggFunction{
 			&model.AggFunction{Alias: "totalCount", Expr: "count(*)"},
 		},
-		LimitConstant: "doc_per_page_count",
 	}
 }
 //for insert
@@ -59,6 +58,7 @@ type User_argv struct {
 //Keys for delete/get object
 type User_keys struct {
 	Id fields.ValInt `json:"id"`
+	Mode string `json:"mode" openMode:"true"` //open mode insert|copy|edit
 }
 type User_keys_argv struct {
 	Argv *User_keys `json:"argv"`	
@@ -66,7 +66,7 @@ type User_keys_argv struct {
 
 //old keys for update
 type User_old_keys struct {
-	Old_id fields.ValInt `json:"old_id" required:"true"`
+	Old_id fields.ValInt `json:"old_id"`
 	Id fields.ValInt `json:"id"`
 	Name fields.ValText `json:"name"`
 	Role_id enums.ValEnum_role_types `json:"role_id"`

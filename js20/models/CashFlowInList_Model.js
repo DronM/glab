@@ -68,6 +68,24 @@ function CashFlowInList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
+	
+	filed_options.autoInc = false;	
+	
+	options.fields.cash_flow_income_type = new FieldString("cash_flow_income_type",filed_options);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
+	filed_options.alias = 'Источник прихода';
+	filed_options.autoInc = false;	
+	
+	options.fields.income_source = new FieldText("income_source",filed_options);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
 	filed_options.alias = 'Комментарий';
 	filed_options.autoInc = false;	
 	

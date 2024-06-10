@@ -94,17 +94,29 @@ function CashFlowInList_View(id,options){
 									"field":model.getField("cash_locations_ref"),
 									"ctrlClass":CashLocationEdit,
 									"ctrlOptions":{
-										"labelCaption":""
+										"labelCaption":"",
+										"value": new RefType({"keys": {"id": 1}, "descr":"Касса"})
 									},
 									"ctrlBindFieldId":"cash_location_id"
 								})
 							]
 						})
-						,new GridCellHead(id+":grid:head:comment_text",{
-							"value":"Комментарий",
+						,new GridCellHead(id+":grid:head:cash_flow_income_type",{
+							"value":"Вид",
+							"columns":[
+								new EnumGridColumn_cash_flow_income_types({
+									"field":model.getField("cash_flow_income_type"),
+									"ctrlOptions":{
+										"value":"cash"
+									}
+								})
+							]
+						})
+						,new GridCellHead(id+":grid:head:income_source",{
+							"value":"Источник",
 							"columns":[
 								new GridColumn({
-									"field":model.getField("comment_text"),
+									"field":model.getField("income_source")
 								})
 							]
 						})
@@ -116,7 +128,14 @@ function CashFlowInList_View(id,options){
 								})
 							]
 						})
-						
+						,new GridCellHead(id+":grid:head:comment_text",{
+							"value":"Комментарий",
+							"columns":[
+								new GridColumn({
+									"field":model.getField("comment_text"),
+								})
+							]
+						})
 					]
 				})
 			]
@@ -127,7 +146,7 @@ function CashFlowInList_View(id,options){
 				new GridRow(id+":grid:foot:row0",{
 					"elements":[
 						new GridCell(id+":grid:foot:total_sp1",{
-							"colSpan":"3"
+							"colSpan":"4"
 						})											
 						,new GridCellFoot(id+":grid:foot:tot_total",{
 							"attrs":{"align":"right", "nowrap":"nowrap"},
@@ -136,6 +155,8 @@ function CashFlowInList_View(id,options){
 							"totalFieldId":"total_total",
 							"gridColumn":new GridColumnFloat({"id":"tot_total"})
 						})
+						,new GridCell(id+":grid:foot:total_com",{
+						})											
 					]
 				})		
 			]

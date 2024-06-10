@@ -56,13 +56,13 @@ function CashFlowOutList_View(id,options){
 		}
 	}
 	let self = this;
-	this.addElement(new GridAjx(id+":grid",{
+	let grid = new GridAjx(id+":grid",{
 		"model":model,
 		"keyIds":["id"],
+		"editViewClass": CashFlowOutListEdit_View,
 		"controller":contr,
 		"editInline":true,
 		"editWinClass":null,//WindowFormModalBS,
-		"editViewClass":null,//CashFlowOutDialog_View,
 		/*"editViewOptions":function(){
 			return {
 				"dialogWidth":"80%"
@@ -95,7 +95,8 @@ function CashFlowOutList_View(id,options){
 									"field":model.getField("cash_locations_ref"),
 									"ctrlClass":CashLocationEdit,
 									"ctrlOptions":{
-										"labelCaption":""
+										"labelCaption":"",
+										"value": new RefType({"keys": {"id": 1}, "descr":"Касса"})
 									},
 									"ctrlBindFieldId":"cash_location_id"
 								})
@@ -172,12 +173,13 @@ function CashFlowOutList_View(id,options){
 							"columns":[
 								new GridColumnRef({
 									"field":model.getField("fin_expense_types3_ref"),
-									"ctrlClass":FinExpenseTypeEdit,
+									"ctrlClass":FinExpenseTypeItemEdit,
 									"ctrlOptions":{
+										"required":true,
 										"no_filter":true,
 										"labelCaption":"",
 										"onSelect": function(f){
-											this.setAttr("parent_id", f.parent_id.getValue());
+											// this.setAttr("parent_id", f.parent_id.getValue());
 										}
 									},
 									"ctrlBindFieldId":"fin_expense_type3_id"
@@ -232,7 +234,41 @@ function CashFlowOutList_View(id,options){
 		"refreshInterval":constants.grid_refresh_interval.getValue()*1000,
 		"rowSelect":false,
 		"focus":true
-	}));	
+	});	
+	
+	// grid.m_fillEditView = grid.fillEditView;
+	// grid.fillEditView = function(cmd){
+	// 	this.m_fillEditView(cmd);
+	// 	debugger
+	// 	self.onEditRow(this);
+	// }
+	this.addElement(grid);
 }
 extend(CashFlowOutList_View,ViewAjxList);
 
+
+//***********************
+function CashFlowOutListEdit_View(id,options){	
+	debugger
+	CashFlowOutListEdit_View.superclass.constructor.call(this,id,options);
+}
+extend(CashFlowOutListEdit_View, ViewGridEditInlineAjx);
+
+CashFlowOutListEdit_View.prototype.onGetData = function(resp, cmd){
+	CashFlowOutListEdit_View.superclass.onGetData.call(this, resp, cmd);
+debugger	
+	let edit = this; //grid.getEditViewObj();
+	let ctrl1 = edit.getElement("fin_expense_types1_ref");
+	let ctrl2 = edit.getElement("fin_expense_types2_ref");
+	let ctrl3 = edit.getElement("fin_expense_types3_ref");
+
+	let val1 = ctrl1.getValue();
+	if(val1 && !val1.isNull()){
+		ctrl2.setParentId(val1.getKey());
+	}
+
+	let val2 = ctrl2.getValue();
+	if(val2 && !val2.isNull()){
+		ctrl3.setParentId(val2.getKey());
+	}
+}
