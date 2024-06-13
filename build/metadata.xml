@@ -4,7 +4,7 @@
 	<versions>
 		<version dateOpen="2022-12-06 19:12:32">1.001</version>
 		<version dateOpen="2022-12-06 19:12:32" dateClose="2023-07-11 16:07:04">1.001 
-		<lastBuild>2024-06-10 12:31:19</lastBuild></version>
+		<lastBuild>2024-06-13 10:23:04</lastBuild></version>
 		<version dateOpen="2023-07-20 10:07:22" dateClose="2023-07-24 08:07:47">1.002</version>
 		<version dateOpen="2023-07-24 10:07:28" dateClose="2023-07-24 14:07:30">1.003</version>
 		<version dateOpen="2023-07-25 06:07:57" dateClose="2023-07-25 07:07:04">1.004</version>
@@ -12,6 +12,7 @@
 		<version dateOpen="2023-08-09 09:08:18" dateClose="2023-08-17 16:08:00">1.006</version>
 		<version dateOpen="2024-02-19 16:02:00" dateClose="2024-05-30 10:53:22">1.007</version>
 		<version dateOpen="2024-06-05 10:12:39" dateClose="2024-06-10 12:31:20">1.008</version>
+		<version dateOpen="2024-06-13 08:20:14" dateClose="2024-06-13 10:23:05">1.009</version>
 	</versions>
 	<!--
 	<globalFilters>
@@ -1496,12 +1497,22 @@
 				<field id="name"/>
 			</index>
 		</model>
+		<model id="CashIncomeSource" parent="ModelSQL" dataTable="cash_income_sources" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
+			<field id="name" dataType="Text" alias="Наименование"/>
+			<field id="cash_location_id" dataType="Int" refTable="cash_locations" refField="id"/>
+		</model>
+		<model id="CashIncomeSourceList" parent="ModelSQL" dataTable="cash_income_sources_list" virtual="FALSE">
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
+			<field id="name" dataType="Text" alias="Наименование"/>
+			<field id="cash_locations_ref" dataType="JSON"/>
+		</model>
 		<model id="CashFlowIn" parent="ModelSQL" dataTable="cash_flow_in" virtual="FALSE">
 			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
 			<field id="date_time" dataType="DateTimeTZ" dbRequired="TRUE" defaultValue="CURRENT_TIMESTAMP"/>
 			<field id="cash_location_id" dataType="Int" dbRequired="TRUE" refTable="cash_locations" refField="id"/>
 			<field id="cash_flow_income_type" dataType="Enum" required="TRUE" enumId="cash_flow_income_types" alias="Тип родителя"/>
-			<field id="income_source" dataType="Text" alias="Источник прихода"/>
+			<field id="cash_income_source_id" dataType="Int" alias="Источник прихода"/>
 			<field id="comment_text" dataType="Text" alias="Комментарий"/>
 			<field id="user_id" dataType="Int" dbRequired="TRUE" refTable="users" refField="id"/>
 			<field id="total" dataType="Float" length="15" precision="2"/>
@@ -1527,7 +1538,7 @@
 			<field id="cash_location_id" dataType="Int"/>
 			<field id="cash_locations_ref" dataType="JSON"/>
 			<field id="cash_flow_income_type" dataType="String"/>
-			<field id="income_source" dataType="Text" alias="Источник прихода"/>
+			<field id="cash_income_sources_ref" dataType="JSON" alias="Источник прихода"/>
 			<field id="comment_text" dataType="Text" alias="Комментарий"/>
 			<field id="users_ref" dataType="JSON"/>
 			<field id="total" dataType="Float" length="15" precision="2"/>
@@ -2504,6 +2515,13 @@
 				<field id="inline" dataType="Int"/>
 			</publicMethod>
 		</controller>
+		<controller id="CashIncomeSource" parentId="ControllerSQL" state="TRUE" noState="TRUE">
+			<publicMethod id="insert" modelId="CashIncomeSource"/>
+			<publicMethod id="update" modelId="CashIncomeSource"/>
+			<publicMethod id="delete" modelId="CashIncomeSource"/>
+			<publicMethod id="get_list" modelId="CashIncomeSourceList"/>
+			<publicMethod id="get_object" modelId="CashIncomeSourceList"/>
+		</controller>
 		<controller id="CashFlowOut" parentId="ControllerSQL" state="TRUE" noState="TRUE">
 			<publicMethod id="insert" modelId="CashFlowOut"/>
 			<publicMethod id="update" modelId="CashFlowOut"/>
@@ -2609,6 +2627,7 @@
 		<view id="10029" c="Firm_Controller" t="FirmList" f="get_list" section="Справочники" descr="Организации"/>
 		<view id="10030" c="Bank_Controller" t="BankList" f="get_list" section="Справочники" descr="Банки"/>
 		<view id="10031" c="FinExpenseType_Controller" t="FinExpenseTypeItemList" f="get_list" section="Справочники" descr="Элементы расходов"/>
+		<view id="10032" c="CashIncomeSource_Controller" t="CashIncomeSourceList" f="get_list" section="Справочники" descr="Источники поступлений наличных"/>
 		<view id="20001" c="ItemSearch_Controller" t="ItemSearch" f="get_object" section="Формы" descr="Подбор товара"/>
 		<view id="20002" c="AutoToGlassMatchHead_Controller" t="AutoToGlassMatchHeadList" f="get_list" section="Формы" descr="Конфигуратор комплектаций"/>
 		<view id="20003" t="BankUpload" section="Формы" descr="Импорт выписки"/>
@@ -2668,6 +2687,7 @@
 		<serverTemplate id="CashLocationList" class="list"/>
 		<serverTemplate id="FinExpenseTypeList" class="list"/>
 		<serverTemplate id="FinExpenseTypeItemList" class="list"/>
+		<serverTemplate id="CashIncomeSourceList" class="list"/>
 		<serverTemplate id="FinExpenseTypeDialog"/>
 		<serverTemplate id="CashFlowInList" class="list"/>
 		<serverTemplate id="CashFlowOutList" class="list"/>
@@ -3140,6 +3160,7 @@
 		<jsScript file="js20/views/CashFlowInList_View.js"/>
 		<jsScript file="js20/views/CashFlowOutList_View.js"/>
 		<jsScript file="js20/views/CashFlowTransferList_View.js"/>
+		<jsScript file="js20/views/CashIncomeSourceList_View.js"/>
 		<!-- <jsScript file="js20/views/PersonDocumentTypeList_View.js" /> -->
 		<jsScript file="js20/views/FirmList_View.js"/>
 		<jsScript file="js20/views/FirmDialog_View.js"/>
@@ -3199,6 +3220,7 @@
 		<jsScript file="js20/custom_controls/AutoModelGenerationNextIdBtn.js"/>
 		<jsScript file="js20/custom_controls/PersonDocumentEdit.js"/>
 		<jsScript file="js20/custom_controls/CashLocationEdit.js"/>
+		<jsScript file="js20/custom_controls/CashIncomeSourceEdit.js"/>
 		<jsScript file="js20/custom_controls/FinExpenseTypeEdit.js"/>
 		<jsScript file="js20/custom_controls/FinExpenseTypeItemEdit.js"/>
 		<jsScript file="js20/custom_controls/BankAccountEdit.js"/>
@@ -3434,6 +3456,9 @@
 		<jsScript file="js20/models/FinExpenseTypeItemList_Model.js"/>
 		<jsScript file="js20/enum_controls/Enum_cash_flow_income_types.js"/>
 		<jsScript file="js20/enum_controls/EnumGridColumn_cash_flow_income_types.js"/>
+		<jsScript file="js20/controllers/CashIncomeSource_Controller.js"/>
+		<jsScript file="js20/models/CashIncomeSource_Model.js"/>
+		<jsScript file="js20/models/CashIncomeSourceList_Model.js"/>
 	</jsScripts>
 	<cssScripts>
 		<cssScript file="js20/assets/css/icons/icomoon/styles.css" compressed="TRUE" standalone="TRUE"/>

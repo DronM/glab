@@ -17,7 +17,7 @@ import (
 )
 
 func initMD(md *github.Metadata){
-	md.Controllers["MainMenuConstructor"] = controllers.NewController_MainMenuConstructor()
-	md.Models["MainMenuConstructor"] = models.NewModelMD_MainMenuConstructor()md.Models["MainMenuConstructor"] = models.NewModelMD_MainMenuConstructor()md.Models["MainMenuConstructor"] = models.NewModelMD_MainMenuConstructor()
+	md.Controllers["CashIncomeSource"] = controllers.NewController_CashIncomeSource()
+	md.Models["CashIncomeSource"] = models.NewModelMD_CashIncomeSource()md.Models["CashIncomeSource"] = models.NewModelMD_CashIncomeSource()
 
 }

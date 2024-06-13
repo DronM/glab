@@ -195,6 +195,10 @@ func initMD(md *gobizap.Metadata) {
 	md.Models["BankFlowOutList"] = models.NewModelMD_BankFlowOutList()
 	md.Models["BankFlowOutDialog"] = models.NewModelMD_BankFlowOutDialog()
 
+	md.Controllers["CashIncomeSource"] = controllers.NewController_CashIncomeSource()
+	md.Models["CashIncomeSource"] = models.NewModelMD_CashIncomeSource()
+	md.Models["CashIncomeSourceList"] = models.NewModelMD_CashIncomeSourceList()
+
 	md.Controllers["UsetOperation"] = controllers.NewController_UserOperation()
 	md.Models["UserOperation"] = models.NewModelMD_UserOperation()
 	//

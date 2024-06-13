@@ -68,7 +68,7 @@ function CashFlowIn_Model(options){
 	filed_options.alias = 'Источник прихода';
 	filed_options.autoInc = false;	
 	
-	options.fields.income_source = new FieldText("income_source",filed_options);
+	options.fields.cash_income_source_id = new FieldInt("cash_income_source_id",filed_options);
 	
 				
 	

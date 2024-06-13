@@ -35,6 +35,7 @@
 <li><a href="#CashFlowIn_Controller">CashFlowIn_Controller</a></li>
 <li><a href="#CashFlowOut_Controller">CashFlowOut_Controller</a></li>
 <li><a href="#CashFlowTransfer_Controller">CashFlowTransfer_Controller</a></li>
+<li><a href="#CashIncomeSource_Controller">CashIncomeSource_Controller</a></li>
 <li><a href="#CashLocation_Controller">CashLocation_Controller</a></li>
 <li><a href="#Constant_Controller">Constant_Controller</a></li>
 <li><a href="#Contact_Controller">Contact_Controller</a></li>
@@ -198,6 +199,8 @@
 <li><a href="#FinExpenseTypeDialog_Model">FinExpenseTypeDialog_Model</a></li>
 <li><a href="#FinExpenseTypeItemList_Model">FinExpenseTypeItemList_Model</a></li>
 <li><a href="#CashLocation_Model">CashLocation_Model</a></li>
+<li><a href="#CashIncomeSource_Model">CashIncomeSource_Model</a></li>
+<li><a href="#CashIncomeSourceList_Model">CashIncomeSourceList_Model</a></li>
 <li><a href="#CashFlowIn_Model">CashFlowIn_Model</a></li>
 <li><a href="#CashFlowInList_Model">CashFlowInList_Model</a></li>
 <li><a href="#CashFlowOut_Model">CashFlowOut_Model</a></li>
@@ -721,6 +724,19 @@
 <a href="#CashFlowTransfer_Model">Model: CashFlowTransfer_Model</a><h2>get_list</h2>
 <a href="#CashFlowTransferList_Model">Model: CashFlowTransferList_Model</a><h2>get_object</h2>
 <a href="#CashFlowTransferList_Model">Model: CashFlowTransferList_Model</a>
+</div>
+</div>
+<div id="CashIncomeSource_Controller" class="content_box">
+<h1>CashIncomeSource_Controller</h1>
+<div class="content_item">
+<p class="big"></p>
+<p>Методы:</p>
+<h2>insert</h2>
+<a href="#CashIncomeSource_Model">Model: CashIncomeSource_Model</a><h2>update</h2>
+<a href="#CashIncomeSource_Model">Model: CashIncomeSource_Model</a><h2>delete</h2>
+<a href="#CashIncomeSource_Model">Model: CashIncomeSource_Model</a><h2>get_list</h2>
+<a href="#CashIncomeSourceList_Model">Model: CashIncomeSourceList_Model</a><h2>get_object</h2>
+<a href="#CashIncomeSourceList_Model">Model: CashIncomeSourceList_Model</a>
 </div>
 </div>
 <div id="CashLocation_Controller" class="content_box">
@@ -3445,8 +3461,8 @@
 <div>Required:TRUE</div>
 <div>Length:</div>
 <div>Precision:</div>
-<h2>income_source</h2>
-<div>Type:Text</div>
+<h2>cash_income_source_id</h2>
+<div>Type:Int</div>
 <div>Primary key:</div>
 <div>Required:</div>
 <div>Length:</div>
@@ -3505,8 +3521,8 @@
 <div>Required:</div>
 <div>Length:</div>
 <div>Precision:</div>
-<h2>income_source</h2>
-<div>Type:Text</div>
+<h2>cash_income_sources_ref</h2>
+<div>Type:JSON</div>
 <div>Primary key:</div>
 <div>Required:</div>
 <div>Length:</div>
@@ -3829,6 +3845,54 @@
 <div>Required:</div>
 <div>Length:15</div>
 <div>Precision:2</div>
+</div>
+</div>
+<div id="CashIncomeSource_Model" class="content_box">
+<h1>CashIncomeSource_Model</h1>
+<div class="content_item">
+<p>Поля:</p>
+<h2>id</h2>
+<div>Type:Int</div>
+<div>Primary key:TRUE</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
+<h2>name</h2>
+<div>Type:Text</div>
+<div>Primary key:</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
+<h2>cash_location_id</h2>
+<div>Type:Int</div>
+<div>Primary key:</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
+</div>
+</div>
+<div id="CashIncomeSourceList_Model" class="content_box">
+<h1>CashIncomeSourceList_Model</h1>
+<div class="content_item">
+<p>Поля:</p>
+<h2>id</h2>
+<div>Type:Int</div>
+<div>Primary key:TRUE</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
+<h2>name</h2>
+<div>Type:Text</div>
+<div>Primary key:</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
+<h2>cash_locations_ref</h2>
+<div>Type:JSON</div>
+<div>Primary key:</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
 </div>
 </div>
 <div id="CashLocation_Model" class="content_box">

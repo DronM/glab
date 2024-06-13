@@ -32,9 +32,19 @@ function CashFlowInOut_View(id,options){
 		}));
 
 		this.addElement(new CashFlowOutList_View(id+":cash_flow_out_list",{
+			"inOut":true,
+			"inOutRefresh":function(){
+				self.m_oldDate = undefined;
+				self.onSelectDate();
+			}
 		}));
 
 		this.addElement(new CashFlowInList_View(id+":cash_flow_in_list",{
+			"inOut":true,
+			"inOutRefresh":function(){
+				self.m_oldDate = undefined;
+				self.onSelectDate();
+			}
 		}));
 	}
 	CashFlowInOut_View.superclass.constructor.call(this,id,options);

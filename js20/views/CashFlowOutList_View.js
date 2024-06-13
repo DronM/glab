@@ -17,8 +17,11 @@ function CashFlowOutList_View(id,options){
 	var popup_menu = new PopUpMenu();
 	var pagClass = window.getApp().getPaginationClass();
 	
+	this.m_inOutRefresh = options.inOutRefresh;
+
+	let self = this;
 	var filters;
-	if (!options.detail){
+	if (!options.detail && !options.inOut){
 		var period_ctrl = new EditPeriodDateTime(id+":filter-ctrl-period",{
 			"field":new FieldDateTime("date_time")
 		});
@@ -55,7 +58,6 @@ function CashFlowOutList_View(id,options){
 			}
 		}
 	}
-	let self = this;
 	let grid = new GridAjx(id+":grid",{
 		"model":model,
 		"keyIds":["id"],
@@ -70,7 +72,8 @@ function CashFlowOutList_View(id,options){
 		},*/
 		"commands":new GridCmdContainerAjx(id+":grid:cmd",{
 			"exportFileName" :"РасходныеКассовыеОрдера",
-			"filters": filters
+			"filters": filters,
+			"cmdRefresh":!options.inOut
 		}),		
 		"popUpMenu":popup_menu,
 		"filters":(options.detailFilters&&options.detailFilters.CashFlowOutList_Model)? options.detailFilters.CashFlowOutList_Model:null,	
@@ -233,7 +236,18 @@ function CashFlowOutList_View(id,options){
 		"autoRefresh":options.detailFilters? true:false,
 		"refreshInterval":constants.grid_refresh_interval.getValue()*1000,
 		"rowSelect":false,
-		"focus":true
+		"focus":true,
+		"srvEvents":!options.inOut? null : {
+			"events":[
+				{"id":"CashFlowOut.insert"},
+				{"id":"CashFlowOut.update"},
+				{"id":"CashFlowOut.delete"}
+			],
+			"onEvent":function(params){
+				// self.srvEventsCallBack(params);
+				self.m_inOutRefresh();
+			}
+		}
 	});	
 	
 	// grid.m_fillEditView = grid.fillEditView;

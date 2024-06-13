@@ -489,6 +489,13 @@ UPDATE permissions SET rules = '{
 			,"get_object":true
 			,"get_report":true
 		}
+		,"CashIncomeSource":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
+		}
 		,"CashFlowOut":{
 			"insert":true
 			,"update":true
@@ -1009,6 +1016,13 @@ UPDATE permissions SET rules = '{
 			,"get_list":true
 			,"get_object":true
 			,"get_report":true
+		}
+		,"CashIncomeSource":{
+			"insert":true
+			,"update":true
+			,"delete":true
+			,"get_list":true
+			,"get_object":true
 		}
 		,"CashFlowOut":{
 			"insert":true

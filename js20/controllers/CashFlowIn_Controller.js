@@ -66,7 +66,7 @@ extend(CashFlowIn_Controller,ControllerObjServer);
 	
 	var options = {};
 	options.alias = "Источник прихода";
-	var field = new FieldText("income_source",options);
+	var field = new FieldInt("cash_income_source_id",options);
 	
 	pm.addField(field);
 	
@@ -130,7 +130,7 @@ extend(CashFlowIn_Controller,ControllerObjServer);
 	
 	var options = {};
 	options.alias = "Источник прихода";
-	var field = new FieldText("income_source",options);
+	var field = new FieldInt("cash_income_source_id",options);
 	
 	pm.addField(field);
 	
@@ -195,6 +195,12 @@ extend(CashFlowIn_Controller,ControllerObjServer);
 	var f_opts = {};
 	
 	pm.addField(new FieldJSON("cash_locations_ref",f_opts));
+	var f_opts = {};
+	
+	pm.addField(new FieldString("cash_flow_income_type",f_opts));
+	var f_opts = {};
+	f_opts.alias = "Источник прихода";
+	pm.addField(new FieldJSON("cash_income_sources_ref",f_opts));
 	var f_opts = {};
 	f_opts.alias = "Комментарий";
 	pm.addField(new FieldText("comment_text",f_opts));

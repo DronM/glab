@@ -20,7 +20,7 @@ type CashFlowIn struct {
 	Date_time fields.ValDateTimeTZ `json:"date_time"`
 	Cash_location_id fields.ValInt `json:"cash_location_id"`
 	Cash_flow_income_type enums.ValEnum_cash_flow_income_types `json:"cash_flow_income_type" required:"true" alias:"Тип родителя"`
-	Income_source fields.ValText `json:"income_source" alias:"Источник прихода"`
+	Cash_income_source_id fields.ValInt `json:"cash_income_source_id" alias:"Источник прихода"`
 	Comment_text fields.ValText `json:"comment_text" alias:"Комментарий"`
 	User_id fields.ValInt `json:"user_id"`
 	Total fields.ValFloat `json:"total"`
@@ -31,7 +31,7 @@ func (o *CashFlowIn) SetNull() {
 	o.Date_time.SetNull()
 	o.Cash_location_id.SetNull()
 	o.Cash_flow_income_type.SetNull()
-	o.Income_source.SetNull()
+	o.Cash_income_source_id.SetNull()
 	o.Comment_text.SetNull()
 	o.User_id.SetNull()
 	o.Total.SetNull()
@@ -67,7 +67,7 @@ type CashFlowIn_old_keys struct {
 	Date_time fields.ValDateTimeTZ `json:"date_time"`
 	Cash_location_id fields.ValInt `json:"cash_location_id"`
 	Cash_flow_income_type enums.ValEnum_cash_flow_income_types `json:"cash_flow_income_type" alias:"Тип родителя"`
-	Income_source fields.ValText `json:"income_source" alias:"Источник прихода"`
+	Cash_income_source_id fields.ValInt `json:"cash_income_source_id" alias:"Источник прихода"`
 	Comment_text fields.ValText `json:"comment_text" alias:"Комментарий"`
 	User_id fields.ValInt `json:"user_id"`
 	Total fields.ValFloat `json:"total"`

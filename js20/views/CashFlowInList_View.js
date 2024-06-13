@@ -17,8 +17,11 @@ function CashFlowInList_View(id,options){
 	var popup_menu = new PopUpMenu();
 	var pagClass = window.getApp().getPaginationClass();
 	
+	this.m_inOutRefresh = options.inOutRefresh;
+
+	let self = this;
 	var filters;
-	if (!options.detail){
+	if (!options.detail && !options.inOut){
 		var period_ctrl = new EditPeriodDateTime(id+":filter-ctrl-period",{
 			"field":new FieldDateTime("date_time")
 		});
@@ -69,7 +72,8 @@ function CashFlowInList_View(id,options){
 		},*/
 		"commands":new GridCmdContainerAjx(id+":grid:cmd",{
 			"exportFileName" :"ПриходныеКассовыеОрдера",
-			"filters": filters
+			"filters": filters,
+			"cmdRefresh":!options.inOut
 		}),		
 		"popUpMenu":popup_menu,
 		"filters":(options.detailFilters&&options.detailFilters.CashFlowInList_Model)? options.detailFilters.CashFlowInList_Model:null,	
@@ -112,11 +116,16 @@ function CashFlowInList_View(id,options){
 								})
 							]
 						})
-						,new GridCellHead(id+":grid:head:income_source",{
+						,new GridCellHead(id+":grid:head:cash_income_sources_ref",{
 							"value":"Источник",
 							"columns":[
-								new GridColumn({
-									"field":model.getField("income_source")
+								new GridColumnRef({
+									"field":model.getField("cash_income_sources_ref"),
+									"ctrlClass":CashIncomeSourceEdit,
+									"ctrlOptions":{
+										"labelCaption":""
+									},
+									"ctrlBindFieldId":"cash_income_source_id"
 								})
 							]
 						})
@@ -165,9 +174,21 @@ function CashFlowInList_View(id,options){
 			{"countPerPage":constants.doc_per_page_count.getValue()}),		
 		
 		"autoRefresh":options.detailFilters? true:false,
-		"refreshInterval":constants.grid_refresh_interval.getValue()*1000,
+		"refreshInterval":options.inOut? null : constants.grid_refresh_interval.getValue()*1000,
 		"rowSelect":false,
-		"focus":true
+		"focus":true,
+		"defSrvEvents":true,
+		"srvEvents":!options.inOut? null : {
+			"events":[
+				{"id":"CashFlowIn.insert"},
+				{"id":"CashFlowIn.update"},
+				{"id":"CashFlowIn.delete"}
+			],
+			"onEvent":function(params){
+				// self.srvEventsCallBack(params);
+				self.m_inOutRefresh();
+			}
+		}
 	}));	
 }
 extend(CashFlowInList_View,ViewAjxList);

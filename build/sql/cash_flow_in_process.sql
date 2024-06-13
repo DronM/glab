@@ -7,6 +7,7 @@ CREATE OR REPLACE FUNCTION public.cash_flow_in_process()
 $BODY$
 DECLARE
 	reg_act ra_cash_flow%ROWTYPE;
+	v_cash_location_id int;
 BEGIN
 	IF (TG_WHEN='BEFORE' AND TG_OP='INSERT') THEN
 		--IF NEW.date_time < '2024-01-01T00:00:00'::timestamp THEN
@@ -29,6 +30,24 @@ BEGIN
 		reg_act.cash_location_id	= NEW.cash_location_id;
 		reg_act.total			= NEW.total;
 		PERFORM ra_cash_flow_add_act(reg_act);	
+		
+		--if source location is defined - make out movements
+		SELECT
+			src.cash_location_id
+		INTO
+			v_cash_location_id
+		FROM cash_income_sources AS src
+		WHERE src.id = NEW.cash_income_source_id;
+		
+		IF v_cash_location_id IS NOT NULL THEN
+			reg_act.date_time		= NEW.date_time;
+			reg_act.deb			= false;
+			reg_act.doc_type  		= 'cash_flow_in'::doc_types;
+			reg_act.doc_id  		= NEW.id;
+			reg_act.cash_location_id	= v_cash_location_id;
+			reg_act.total			= NEW.total;
+			PERFORM ra_cash_flow_add_act(reg_act);			
+		END IF;
 		
 		RETURN NEW;
 		
