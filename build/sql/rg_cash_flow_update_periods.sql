@@ -20,6 +20,7 @@ BEGIN
 	CALC_DATE_TIME = rg_calc_period('cash_flow'::reg_types);
 	v_loop_rg_period = rg_period('cash_flow'::reg_types,in_date_time);
 	v_calc_interval = rg_calc_interval('cash_flow'::reg_types);
+	--raise exception 'rg_cash_flow_update_periods';
 	LOOP
 		UPDATE rg_cash_flow
 		SET

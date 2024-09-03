@@ -21,6 +21,7 @@ function FinExpenseTypeItemEdit(id,options){
 		if(nm && nm.length > 0){
 			let pm = (new FinExpenseType_Controller()).getPublicMethod("insert");
 			pm.setFieldValue("parent_id", self.m_parentId);	
+			pm.setFieldValue("lev", self.m_lev);	
 			pm.setFieldValue("name", nm);	
 			pm.run({
 				"ok":function(resp){
@@ -68,15 +69,18 @@ function FinExpenseTypeItemEdit(id,options){
 	FinExpenseTypeItemEdit.superclass.constructor.call(this,id,options);
 	
 	this.setParentId("null");
+
+	this.m_lev = options.lev;
 }
 extend(FinExpenseTypeItemEdit, EditRef);
 
 FinExpenseTypeItemEdit.prototype.setParentId = function(id) {
 	this.m_parentId = id;
 	let pm = this.getAutoComplete().getPublicMethod("complete");
-	let cond_fields = "parent_id";
-	let cond_vals = id;
+	let cond_fields = "parent_id@@lev";
+	let cond_vals = id +"@@"+ this.m_lev;
 	let cond_sgns = ((id=="null")? "i" : "e");
+	cond_sgns+= "@@e";
 	pm.setFieldValue("cond_fields", cond_fields);
 	pm.setFieldValue("cond_vals", cond_vals); 
 	pm.setFieldValue("cond_sgns", cond_sgns); 

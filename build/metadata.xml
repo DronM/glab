@@ -4,7 +4,7 @@
 	<versions>
 		<version dateOpen="2022-12-06 19:12:32">1.001</version>
 		<version dateOpen="2022-12-06 19:12:32" dateClose="2023-07-11 16:07:04">1.001 
-		<lastBuild>2024-06-13 10:23:04</lastBuild></version>
+		<lastBuild>2024-09-03 15:09:26</lastBuild></version>
 		<version dateOpen="2023-07-20 10:07:22" dateClose="2023-07-24 08:07:47">1.002</version>
 		<version dateOpen="2023-07-24 10:07:28" dateClose="2023-07-24 14:07:30">1.003</version>
 		<version dateOpen="2023-07-25 06:07:57" dateClose="2023-07-25 07:07:04">1.004</version>
@@ -13,6 +13,7 @@
 		<version dateOpen="2024-02-19 16:02:00" dateClose="2024-05-30 10:53:22">1.007</version>
 		<version dateOpen="2024-06-05 10:12:39" dateClose="2024-06-10 12:31:20">1.008</version>
 		<version dateOpen="2024-06-13 08:20:14" dateClose="2024-06-13 10:23:05">1.009</version>
+		<version dateOpen="2024-09-03 13:58:12" dateClose="2024-09-03 15:09:27">1.010</version>
 	</versions>
 	<!--
 	<globalFilters>
@@ -1448,6 +1449,7 @@
 		<model id="FinExpenseType" parent="ModelSQL" dataTable="fin_expense_types" virtual="FALSE">
 			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
 			<field id="parent_id" dataType="Int" alias="Родитель"/>
+			<field id="lev" dataType="Int" alias="Уровень" defaultValue="0"/>
 			<field id="name" dataType="Text" alias="Наименование"/>
 			<field id="for_cash" dataType="Bool" alias="Для кассы" defaultValue="FALSE"/>
 			<field id="for_bank" dataType="Bool" alias="Для банка" defaultValue="FALSE"/>
@@ -1465,6 +1467,7 @@
 			</defaultOrder>
 			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
 			<field id="parent_id" dataType="Int" alias="Родитель"/>
+			<field id="lev" dataType="Int" alias="Уровень"/>
 			<field id="name" dataType="Text" alias="Наименование"/>
 			<field id="for_cash" dataType="Bool" alias="Для кассы"/>
 			<field id="for_bank" dataType="Bool" alias="Для банка"/>

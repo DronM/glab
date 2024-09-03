@@ -17,3 +17,10 @@
 1) AutoModelGenerationList_View Модель - Модификация
 2) Поколения. Нужна колонка Наименование с авторасчетом
 3) Кузова по новому. Привязка к моделям + кузова поколения.
+
+
+1.010
+1) FinExpenseType new field lev int.
+	CashFlowOutList_View.js lev option.
+	FinExpenseTypeEdit.js
+	FinExpenseTypeItemEdit.js

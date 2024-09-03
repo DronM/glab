@@ -18,6 +18,7 @@ import (
 type FinExpenseTypeList struct {
 	Id fields.ValInt `json:"id" primaryKey:"true" autoInc:"true"`
 	Parent_id fields.ValInt `json:"parent_id" alias:"Родитель"`
+	Lev fields.ValInt `json:"lev" alias:"Уровень"`
 	Name fields.ValText `json:"name" alias:"Наименование" defOrder:"ASC"`
 	For_cash fields.ValBool `json:"for_cash" alias:"Для кассы"`
 	For_bank fields.ValBool `json:"for_bank" alias:"Для банка"`
@@ -27,6 +28,7 @@ type FinExpenseTypeList struct {
 func (o *FinExpenseTypeList) SetNull() {
 	o.Id.SetNull()
 	o.Parent_id.SetNull()
+	o.Lev.SetNull()
 	o.Name.SetNull()
 	o.For_cash.SetNull()
 	o.For_bank.SetNull()

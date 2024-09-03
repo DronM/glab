@@ -10,6 +10,8 @@ CREATE OR REPLACE VIEW public.fin_expense_types_list AS
 		,t.deleted
 		,t.for_cash
 		,t.for_bank
+		,t.lev
+		
 	FROM public.fin_expense_types AS t
 	
 	ORDER BY name ASC

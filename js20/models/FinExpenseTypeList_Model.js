@@ -47,6 +47,15 @@ function FinExpenseTypeList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
+	filed_options.alias = 'Уровень';
+	filed_options.autoInc = false;	
+	
+	options.fields.lev = new FieldInt("lev",filed_options);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
 	filed_options.alias = 'Наименование';
 	filed_options.autoInc = false;	
 	

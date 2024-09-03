@@ -114,6 +114,7 @@ function CashFlowOutList_View(id,options){
 									"ctrlOptions":{
 										"labelCaption":"",
 										"for_cash":true,
+										"lev":1,
 										"onClear": function(){
 											let edit = self.getElement("grid").getEditViewObj();
 											let ctrl = edit.getElement("fin_expense_types2_ref");											
@@ -125,9 +126,17 @@ function CashFlowOutList_View(id,options){
 											
 											let par_id = f.id.getValue();											
 											let edit = self.getElement("grid").getEditViewObj();
+
 											let ctrl = edit.getElement("fin_expense_types2_ref");
 											ctrl.setParentId(par_id);
 											let ctrl_v = ctrl.getValue();
+											if(ctrl_v && !ctrl_v.isNull() && ctrl_v.getKey() != par_id){
+												ctrl.reset();
+											}
+
+											ctrl = edit.getElement("fin_expense_types3_ref");
+											ctrl.setParentId(par_id);
+											ctrl_v = ctrl.getValue();
 											if(ctrl_v && !ctrl_v.isNull() && ctrl_v.getKey() != par_id){
 												ctrl.reset();
 											}
@@ -147,23 +156,24 @@ function CashFlowOutList_View(id,options){
 									"no_filter":true,
 									"ctrlOptions":{
 										"labelCaption":"",
+										"lev":2,
 										"onClear": function(){
-											let edit = self.getElement("grid").getEditViewObj();
-											let ctrl = edit.getElement("fin_expense_types3_ref");											
-											ctrl.reset();
-											ctrl.setParentId("null");
+											// let edit = self.getElement("grid").getEditViewObj();
+											// let ctrl = edit.getElement("fin_expense_types3_ref");											
+											// ctrl.reset();
+											// ctrl.setParentId("null");
 										},
 										"onSelect": function(f){
 											this.setAttr("parent_id", f.parent_id.getValue());
 											
-											let par_id = f.id.getValue();
-											let edit = self.getElement("grid").getEditViewObj();
-											let ctrl = edit.getElement("fin_expense_types3_ref");
-											ctrl.setParentId(par_id);
-											let ctrl_v = ctrl.getValue();
-											if(ctrl_v && !ctrl_v.isNull() && ctrl_v.getKey() != par_id){
-												ctrl.reset();
-											}
+											// let par_id = f.id.getValue();
+											// let edit = self.getElement("grid").getEditViewObj();
+											// let ctrl = edit.getElement("fin_expense_types3_ref");
+											// ctrl.setParentId(par_id);
+											// let ctrl_v = ctrl.getValue();
+											// if(ctrl_v && !ctrl_v.isNull() && ctrl_v.getKey() != par_id){
+											// 	ctrl.reset();
+											// }
 										}
 										
 									},
@@ -180,9 +190,11 @@ function CashFlowOutList_View(id,options){
 									"ctrlOptions":{
 										"required":true,
 										"no_filter":true,
+										"lev":3,
 										"labelCaption":"",
 										"onSelect": function(f){
 											// this.setAttr("parent_id", f.parent_id.getValue());
+											this.setAttr("lev", 3);
 										}
 									},
 									"ctrlBindFieldId":"fin_expense_type3_id"
@@ -270,7 +282,7 @@ extend(CashFlowOutListEdit_View, ViewGridEditInlineAjx);
 
 CashFlowOutListEdit_View.prototype.onGetData = function(resp, cmd){
 	CashFlowOutListEdit_View.superclass.onGetData.call(this, resp, cmd);
-debugger	
+// debugger	
 	let edit = this; //grid.getEditViewObj();
 	let ctrl1 = edit.getElement("fin_expense_types1_ref");
 	let ctrl2 = edit.getElement("fin_expense_types2_ref");

@@ -40,6 +40,7 @@ function FinExpenseTypeEdit(id,options){
 	FinExpenseTypeEdit.superclass.constructor.call(this,id,options);
 	
 	this.setParentId("null");
+	this.m_lev = options.lev;
 }
 extend(FinExpenseTypeEdit, EditRef);
 
@@ -57,6 +58,11 @@ FinExpenseTypeEdit.prototype.setParentId = function(id) {
 		cond_fields+= "@@for_cash"
 		cond_vals+=	"@@" + ((this.m_forCash)? "1":"0");
 		cond_sgns+= "@@e";
+	}
+	if(id != "null"){
+		cond_fields+= "@@lev";
+		cond_vals+=	"@@3";
+		cond_sgns+= "@@ne";
 	}
 	pm.setFieldValue("cond_fields", cond_fields);
 	pm.setFieldValue("cond_vals", cond_vals); 

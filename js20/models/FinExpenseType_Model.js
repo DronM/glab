@@ -44,6 +44,16 @@ function FinExpenseType_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
+	filed_options.defValue = true;
+	filed_options.alias = 'Уровень';
+	filed_options.autoInc = false;	
+	
+	options.fields.lev = new FieldInt("lev",filed_options);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
 	filed_options.alias = 'Наименование';
 	filed_options.autoInc = false;	
 	
@@ -97,7 +107,6 @@ function FinExpenseType_Model(options){
 	
 	options.fields.bank_match_rule_cond = new FieldText("bank_match_rule_cond",filed_options);
 	
-			
 			
 		FinExpenseType_Model.superclass.constructor.call(this,id,options);
 }

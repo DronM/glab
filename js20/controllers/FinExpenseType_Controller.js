@@ -54,6 +54,12 @@ extend(FinExpenseType_Controller,ControllerObjServer);
 	pm.addField(field);
 	
 	var options = {};
+	options.alias = "Уровень";
+	var field = new FieldInt("lev",options);
+	
+	pm.addField(field);
+	
+	var options = {};
 	options.alias = "Наименование";
 	var field = new FieldText("name",options);
 	
@@ -110,6 +116,12 @@ extend(FinExpenseType_Controller,ControllerObjServer);
 	var options = {};
 	options.alias = "Родитель";
 	var field = new FieldInt("parent_id",options);
+	
+	pm.addField(field);
+	
+	var options = {};
+	options.alias = "Уровень";
+	var field = new FieldInt("lev",options);
 	
 	pm.addField(field);
 	
@@ -186,6 +198,9 @@ extend(FinExpenseType_Controller,ControllerObjServer);
 	var f_opts = {};
 	f_opts.alias = "Родитель";
 	pm.addField(new FieldInt("parent_id",f_opts));
+	var f_opts = {};
+	f_opts.alias = "Уровень";
+	pm.addField(new FieldInt("lev",f_opts));
 	var f_opts = {};
 	f_opts.alias = "Наименование";
 	pm.addField(new FieldText("name",f_opts));
