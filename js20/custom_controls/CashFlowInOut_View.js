@@ -89,10 +89,24 @@ CashFlowInOut_View.prototype.onSelectDate = function(){
 	];
 
 	let grid = this.getElement("cash_flow_out_list").getElement("grid");
+	var out_m = new CashFlowOutList_Model();
+	out_m.setFieldValue("date_time", v);
+	grid.setInsertViewOptions({
+		"models":{
+			"CashFlowOutList_Model":out_m
+		    }
+		});
 	grid.setFilters(filters);
 	grid.onRefresh();
 
 	grid = this.getElement("cash_flow_in_list").getElement("grid");
+	var in_m = new CashFlowInList_Model();
+	in_m.setFieldValue("date_time", v);
+	grid.setInsertViewOptions({
+		"models":{
+			"CashFlowInList_Model":in_m
+		    }
+		});
 	grid.setFilters(filters);
 	grid.onRefresh();
 	 

@@ -108,6 +108,7 @@ function FinExpenseType_Model(options){
 	options.fields.bank_match_rule_cond = new FieldText("bank_match_rule_cond",filed_options);
 	
 			
+			
 		FinExpenseType_Model.superclass.constructor.call(this,id,options);
 }
 extend(FinExpenseType_Model,ModelXML);

@@ -18,7 +18,7 @@ function FinExpenseTypeItemEdit(id,options){
 	options.cmdInsert = true; 
 	options.insertOnClick = function(){
 		let nm = self.getNode().value;
-		if(nm && nm.length > 0){
+		if(nm && nm.length > 0 && nm.trim().length>0){
 			let pm = (new FinExpenseType_Controller()).getPublicMethod("insert");
 			pm.setFieldValue("parent_id", self.m_parentId);	
 			pm.setFieldValue("lev", self.m_lev);	

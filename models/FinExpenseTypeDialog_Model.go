@@ -19,6 +19,7 @@ type FinExpenseTypeDialog struct {
 	Id fields.ValInt `json:"id" primaryKey:"true" autoInc:"true"`
 	Parents_ref fields.ValJSON `json:"parents_ref" alias:"Родитель"`
 	Name fields.ValText `json:"name" alias:"Наименование"`
+	Lev fields.ValInt `json:"lev" alias:"Уровень"`
 	For_cash fields.ValBool `json:"for_cash" alias:"Для кассы"`
 	For_bank fields.ValBool `json:"for_bank" alias:"Для банка"`
 	Bank_match_rule fields.ValText `json:"bank_match_rule" alias:"Правило поиска соответствия для банка"`
@@ -29,6 +30,7 @@ func (o *FinExpenseTypeDialog) SetNull() {
 	o.Id.SetNull()
 	o.Parents_ref.SetNull()
 	o.Name.SetNull()
+	o.Lev.SetNull()
 	o.For_cash.SetNull()
 	o.For_bank.SetNull()
 	o.Bank_match_rule.SetNull()

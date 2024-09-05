@@ -53,6 +53,15 @@ function FinExpenseTypeDialog_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
+	filed_options.alias = 'Уровень';
+	filed_options.autoInc = false;	
+	
+	options.fields.lev = new FieldInt("lev",filed_options);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
 	filed_options.alias = 'Для кассы';
 	filed_options.autoInc = false;	
 	

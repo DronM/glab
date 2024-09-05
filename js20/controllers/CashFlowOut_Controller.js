@@ -29,6 +29,7 @@ function CashFlowOut_Controller(options){
 	this.addDelete();
 	this.addGetList();
 	this.addGetObject();
+	this.add_complete_comment();
 		
 }
 extend(CashFlowOut_Controller,ControllerObjServer);
@@ -233,6 +234,50 @@ extend(CashFlowOut_Controller,ControllerObjServer);
 	
 	pm.addField(new FieldString("mode"));
 	pm.addField(new FieldString("lsn"));
+}
+
+			CashFlowOut_Controller.prototype.add_complete_comment = function(){
+	var opts = {"controller":this};	
+	var pm = new PublicMethodServer('complete_comment',opts);
+	
+				
+	
+	var options = {};
+	
+		pm.addField(new FieldText("comment_text",options));
+	
+				
+	
+	var options = {};
+	
+		pm.addField(new FieldInt("fin_expense_type2_id",options));
+	
+				
+	
+	var options = {};
+	
+		pm.addField(new FieldInt("ic",options));
+	
+				
+	
+	var options = {};
+	
+		pm.addField(new FieldInt("mid",options));
+	
+				
+	
+	var options = {};
+	
+		pm.addField(new FieldInt("count",options));
+	
+				
+	
+	var options = {};
+	
+		pm.addField(new FieldString("ord_directs",options));
+	
+			
+	this.addPublicMethod(pm);
 }
 
 		

@@ -13,160 +13,185 @@ package controllers
  */
 
 import (
-	"reflect"	
 	"encoding/json"
-	
-	"glab/models"
-	
+	"reflect"
+
 	"github.com/dronm/gobizap"
 	"github.com/dronm/gobizap/fields"
 	"github.com/dronm/gobizap/model"
+
+	"glab/models"
 )
 
-//Controller
+// Controller
 type CashFlowOut_Controller struct {
 	gobizap.Base_Controller
 }
 
-func NewController_CashFlowOut() *CashFlowOut_Controller{
-	c := &CashFlowOut_Controller{gobizap.Base_Controller{ID: "CashFlowOut", PublicMethods: make(gobizap.PublicMethodCollection)}}	
+func NewController_CashFlowOut() *CashFlowOut_Controller {
+	c := &CashFlowOut_Controller{gobizap.Base_Controller{ID: "CashFlowOut", PublicMethods: make(gobizap.PublicMethodCollection)}}
 	keys_fields := fields.GenModelMD(reflect.ValueOf(models.CashFlowOut_keys{}))
-	
+
 	//************************** method insert **********************************
 	c.PublicMethods["insert"] = &CashFlowOut_Controller_insert{
 		gobizap.Base_PublicMethod{
-			ID: "insert",
-			Fields: fields.GenModelMD(reflect.ValueOf(models.CashFlowOut{})),
+			ID:        "insert",
+			Fields:    fields.GenModelMD(reflect.ValueOf(models.CashFlowOut{})),
 			EventList: gobizap.PublicMethodEventList{"CashFlowOut.insert"},
 		},
 	}
-	
+
 	//************************** method delete *************************************
 	c.PublicMethods["delete"] = &CashFlowOut_Controller_delete{
 		gobizap.Base_PublicMethod{
-			ID: "delete",
-			Fields: keys_fields,
+			ID:        "delete",
+			Fields:    keys_fields,
 			EventList: gobizap.PublicMethodEventList{"CashFlowOut.delete"},
 		},
 	}
-	
+
 	//************************** method update *************************************
 	c.PublicMethods["update"] = &CashFlowOut_Controller_update{
 		gobizap.Base_PublicMethod{
-			ID: "update",
-			Fields: fields.GenModelMD(reflect.ValueOf(models.CashFlowOut_old_keys{})),
+			ID:        "update",
+			Fields:    fields.GenModelMD(reflect.ValueOf(models.CashFlowOut_old_keys{})),
 			EventList: gobizap.PublicMethodEventList{"CashFlowOut.update"},
 		},
 	}
-	
+
 	//************************** method get_object *************************************
 	c.PublicMethods["get_object"] = &CashFlowOut_Controller_get_object{
 		gobizap.Base_PublicMethod{
-			ID: "get_object",
+			ID:     "get_object",
 			Fields: keys_fields,
 		},
 	}
-	
+
 	//************************** method get_list *************************************
 	c.PublicMethods["get_list"] = &CashFlowOut_Controller_get_list{
 		gobizap.Base_PublicMethod{
-			ID: "get_list",
+			ID:     "get_list",
 			Fields: model.Cond_Model_fields,
 		},
 	}
-	
-			
-	
+
+	//************************** method complete *************************************
+	c.PublicMethods["complete_comment"] = &CashFlowOut_Controller_complete_comment{
+		gobizap.Base_PublicMethod{
+			ID:     "complete_comment",
+			Fields: fields.GenModelMD(reflect.ValueOf(models.CashFlowOut_complete_comment{})),
+		},
+	}
+
 	return c
 }
 
 type CashFlowOut_Controller_keys_argv struct {
-	Argv models.CashFlowOut_keys `json:"argv"`	
+	Argv models.CashFlowOut_keys `json:"argv"`
 }
 
-//************************* INSERT **********************************************
-//Public method: insert
+// ************************* INSERT **********************************************
+// Public method: insert
 type CashFlowOut_Controller_insert struct {
 	gobizap.Base_PublicMethod
 }
 
-//Public method Unmarshal to structure
+// Public method Unmarshal to structure
 func (pm *CashFlowOut_Controller_insert) Unmarshal(payload []byte) (reflect.Value, error) {
 	var res reflect.Value
 	argv := &models.CashFlowOut_argv{}
-		
+
 	if err := json.Unmarshal(payload, argv); err != nil {
 		return res, err
 	}
-	res = reflect.ValueOf(&argv.Argv).Elem()	
+	res = reflect.ValueOf(&argv.Argv).Elem()
 	return res, nil
 }
 
-//************************* DELETE **********************************************
+// ************************* DELETE **********************************************
 type CashFlowOut_Controller_delete struct {
 	gobizap.Base_PublicMethod
 }
 
-//Public method Unmarshal to structure
+// Public method Unmarshal to structure
 func (pm *CashFlowOut_Controller_delete) Unmarshal(payload []byte) (reflect.Value, error) {
 	var res reflect.Value
 	argv := &models.CashFlowOut_keys_argv{}
-		
+
 	if err := json.Unmarshal(payload, argv); err != nil {
 		return res, err
-	}	
-	res = reflect.ValueOf(&argv.Argv).Elem()	
+	}
+	res = reflect.ValueOf(&argv.Argv).Elem()
 	return res, nil
 }
 
-//************************* GET OBJECT **********************************************
+// ************************* GET OBJECT **********************************************
 type CashFlowOut_Controller_get_object struct {
 	gobizap.Base_PublicMethod
 }
 
-//Public method Unmarshal to structure
+// Public method Unmarshal to structure
 func (pm *CashFlowOut_Controller_get_object) Unmarshal(payload []byte) (reflect.Value, error) {
 	var res reflect.Value
 	argv := &models.CashFlowOut_keys_argv{}
-		
+
 	if err := json.Unmarshal(payload, argv); err != nil {
 		return res, err
-	}	
-	res = reflect.ValueOf(&argv.Argv).Elem()	
+	}
+	res = reflect.ValueOf(&argv.Argv).Elem()
 	return res, nil
 }
 
-//************************* GET LIST **********************************************
-//Public method: get_list
+// ************************* GET LIST **********************************************
+// Public method: get_list
 type CashFlowOut_Controller_get_list struct {
 	gobizap.Base_PublicMethod
 }
-//Public method Unmarshal to structure
+
+// Public method Unmarshal to structure
 func (pm *CashFlowOut_Controller_get_list) Unmarshal(payload []byte) (reflect.Value, error) {
 	var res reflect.Value
 	argv := &model.Controller_get_list_argv{}
-		
+
 	if err := json.Unmarshal(payload, argv); err != nil {
 		return res, err
-	}	
-	res = reflect.ValueOf(&argv.Argv).Elem()	
+	}
+	res = reflect.ValueOf(&argv.Argv).Elem()
 	return res, nil
 }
 
-//************************* UPDATE **********************************************
-//Public method: update
+// ************************* UPDATE **********************************************
+// Public method: update
 type CashFlowOut_Controller_update struct {
 	gobizap.Base_PublicMethod
 }
-//Public method Unmarshal to structure
+
+// Public method Unmarshal to structure
 func (pm *CashFlowOut_Controller_update) Unmarshal(payload []byte) (reflect.Value, error) {
 	var res reflect.Value
 	argv := &models.CashFlowOut_old_keys_argv{}
-		
+
 	if err := json.Unmarshal(payload, argv); err != nil {
 		return res, err
-	}	
-	res = reflect.ValueOf(&argv.Argv).Elem()	
+	}
+	res = reflect.ValueOf(&argv.Argv).Elem()
 	return res, nil
 }
 
+// ************************** complete_comment ********************************************************
+// Public method: complete_for_make
+type CashFlowOut_Controller_complete_comment struct {
+	gobizap.Base_PublicMethod
+}
+
+// Public method Unmarshal to structure
+func (pm *CashFlowOut_Controller_complete_comment) Unmarshal(payload []byte) (reflect.Value, error) {
+	var res reflect.Value
+	argv := &models.CashFlowOut_complete_comment_argv{}
+
+	if err := json.Unmarshal(payload, argv); err != nil {
+		return res, err
+	}
+	res = reflect.ValueOf(&argv.Argv).Elem()
+	return res, nil
+}

@@ -31,6 +31,9 @@ function FinExpenseTypeDialog_View(id,options){
 		this.addElement(new EditCheckBox(id+":for_cash",{
 			"labelCaption":"Для кассы"
 		}));	
+		this.addElement(new EditNum(id+":lev",{
+			"labelCaption":"Уровень"
+		}));	
 		this.addElement(new EditCheckBox(id+":for_bank",{
 			"labelCaption":"Для банка",
 			"events":{
@@ -68,6 +71,7 @@ function FinExpenseTypeDialog_View(id,options){
 		,new DataBinding({"control":this.getElement("for_bank")})
 		,new DataBinding({"control":this.getElement("for_cash")})
 		,new DataBinding({"control":this.getElement("deleted")})
+		,new DataBinding({"control":this.getElement("lev")})
 		,new DataBinding({"control":this.getElement("bank_match_rule")})
 	];
 	this.setDataBindings(read_b);
@@ -78,6 +82,7 @@ function FinExpenseTypeDialog_View(id,options){
 		,new CommandBinding({"control":this.getElement("for_bank")})
 		,new CommandBinding({"control":this.getElement("for_cash")})
 		,new CommandBinding({"control":this.getElement("deleted")})
+		,new CommandBinding({"control":this.getElement("lev")})
 		,new CommandBinding({"control":this.getElement("bank_match_rule")})
 	];
 	this.setWriteBindings(write_b);
@@ -90,6 +95,13 @@ FinExpenseTypeDialog_View.prototype.onGetData = function(resp, cmd){
 	let m = this.getModel();
 	if (m.getFieldValue("for_bank")) {
 		DOMHelper.show(this.getId()+":bank_sec");
+	}
+
+	if(cmd == "insert" || cmd == "copy"){
+		let pm = this.getWritePublicMethod();
+		let lev = pm.getFieldValue("lev");
+		lev = (!lev)? 1:lev;
+		this.getElement("lev").setValue(lev);
 	}
 }
 

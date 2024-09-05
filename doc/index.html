@@ -205,6 +205,7 @@
 <li><a href="#CashFlowInList_Model">CashFlowInList_Model</a></li>
 <li><a href="#CashFlowOut_Model">CashFlowOut_Model</a></li>
 <li><a href="#CashFlowOutList_Model">CashFlowOutList_Model</a></li>
+<li><a href="#CashFlowOutCommentList_Model">CashFlowOutCommentList_Model</a></li>
 <li><a href="#CashFlowInOutList_Model">CashFlowInOutList_Model</a></li>
 <li><a href="#CashFlowTransfer_Model">CashFlowTransfer_Model</a></li>
 <li><a href="#CashFlowTransferList_Model">CashFlowTransferList_Model</a></li>
@@ -710,7 +711,8 @@
 <a href="#CashFlowOut_Model">Model: CashFlowOut_Model</a><h2>delete</h2>
 <a href="#CashFlowOut_Model">Model: CashFlowOut_Model</a><h2>get_list</h2>
 <a href="#CashFlowOutList_Model">Model: CashFlowOutList_Model</a><h2>get_object</h2>
-<a href="#CashFlowOutList_Model">Model: CashFlowOutList_Model</a>
+<a href="#CashFlowOutList_Model">Model: CashFlowOutList_Model</a><h2>complete_comment</h2>
+<a href="#CashFlowOutCommentList_Model">Model: CashFlowOutCommentList_Model</a>
 </div>
 </div>
 <div id="CashFlowTransfer_Controller" class="content_box">
@@ -3673,6 +3675,18 @@
 <div>Precision:2</div>
 </div>
 </div>
+<div id="CashFlowOutCommentList_Model" class="content_box">
+<h1>CashFlowOutCommentList_Model</h1>
+<div class="content_item">
+<p>Поля:</p>
+<h2>comment_text</h2>
+<div>Type:Text</div>
+<div>Primary key:TRUE</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
+</div>
+</div>
 <div id="CashFlowOutList_Model" class="content_box">
 <h1>CashFlowOutList_Model</h1>
 <div class="content_item">
@@ -4741,6 +4755,12 @@
 <div>Precision:</div>
 <h2>name</h2>
 <div>Type:Text</div>
+<div>Primary key:</div>
+<div>Required:</div>
+<div>Length:</div>
+<div>Precision:</div>
+<h2>lev</h2>
+<div>Type:Int</div>
 <div>Primary key:</div>
 <div>Required:</div>
 <div>Length:</div>

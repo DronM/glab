@@ -158,22 +158,14 @@ function CashFlowOutList_View(id,options){
 										"labelCaption":"",
 										"lev":2,
 										"onClear": function(){
-											// let edit = self.getElement("grid").getEditViewObj();
-											// let ctrl = edit.getElement("fin_expense_types3_ref");											
-											// ctrl.reset();
-											// ctrl.setParentId("null");
+											let edit = self.getElement("grid").getEditViewObj();
+											edit.getElement("comment_text").setExpenseTypeId(null);
 										},
 										"onSelect": function(f){
 											this.setAttr("parent_id", f.parent_id.getValue());
-											
-											// let par_id = f.id.getValue();
-											// let edit = self.getElement("grid").getEditViewObj();
-											// let ctrl = edit.getElement("fin_expense_types3_ref");
-											// ctrl.setParentId(par_id);
-											// let ctrl_v = ctrl.getValue();
-											// if(ctrl_v && !ctrl_v.isNull() && ctrl_v.getKey() != par_id){
-											// 	ctrl.reset();
-											// }
+
+											let edit = self.getElement("grid").getEditViewObj();
+											edit.getElement("comment_text").setExpenseTypeId(f.id.getValue());
 										}
 										
 									},
@@ -201,15 +193,6 @@ function CashFlowOutList_View(id,options){
 								})
 							]
 						})
-						
-						,new GridCellHead(id+":grid:head:comment_text",{
-							"value":"Комментарий",
-							"columns":[
-								new GridColumn({
-									"field":model.getField("comment_text"),
-								})
-							]
-						})
 						,new GridCellHead(id+":grid:head:total",{
 							"value":"Сумма",
 							"columns":[
@@ -218,7 +201,18 @@ function CashFlowOutList_View(id,options){
 								})
 							]
 						})
-						
+						,new GridCellHead(id+":grid:head:comment_text",{
+							"value":"Комментарий",
+							"columns":[
+								new GridColumn({
+									"field":model.getField("comment_text"),
+									"ctrlClass":CashFlowOutCommentEdit,
+									"ctrlOptions":{
+										"labelCaption":""
+									}
+								})
+							]
+						})
 					]
 				})
 			]
@@ -229,7 +223,7 @@ function CashFlowOutList_View(id,options){
 				new GridRow(id+":grid:foot:row0",{
 					"elements":[
 						new GridCell(id+":grid:foot:total_sp1",{
-							"colSpan":"6"
+							"colSpan":"5"
 						})											
 						,new GridCellFoot(id+":grid:foot:tot_total",{
 							"attrs":{"align":"right", "nowrap":"nowrap"},
@@ -238,6 +232,8 @@ function CashFlowOutList_View(id,options){
 							"totalFieldId":"total_total",
 							"gridColumn":new GridColumnFloat({"id":"tot_total"})
 						})
+						,new GridCell(id+":grid:foot:total_com",{
+						})											
 					]
 				})		
 			]
@@ -275,7 +271,6 @@ extend(CashFlowOutList_View,ViewAjxList);
 
 //***********************
 function CashFlowOutListEdit_View(id,options){	
-	debugger
 	CashFlowOutListEdit_View.superclass.constructor.call(this,id,options);
 }
 extend(CashFlowOutListEdit_View, ViewGridEditInlineAjx);

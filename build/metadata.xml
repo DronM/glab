@@ -4,7 +4,7 @@
 	<versions>
 		<version dateOpen="2022-12-06 19:12:32">1.001</version>
 		<version dateOpen="2022-12-06 19:12:32" dateClose="2023-07-11 16:07:04">1.001 
-		<lastBuild>2024-09-03 15:09:26</lastBuild></version>
+		<lastBuild>2024-09-05 13:48:31</lastBuild></version>
 		<version dateOpen="2023-07-20 10:07:22" dateClose="2023-07-24 08:07:47">1.002</version>
 		<version dateOpen="2023-07-24 10:07:28" dateClose="2023-07-24 14:07:30">1.003</version>
 		<version dateOpen="2023-07-25 06:07:57" dateClose="2023-07-25 07:07:04">1.004</version>
@@ -14,6 +14,7 @@
 		<version dateOpen="2024-06-05 10:12:39" dateClose="2024-06-10 12:31:20">1.008</version>
 		<version dateOpen="2024-06-13 08:20:14" dateClose="2024-06-13 10:23:05">1.009</version>
 		<version dateOpen="2024-09-03 13:58:12" dateClose="2024-09-03 15:09:27">1.010</version>
+		<version dateOpen="2024-09-05 08:50:05" dateClose="2024-09-05 13:48:32">1.011</version>
 	</versions>
 	<!--
 	<globalFilters>
@@ -1460,6 +1461,10 @@
 				<field id="parent_id"/>
 				<field id="name"/>
 			</index>
+			<index id="expense_types_lev_idx">
+				<field id="parent_id"/>
+				<field id="lev"/>
+			</index>
 		</model>
 		<model id="FinExpenseTypeList" parent="ModelSQL" dataTable="fin_expense_types_list" virtual="TRUE">
 			<defaultOrder>
@@ -1477,6 +1482,7 @@
 			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
 			<field id="parents_ref" dataType="JSON" alias="Родитель"/>
 			<field id="name" dataType="Text" alias="Наименование"/>
+			<field id="lev" dataType="Int" alias="Уровень"/>
 			<field id="for_cash" dataType="Bool" alias="Для кассы"/>
 			<field id="for_bank" dataType="Bool" alias="Для банка"/>
 			<field id="bank_match_rule" dataType="Text" alias="Правило поиска соответствия для банка"/>
@@ -1583,6 +1589,9 @@
 			<field id="comment_text" dataType="Text" alias="Комментарий"/>
 			<field id="users_ref" dataType="JSON"/>
 			<field id="total" dataType="Float" length="15" precision="2"/>
+		</model>
+		<model id="CashFlowOutCommentList" parent="ModelSQL" dataTable="cash_flow_out_comment_list" virtual="TRUE">
+			<field id="comment_text" dataType="Text" primaryKey="TRUE"/>
 		</model>
 		<model id="CashFlowInOutList" parent="ModelSQL" dataTable="cash_flow_in_out_list" virtual="TRUE">
 			<defaultOrder>
@@ -2531,6 +2540,14 @@
 			<publicMethod id="delete" modelId="CashFlowOut"/>
 			<publicMethod id="get_list" modelId="CashFlowOutList"/>
 			<publicMethod id="get_object" modelId="CashFlowOutList"/>
+			<publicMethod id="complete_comment" modelId="CashFlowOutCommentList" patternFieldId="comment_text">
+				<field id="comment_text" dataType="Text"/>
+				<field id="fin_expense_type2_id" dataType="Int"/>
+				<field id="ic" dataType="Int"/>
+				<field id="mid" dataType="Int"/>
+				<field id="count" dataType="Int"/>
+				<field id="ord_directs" dataType="String"/>
+			</publicMethod>
 		</controller>
 		<controller id="CashFlowTransfer" parentId="ControllerSQL" state="TRUE" noState="TRUE">
 			<publicMethod id="insert" modelId="CashFlowTransfer"/>
@@ -2871,6 +2888,7 @@
 		<jsScript file="js20/controls/Edit.js"/>
 		<jsScript file="js20/controls/rs/Edit.rs_ru.js" resource="ru"/>
 		<jsScript file="js20/controls/EditRef.js"/>
+		<jsScript file="js20/controls/EditComplete.js"/>
 		<jsScript file="js20/controls/EditString.js"/>
 		<jsScript file="js20/controls/EditText.js"/>
 		<jsScript file="js20/controls/EditNum.js"/>
@@ -3232,6 +3250,7 @@
 		<jsScript file="js20/custom_controls/BankFlowGridCmdApplyRules.js"/>
 		<jsScript file="js20/custom_controls/BankFlowGridCmdApplyRulesBtn.js"/>
 		<jsScript file="js20/custom_controls/CashFlowInOut_View.js"/>
+		<jsScript file="js20/custom_controls/CashFlowOutCommentEdit.js"/>
 		<jsScript file="js20/enum_controls/Enum_data_types.js"/>
 		<jsScript file="js20/enum_controls/EnumGridColumn_data_types.js"/>
 		<jsScript file="js20/enum_controls/EnumGridColumn_locales.js"/>
@@ -3462,6 +3481,7 @@
 		<jsScript file="js20/controllers/CashIncomeSource_Controller.js"/>
 		<jsScript file="js20/models/CashIncomeSource_Model.js"/>
 		<jsScript file="js20/models/CashIncomeSourceList_Model.js"/>
+		<jsScript file="js20/models/CashFlowOutCommentList_Model.js"/>
 	</jsScripts>
 	<cssScripts>
 		<cssScript file="js20/assets/css/icons/icomoon/styles.css" compressed="TRUE" standalone="TRUE"/>

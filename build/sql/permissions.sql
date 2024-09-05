@@ -502,6 +502,7 @@ UPDATE permissions SET rules = '{
 			,"delete":true
 			,"get_list":true
 			,"get_object":true
+			,"complete_comment":true
 		}
 		,"CashFlowTransfer":{
 			"insert":true
@@ -1030,6 +1031,7 @@ UPDATE permissions SET rules = '{
 			,"delete":true
 			,"get_list":true
 			,"get_object":true
+			,"complete_comment":true
 		}
 		,"CashFlowTransfer":{
 			"insert":true

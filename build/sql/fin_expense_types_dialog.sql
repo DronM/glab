@@ -11,6 +11,7 @@ CREATE OR REPLACE VIEW public.fin_expense_types_dialog AS
 		,t.for_bank
 		,t.bank_match_rule
 		,t.deleted
+		,t.lev
 	FROM public.fin_expense_types AS t
 	LEFT JOIN fin_expense_types AS p ON p.id = t.parent_id
 	;

@@ -24,3 +24,8 @@
 	CashFlowOutList_View.js lev option.
 	FinExpenseTypeEdit.js
 	FinExpenseTypeItemEdit.js
+
+
+1.011
+1) CashFlowOutCommentList
+2) FinExpenseType new column lev
