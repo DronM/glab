@@ -29,3 +29,11 @@
 1.011
 1) CashFlowOutCommentList
 2) FinExpenseType new column lev
+
+
+1.012
+1) ViewGridEditInlineAjx.js function setReadBinds()
+2) New controls: ButtonDateNext.js, ButtonDatePrev.js.
+3) Edit.js m_buttonsBefore container for before input buttons.
+
+

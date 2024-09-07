@@ -4,7 +4,7 @@
 	<versions>
 		<version dateOpen="2022-12-06 19:12:32">1.001</version>
 		<version dateOpen="2022-12-06 19:12:32" dateClose="2023-07-11 16:07:04">1.001 
-		<lastBuild>2024-09-05 13:48:31</lastBuild></version>
+		<lastBuild>2024-09-07 10:57:58</lastBuild></version>
 		<version dateOpen="2023-07-20 10:07:22" dateClose="2023-07-24 08:07:47">1.002</version>
 		<version dateOpen="2023-07-24 10:07:28" dateClose="2023-07-24 14:07:30">1.003</version>
 		<version dateOpen="2023-07-25 06:07:57" dateClose="2023-07-25 07:07:04">1.004</version>
@@ -15,6 +15,7 @@
 		<version dateOpen="2024-06-13 08:20:14" dateClose="2024-06-13 10:23:05">1.009</version>
 		<version dateOpen="2024-09-03 13:58:12" dateClose="2024-09-03 15:09:27">1.010</version>
 		<version dateOpen="2024-09-05 08:50:05" dateClose="2024-09-05 13:48:32">1.011</version>
+		<version dateOpen="2024-09-07 06:53:12" dateClose="2024-09-07 10:57:59">1.012</version>
 	</versions>
 	<!--
 	<globalFilters>
@@ -2862,6 +2863,10 @@
 		<jsScript file="js20/controls/rs/ButtonCalc.rs_ru.js" resource="ru"/>
 		<jsScript file="js20/controls/ButtonCalendar.js"/>
 		<jsScript file="js20/controls/rs/ButtonCalendar.rs_ru.js" resource="ru"/>
+		<jsScript file="js20/controls/ButtonDateNext.js"/>
+		<jsScript file="js20/controls/rs/ButtonDateNext.rs_ru.js" resource="ru"/>
+		<jsScript file="js20/controls/ButtonDatePrev.js"/>
+		<jsScript file="js20/controls/rs/ButtonDatePrev.rs_ru.js" resource="ru"/>
 		<jsScript file="js20/controls/ButtonClear.js"/>
 		<jsScript file="js20/controls/rs/ButtonClear.rs_ru.js" resource="ru"/>
 		<jsScript file="js20/controls/ButtonCmd.js"/>

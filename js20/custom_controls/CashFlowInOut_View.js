@@ -17,7 +17,11 @@ function CashFlowInOut_View(id,options){
 	let d = new Date();
 	let self = this;
 	options.addElement = function(){
+		//date with period change commands.
 		this.addElement(new EditDate(id+":period",{
+			"cmdClear":false,
+			"cmdNext":true,
+			"cmdPrev":true,
 			"inputEnabled":false,
 			"labelCaption":"День:",
 			"labelClassName":"control-label "+ window.getBsCol(1),
@@ -88,30 +92,35 @@ CashFlowInOut_View.prototype.onSelectDate = function(){
 		"val":DateHelper.format(to, "Y-m-dTH:i:s")}
 	];
 
-	let grid = this.getElement("cash_flow_out_list").getElement("grid");
-	var out_m = new CashFlowOutList_Model();
-	out_m.setFieldValue("date_time", v);
-	grid.setInsertViewOptions({
-		"models":{
-			"CashFlowOutList_Model":out_m
-		    }
-		});
-	grid.setFilters(filters);
-	grid.onRefresh();
-
-	grid = this.getElement("cash_flow_in_list").getElement("grid");
-	var in_m = new CashFlowInList_Model();
-	in_m.setFieldValue("date_time", v);
-	grid.setInsertViewOptions({
-		"models":{
-			"CashFlowInList_Model":in_m
-		    }
-		});
-	grid.setFilters(filters);
-	grid.onRefresh();
+	// if date is not a current date then set hours to 08:00
+	let gridDate;
+	let cur = new Date();
+	if(v.getDate() != cur.getDate() || v.getMonth() != cur.getMonth() || v.getFullYear() != cur.getFullYear()){
+		gridDate = new Date(v);
+		gridDate.setHours(8);
+	}
+	this.refreshGrid("cash_flow_in_list", filters, gridDate);
+	this.refreshGrid("cash_flow_out_list", filters, gridDate);
 	 
 	this.updateReport(v, to);
 	window.showTempNote("Данные обновлены за выбранный период", null, 5000);
+}
+
+CashFlowInOut_View.prototype.refreshGrid = function(gridId, filters, dateVal){
+	let grid = this.getElement(gridId).getElement("grid");
+
+	let gridOpts = {}
+	if(dateVal){
+		let gridModelId = grid.getModel().getId();
+		let gridModel = new window[gridModelId]();
+		gridModel.setFieldValue("date_time", dateVal);
+		gridModel.recInsert();
+		gridOpts.models = {};
+		gridOpts.models[gridModelId] = gridModel;
+    }
+	grid.setInsertViewOptions(gridOpts);
+	grid.setFilters(filters);
+	grid.onRefresh();
 }
 
 CashFlowInOut_View.prototype.updateReport = function(from, to){

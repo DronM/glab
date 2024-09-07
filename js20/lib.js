@@ -1375,6 +1375,16 @@ ButtonCalendar.prototype.getDateFormat=function(){return this.m_dateFormat;}
 ButtonCalendar.prototype.setTimeValueStr=function(v){this.m_time=DateHelper.timeToMS(v);}
 ButtonCalendar.prototype.getDateFormat=function(){return this.m_dateFormat;} 
 ButtonCalendar.prototype.DEF_TITLE="открыть календарь";ButtonCalendar.prototype.DEF_ALT="кал."; 
+function ButtonDateNext(id,options){options=options||{};options.glyph=options.glyph||this.DEF_GLYPH;options.title=options.title||this.DEF_HINT;var self=this;options.onClick=options.onClick||function(e){self.onClick(e);};ButtonDateNext.superclass.constructor.call(this,id,options);}
+extend(ButtonDateNext,ButtonCtrl);ButtonDateNext.prototype.DEF_GLYPH="glyphicon-chevron-right";ButtonDateNext.prototype.onClick=function(e){let ctrl=this.getEditControl();if(!ctrl){return;}
+let val=ctrl.getValue();if(!val||!DateHelper.isValidDate(val)){return;}
+val.setDate(val.getDate()+1);ctrl.setValue(val);ctrl.onSelectValue();} 
+ButtonDateNext.prototype.DEF_HINT="следующая дата"; 
+function ButtonDatePrev(id,options){options=options||{};options.glyph=options.glyph||this.DEF_GLYPH;options.title=options.title||this.DEF_HINT;var self=this;options.onClick=options.onClick||function(e){self.onClick(e);};ButtonDatePrev.superclass.constructor.call(this,id,options);}
+extend(ButtonDatePrev,ButtonCtrl);ButtonDatePrev.prototype.DEF_GLYPH="glyphicon-chevron-left";ButtonDatePrev.prototype.onClick=function(e){let ctrl=this.getEditControl();if(!ctrl){return;}
+let val=ctrl.getValue();if(!val||!DateHelper.isValidDate(val)){return;}
+val.setDate(val.getDate()-1);ctrl.setValue(val);ctrl.onSelectValue();} 
+ButtonDatePrev.prototype.DEF_HINT="предыдущая дата"; 
 function ButtonClear(id,options){options=options||{};options.glyph="glyphicon-remove";this.m_onClear=options.onClear;var self=this;options.onClick=options.onClick||function(event){self.getEditControl().reset();if(this.m_onClear)this.m_onClear();};ButtonClear.superclass.constructor.call(this,id,options);}
 extend(ButtonClear,ButtonCtrl); 
 ButtonClear.prototype.DEF_TITLE="очистить значение"; 
@@ -1500,6 +1510,7 @@ Edit.prototype.setValid=function(){DOMHelper.delClass(this.m_node,this.INCORRECT
 Edit.prototype.toDOM=function(parent){var node_parent;if(!this.m_html){var id=this.getId();this.m_container=new ControlContainer((id?id+":cont":null),this.m_contTagName,{"className":this.m_contClassName,"visible":this.getVisible()});if(this.m_label&&this.m_labelAlign=="left"){this.m_container.addElement(this.m_label);}
 this.m_editContainer=new Control((id?id+":edit-cont":null),this.m_editContTagName,{"className":this.m_editContClassName});this.m_container.addElement(this.m_editContainer);this.m_container.toDOM(parent);node_parent=this.m_editContainer.getNode();}
 Edit.superclass.toDOM.call(this,node_parent);this.applyMask();if(this.m_buttons&&!this.m_buttons.isEmpty()){this.m_buttons.toDOMAfter(this.getNode());}
+if(this.m_buttonsBefore&&!this.m_buttonsBefore.isEmpty()){this.m_buttonsBefore.toDOMBefore(this.getNode());}
 if(this.m_label&&this.m_labelAlign=="right"){this.m_label.toDOMAfter(this.getNode());}
 this.m_infoControls.toDOM(this.m_container.getNode());}
 Edit.prototype.toDOMBefore=function(node){var node_parent;if(!this.m_html){var id=this.getId();this.m_container=new ControlContainer(((id)?id+":cont":null),this.m_contTagName,{"className":this.m_contClassName,"visible":this.getVisible()});if(this.m_label&&this.m_labelAlign=="left"){this.m_container.addElement(this.m_label);}
@@ -1643,9 +1654,14 @@ if(!this.m_reg.test(v)){this.setNotValid(this.NOT_VALID_TXT);}else{this.setValid
 extend(EditEmail,EditString); 
 function EditPercent(id,options){options=options||{};options.editMask=options.editMask||this.DEF_MASK;EditPercent.superclass.constructor.call(this,id,options);}
 extend(EditPercent,EditString);EditPercent.prototype.DEF_MASK="99%"; 
-function EditDate(id,options){options=options||{};options.validator=options.validator||new ValidatorDate(options);options.editMask=options.editMask||window.getApp().getDateEditMask();this.setDateFormat(options.dateFormat||window.getApp().getDateFormat());options.attrs=options.attrs||{};options.cmdSelect=(options.cmdSelect!=undefined)?options.cmdSelect:true;this.setTimeValueStr(options.timeValueStr);if(options.cmdSelect){var self=this;options.buttonSelect=options.buttonSelect||new ButtonCalendar(id+':btn_calend',{"dateFormat":this.getDateFormat(),"editControl":this,"timeValueStr":this.getTimeValueStr(),"enabled":options.enabled});}
-this.m_fourYearDigit=(options.fourYearDigit!=undefined)?options.fourYearDigit:true;EditDate.superclass.constructor.call(this,id,options);}
-extend(EditDate,EditString);EditDate.prototype.TIME_SEP="T";EditDate.prototype.m_timeValueStr;EditDate.prototype.m_prevValid;EditDate.prototype.setDateFormat=function(v){this.m_dateFormat=v;}
+function EditDate(id,options){options=options||{};options.validator=options.validator||new ValidatorDate(options);options.editMask=options.editMask||window.getApp().getDateEditMask();this.setDateFormat(options.dateFormat||window.getApp().getDateFormat());options.attrs=options.attrs||{};options.cmdSelect=(options.cmdSelect!=undefined)?options.cmdSelect:true;this.setTimeValueStr(options.timeValueStr);if(options.cmdSelect){options.buttonSelect=options.buttonSelect||new ButtonCalendar(id+':btn_calend',{"dateFormat":this.getDateFormat(),"editControl":this,"timeValueStr":this.getTimeValueStr(),"enabled":options.enabled});}
+if(options.cmdNext||options.buttonNext){options.buttonNext=options.buttonNext||new ButtonDateNext(id+':btn_next',{"editControl":this});}
+if(options.cmdPrev||options.buttonPrev){options.buttonPrev=options.buttonPrev||new ButtonDatePrev(id+':btn_prev',{"editControl":this});}
+this.setButtonNext(options.buttonNext);this.setButtonPrev(options.buttonPrev);this.m_fourYearDigit=(options.fourYearDigit!=undefined)?options.fourYearDigit:true;EditDate.superclass.constructor.call(this,id,options);}
+extend(EditDate,EditString);EditDate.prototype.TIME_SEP="T";EditDate.prototype.m_timeValueStr;EditDate.prototype.m_prevValid;EditDate.prototype.addButtonControls=function(){if(!this.m_buttonsBefore){this.m_buttonsBefore=new ControlContainer(this.getId()+":btn-before-cont","SPAN",{"className":this.m_btnContClassName,"enabled":this.getEnabled()});}
+if(this.m_buttonPrev){this.m_buttonsBefore.addElement(this.m_buttonPrev);}
+if(this.m_buttonOpen)this.m_buttons.addElement(this.m_buttonOpen);if(this.m_buttonSelect)this.m_buttons.addElement(this.m_buttonSelect);if(this.m_buttonClear)this.m_buttons.addElement(this.m_buttonClear);if(this.m_buttonNext)this.m_buttons.addElement(this.m_buttonNext);}
+EditDate.prototype.setDateFormat=function(v){this.m_dateFormat=v;}
 EditDate.prototype.getDateFormat=function(){return this.m_dateFormat;}
 EditDate.prototype.toISODate=function(str){if(str=="")return"";k=this.m_fourYearDigit?2:0;var t=(this.m_fourYearDigit?"":"20")+str.substr(4,2+k)+"-"+str.substr(2,2)+"-"+str.substr(0,2);if(str.length>(6+k)){t+=this.TIME_SEP+str.substr(6+k,2);}
 if(str.length>(8+k)){t+=":"+str.substr(8+k,2);}
@@ -1663,7 +1679,11 @@ EditDate.prototype.getTimeValueStr=function(){return this.m_timeValueStr;}
 EditDate.prototype.setOnValueChange=function(v){Edit.superclass.setOnValueChange.call(this,v);var self=this;this.m_onInputChange=function(){var v=self.getValue();var val_valid=(v&&!isNaN(v.getTime()));if(val_valid&&!self.m_prevValid||!val_valid&&self.m_prevValid)
 self.onSelectValue();self.m_prevValid=val_valid;}
 if(v){EventHelper.add(this.getNode(),"keyup",this.m_onInputChange);}
-else{EventHelper.del(this.getNode(),"keyup",this.m_onInputChange);}} 
+else{EventHelper.del(this.getNode(),"keyup",this.m_onInputChange);}}
+EditDate.prototype.setButtonNext=function(v){this.m_buttonNext=v;if(this.m_buttonNext&&this.m_buttonNext.setEditControl){this.m_buttonNext.setEditControl(this);}}
+EditDate.prototype.getButtonNext=function(){return this.m_buttonNext;}
+EditDate.prototype.setButtonPrev=function(v){this.m_buttonPrev=v;if(this.m_buttonPrev&&this.m_buttonPrev.setEditControl){this.m_buttonPrev.setEditControl(this);}}
+EditDate.prototype.getButtonPrev=function(){return this.m_buttonPrev;} 
 function EditINN(id,options){options=options||{};if(options.isEnterprise==undefined){throw new Error("Не определен параметр isEnterprise!");}
 this.m_isEnterprise=options.isEnterprise;options.type="text";options.cmdSelect=false;options.maxLength=(this.m_isEnterprise)?this.ENT_LEN:this.PERS_LEN;options.fixLength=true;options.events=options.events||{};var self=this;EditINN.superclass.constructor.call(this,id,options);}
 extend(EditINN,EditNum);EditINN.prototype.m_isEnterprise;EditINN.prototype.ENT_LEN=10;EditINN.prototype.PERS_LEN=12;EditINN.prototype.setIsEnterprise=function(v){var len=v?this.ENT_LEN:this.PERS_LEN;this.setMaxLength(len);}
@@ -2998,9 +3018,7 @@ options.srvEvents.onWakeup=options.srvEvents.onWakeup||function(error){self.srvE
 GridAjx.superclass.constructor.call(this,id,options);}
 extend(GridAjx,Grid);GridAjx.prototype.DEF_ONDELOK_MES_TIMEOUT=2000;GridAjx.prototype.m_readPublicMethod;GridAjx.prototype.m_insertPublicMethod;GridAjx.prototype.m_updatePublicMethod;GridAjx.prototype.m_deletePublicMethod;GridAjx.prototype.m_exportPublicMethod;GridAjx.prototype.m_editPublicMethod;GridAjx.prototype.m_refreshAfterDelRow;GridAjx.prototype.m_refreshAfterUpdateRow;GridAjx.prototype.m_filters;GridAjx.prototype.onGetData=function(resp){if(resp){this.m_model.setData(resp.getModelData(this.m_model.getId()));}
 GridAjx.superclass.onGetData.call(this);}
-GridAjx.prototype.initEditView=function(parent,replacedNode,cmd){GridAjx.superclass.initEditView.call(this,parent,replacedNode,cmd);var pm;if(cmd=="insert"||cmd=="copy"){pm=this.getInsertPublicMethod();}
-else{pm=this.getUpdatePublicMethod();}
-if(this.m_editViewObj.setWritePublicMethod){this.m_editViewObj.setWritePublicMethod(pm);}
+GridAjx.prototype.initEditView=function(parent,replacedNode,cmd){GridAjx.superclass.initEditView.call(this,parent,replacedNode,cmd);if(this.m_editViewObj.setWritePublicMethod){let pm=(cmd=="insert"||cmd=="copy")?this.getInsertPublicMethod():this.getUpdatePublicMethod();this.m_editViewObj.setWritePublicMethod(pm);}
 if(this.m_editViewObj.setReadPublicMethod){this.m_editViewObj.setReadPublicMethod(this.getEditPublicMethod());}}
 GridAjx.prototype.fillEditView=function(cmd){if(cmd!="insert"&&this.m_editViewObj.getReadPublicMethod){this.keysToPublicMethod(this.m_editViewObj.getReadPublicMethod());}
 GridAjx.superclass.fillEditView.call(this,cmd);}
@@ -3419,7 +3437,7 @@ ViewObjectAjx.prototype.getKeys=function(){return this.m_keys;}
 ViewObjectAjx.prototype.setOnSaveOkMesTimeout=function(v){this.m_onSaveOkMesTimeout=v;}
 ViewObjectAjx.prototype.getOnSaveOkMesTimeout=function(){return this.m_onSaveOkMesTimeout;} 
 ViewObjectAjx.prototype.Q_SAVE_CHANGES="Сохранить изменения?";ViewObjectAjx.prototype.NOTE_SAVED="Объект записан";ViewObjectAjx.prototype.ER_UNSUPPORTED_BASE_MODEL="Данная базовая модель не поддерживается."; 
-function ViewGridEditInlineAjx(id,options){options=options||{};options.tagName=options.tagName||this.DEF_TAG_NAME;options.cmdSave=false;this.m_columnTagName=options.columnTagName||this.DEF_COL_TAG_NAME;this.m_containerClass=options.containerClass;options.commandContainer=new ControlContainer(id+":cmd-cont",this.m_columnTagName,{"className":options.cmdContClassName||this.DEF_CMD_CLASS});this.setGrid(options.grid);this.m_row=options.row;ViewGridEditInlineAjx.superclass.constructor.call(this,id,options);}
+function ViewGridEditInlineAjx(id,options){options=options||{};options.tagName=options.tagName||this.DEF_TAG_NAME;options.cmdSave=false;this.m_columnTagName=options.columnTagName||this.DEF_COL_TAG_NAME;this.m_containerClass=options.containerClass;options.commandContainer=new ControlContainer(id+":cmd-cont",this.m_columnTagName,{"className":options.cmdContClassName||this.DEF_CMD_CLASS});this.setGrid(options.grid);let gridModelId=options.grid.getModel().getId();options.model=(options.models&&options.models[gridModelId])?options.models[gridModelId]:new window[gridModelId]();this.m_row=options.row;ViewGridEditInlineAjx.superclass.constructor.call(this,id,options);}
 extend(ViewGridEditInlineAjx,ViewObjectAjx);ViewGridEditInlineAjx.prototype.DEF_TAG_NAME="TR";ViewGridEditInlineAjx.prototype.DEF_COL_TAG_NAME="TD";ViewGridEditInlineAjx.prototype.DEF_CMD_CLASS="cmdButtons";ViewGridEditInlineAjx.prototype.m_grid;ViewGridEditInlineAjx.prototype.m_row;ViewGridEditInlineAjx.prototype.m_columnTagName;ViewGridEditInlineAjx.prototype.addEditControls=function(){var view_id=this.getId();var columns=this.getGrid().getHead().getColumns();var focus_set_elem;var autofocused=false;var ctrl_cont_class=this.m_containerClass;for(var col_id=0;col_id<columns.length;col_id++){var column=undefined;if(this.m_row){cell_obj=this.m_row.getElement(columns[col_id].getId());if(cell_obj){column=cell_obj.getGridColumn();}}
 if(!column){column=columns[col_id];}
 var ctrl;var f=column.getField();if(!f){ctrl=new Control(view_id+":"+column.getId(),this.m_columnTagName,{"className":ctrl_cont_class});}else if(column.getCtrlEdit()){var ctrl_opts={};var o=column.getCtrlOptions();if(o){if(typeof(o)=="function"){ctrl_opts=o.call(this);}else{ctrl_opts=CommonHelper.clone(o);}}
@@ -3443,15 +3461,16 @@ else{ctrl=new Control(view_id+":"+column.getId(),this.m_columnTagName,{"value":f
 this.addElement(ctrl);}
 if(!autofocused&&focus_set_elem){focus_set_elem.setAttr("autofocus","autofocus");}}
 ViewGridEditInlineAjx.prototype.addControls=function(){this.addEditControls();ViewGridEditInlineAjx.superclass.addControls.call(this);}
-ViewGridEditInlineAjx.prototype.setWritePublicMethod=function(pm){ViewGridEditInlineAjx.superclass.setWritePublicMethod.call(this,pm);if(pm){var columns=this.getGrid().getHead().getColumns();var com_b=this.getCommands()[this.CMD_OK].getBindings();for(var col_id=0;col_id<columns.length;col_id++){var column=undefined;if(this.m_row){cell_obj=this.m_row.getElement(columns[col_id].getId());if(cell_obj){column=cell_obj.getGridColumn();}}
-if(!column){column=columns[col_id];}
-if(column.getField()){var f_id=(column.getCtrlBindField())?column.getCtrlBindField().getId():((column.getCtrlBindFieldId())?column.getCtrlBindFieldId():column.getField().getId());if(pm.fieldExists(f_id)){com_b.push(new CommandBinding({"field":pm.getField(f_id),"control":this.getElement(column.getId())}));}else{console.log("ViewGridEditInlineAjx.prototype.setWritePublicMethod: fieldID: "+f_id+", no PublicMethod field")}}}
-this.setKeysPublicMethod(pm);}}
-ViewGridEditInlineAjx.prototype.setReadBinds=function(pm){if(pm){var model_obj=pm.getController().getObjModelClass();var model;var model=new model_obj();var columns=this.getGrid().getHead().getColumns();var bindings=[];for(var col_id=0;col_id<columns.length;col_id++){var column=undefined;if(this.m_row){cell_obj=this.m_row.getElement(columns[col_id].getId());if(cell_obj){column=cell_obj.getGridColumn();}}
-if(!column){column=columns[col_id];}
-if(column.getField()){var new_f=CommonHelper.clone(column.getField());if(column.getCtrlBindField()){model.addField(CommonHelper.clone(column.getCtrlBindField()));}
-bindings.push(new DataBinding({"field":new_f,"model":model,"control":this.getElement(column.getId())}));}}
-this.setDataBindings(bindings);}}
+ViewGridEditInlineAjx.prototype.setWritePublicMethod=function(pm){ViewGridEditInlineAjx.superclass.setWritePublicMethod.call(this,pm);if(!pm){return;}
+let columns=this.getGrid().getHead().getColumns();let comBind=this.getCommands()[this.CMD_OK].getBindings();for(let colId=0;colId<columns.length;colId++){var column=undefined;if(this.m_row){cell_obj=this.m_row.getElement(columns[colId].getId());if(cell_obj){column=cell_obj.getGridColumn();}}
+if(!column){column=columns[colId];}
+if(column.getField()){let fId=(column.getCtrlBindField())?column.getCtrlBindField().getId():((column.getCtrlBindFieldId())?column.getCtrlBindFieldId():column.getField().getId());if(pm.fieldExists(fId)){comBind.push(new CommandBinding({"field":pm.getField(fId),"control":this.getElement(column.getId())}));}else{console.log("ViewGridEditInlineAjx.prototype.setWritePublicMethod: fieldID: "+fId+", no PublicMethod field")}}}
+this.setKeysPublicMethod(pm);}
+ViewGridEditInlineAjx.prototype.setReadBinds=function(pm){if(!pm){return;}
+let model=this.m_model;let columns=this.getGrid().getHead().getColumns();let bindings=[];for(let colId=0;colId<columns.length;colId++){let column=undefined;if(this.m_row){let cellObj=this.m_row.getElement(columns[colId].getId());if(cellObj){column=cellObj.getGridColumn();}}
+if(!column){column=columns[colId];}
+if(column.getField()){bindings.push(new DataBinding({"field":model.getField(column.getField().getId()),"model":model,"control":this.getElement(column.getId())}));}}
+this.setDataBindings(bindings);this.onGetData(null,this.getCmd());}
 ViewGridEditInlineAjx.prototype.setReadPublicMethod=function(pm){ViewGridEditInlineAjx.superclass.setReadPublicMethod.call(this,pm);this.setReadBinds(pm);}
 ViewGridEditInlineAjx.prototype.viewToDOM=function(parent,prevNode){var elem;for(var elem_id in this.m_elements){elem=this.m_elements[elem_id];elem.toDOM(this.m_node);}
 this.m_commandContainer.toDOM(this.m_node);if(this.m_replacedNode){this.m_replacedNode.parentNode.replaceChild(this.m_node,this.m_replacedNode);}
@@ -4600,11 +4619,15 @@ else{options.className="btn btn-default";}
 options.glyph="glyphicon-refresh";options.title="Применить новые правила определения статей для пустых";var self=this;options.onClick=function(){self.onClick();}
 this.m_cmd=options.cmd;BankFlowGridCmdApplyRulesBtn.superclass.constructor.call(this,id,options);}
 extend(BankFlowGridCmdApplyRulesBtn,Button);BankFlowGridCmdApplyRulesBtn.prototype.m_grid;BankFlowGridCmdApplyRulesBtn.prototype.onClick=function(){let operation_id=window.getApp().startOperationMonitor(this,function(params){console.log(params);window.getApp().fetchUserOperationResult(operation_id,function(f){let cnt=f.comment_text.getValue();window.showTempOk("Применены новые правила определения статей расхода. Обработано докуметов: "+cnt,null,5000);});},function(err,params){throw new Error(err);});let pm=(new BankFlowIn_Controller()).getPublicMethod("apply_rules");pm.setFieldValue("operation_id",operation_id);pm.run();} 
-function CashFlowInOut_View(id,options){options=options||{};let d=new Date();let self=this;options.addElement=function(){this.addElement(new EditDate(id+":period",{"inputEnabled":false,"labelCaption":"День:","labelClassName":"control-label "+window.getBsCol(1),"editContClassName":"input-group "+window.getBsCol(2),"value":d,"onValueChange":function(){self.onSelectDate();}}));this.addElement(new Control(id+":bal_report","DIV",{}));this.addElement(new CashFlowOutList_View(id+":cash_flow_out_list",{"inOut":true,"inOutRefresh":function(){self.m_oldDate=undefined;self.onSelectDate();}}));this.addElement(new CashFlowInList_View(id+":cash_flow_in_list",{"inOut":true,"inOutRefresh":function(){self.m_oldDate=undefined;self.onSelectDate();}}));}
+function CashFlowInOut_View(id,options){options=options||{};let d=new Date();let self=this;options.addElement=function(){this.addElement(new EditDate(id+":period",{"cmdClear":false,"cmdNext":true,"cmdPrev":true,"inputEnabled":false,"labelCaption":"День:","labelClassName":"control-label "+window.getBsCol(1),"editContClassName":"input-group "+window.getBsCol(2),"value":d,"onValueChange":function(){self.onSelectDate();}}));this.addElement(new Control(id+":bal_report","DIV",{}));this.addElement(new CashFlowOutList_View(id+":cash_flow_out_list",{"inOut":true,"inOutRefresh":function(){self.m_oldDate=undefined;self.onSelectDate();}}));this.addElement(new CashFlowInList_View(id+":cash_flow_in_list",{"inOut":true,"inOutRefresh":function(){self.m_oldDate=undefined;self.onSelectDate();}}));}
 CashFlowInOut_View.superclass.constructor.call(this,id,options);this.m_oldDate=d;this.onSelectDate();}
 extend(CashFlowInOut_View,View);CashFlowInOut_View.prototype.onSelectDate=function(){let ctrl=this.getElement("period");if(ctrl.getNode().value.includes("_")){return;}
 let v=ctrl.getValue();if(!v||!DateHelper.isValidDate(v)||this.m_oldDate==v){return;}
-this.m_oldDate=v;v.setHours(0);v.setMinutes(0);v.setSeconds(0);let to=new Date(v.getTime()+(23*60*60*1000)+(59*60*1000)+(59*1000));let filters=[{"field":"date_time","sign":"ge","val":DateHelper.format(v,"Y-m-dTH:i:s")},{"field":"date_time","sign":"le","val":DateHelper.format(to,"Y-m-dTH:i:s")}];let grid=this.getElement("cash_flow_out_list").getElement("grid");var out_m=new CashFlowOutList_Model();out_m.setFieldValue("date_time",v);grid.setInsertViewOptions({"models":{"CashFlowOutList_Model":out_m}});grid.setFilters(filters);grid.onRefresh();grid=this.getElement("cash_flow_in_list").getElement("grid");var in_m=new CashFlowInList_Model();in_m.setFieldValue("date_time",v);grid.setInsertViewOptions({"models":{"CashFlowInList_Model":in_m}});grid.setFilters(filters);grid.onRefresh();this.updateReport(v,to);window.showTempNote("Данные обновлены за выбранный период",null,5000);}
+this.m_oldDate=v;v.setHours(0);v.setMinutes(0);v.setSeconds(0);let to=new Date(v.getTime()+(23*60*60*1000)+(59*60*1000)+(59*1000));let filters=[{"field":"date_time","sign":"ge","val":DateHelper.format(v,"Y-m-dTH:i:s")},{"field":"date_time","sign":"le","val":DateHelper.format(to,"Y-m-dTH:i:s")}];let gridDate;let cur=new Date();if(v.getDate()!=cur.getDate()||v.getMonth()!=cur.getMonth()||v.getFullYear()!=cur.getFullYear()){gridDate=new Date(v);gridDate.setHours(8);}
+this.refreshGrid("cash_flow_in_list",filters,gridDate);this.refreshGrid("cash_flow_out_list",filters,gridDate);this.updateReport(v,to);window.showTempNote("Данные обновлены за выбранный период",null,5000);}
+CashFlowInOut_View.prototype.refreshGrid=function(gridId,filters,dateVal){let grid=this.getElement(gridId).getElement("grid");let gridOpts={}
+if(dateVal){let gridModelId=grid.getModel().getId();let gridModel=new window[gridModelId]();gridModel.setFieldValue("date_time",dateVal);gridModel.recInsert();gridOpts.models={};gridOpts.models[gridModelId]=gridModel;}
+grid.setInsertViewOptions(gridOpts);grid.setFilters(filters);grid.onRefresh();}
 CashFlowInOut_View.prototype.updateReport=function(from,to){let pm=(new CashFlowIn_Controller()).getPublicMethod("get_report");pm.setFieldValue("cond_fields","date_time@@date_time@@cash_location_id");pm.setFieldValue("cond_sgns","ge@@le@@e");pm.setFieldValue("cond_vals",DateHelper.format(from,"Y-m-dTH:i:s")+"@@"+DateHelper.format(to,"Y-m-dTH:i:s")+"@@null");pm.setFieldValue("templ","RepCashFlow");let self=this;pm.run({"viewId":"ViewHTMLXSLT","retContentType":"text","ok":function(resp){self.updateReportCont(resp);}});}
 CashFlowInOut_View.prototype.updateReportCont=function(resp){this.getElement("bal_report").getNode().innerHTML=resp;} 
 function CashFlowOutCommentEdit(id,options){options=options||{};if(options.labelCaption!=""){options.labelCaption=options.labelCaption||"Комментарий:";}

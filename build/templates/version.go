@@ -1,3 +1,3 @@
 package main
 
-const APP_VERSION = "1.011"
+const APP_VERSION = "1.012"
