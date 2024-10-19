@@ -213,6 +213,19 @@ function CashFlowOutList_View(id,options){
 								})
 							]
 						})
+						,new GridCellHead(id+":grid:head:comment_text2",{
+							"value":"Описание",
+							"columns":[
+								new GridColumn({
+									"field":model.getField("comment_text2"),
+									"ctrlClass":EditString,
+									"ctrlOptions":{
+										"labelCaption":"",
+										"maxLenght":"500"
+									}
+								})
+							]
+						})
 					]
 				})
 			]

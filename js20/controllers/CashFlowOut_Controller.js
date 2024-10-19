@@ -82,6 +82,12 @@ extend(CashFlowOut_Controller,ControllerObjServer);
 	pm.addField(field);
 	
 	var options = {};
+	options.alias = "Комментарий";
+	var field = new FieldText("comment_text2",options);
+	
+	pm.addField(field);
+	
+	var options = {};
 	
 	var field = new FieldInt("user_id",options);
 	
@@ -144,6 +150,12 @@ extend(CashFlowOut_Controller,ControllerObjServer);
 	var options = {};
 	options.alias = "Комментарий";
 	var field = new FieldText("comment_text",options);
+	
+	pm.addField(field);
+	
+	var options = {};
+	options.alias = "Комментарий";
+	var field = new FieldText("comment_text2",options);
 	
 	pm.addField(field);
 	
@@ -214,6 +226,9 @@ extend(CashFlowOut_Controller,ControllerObjServer);
 	var f_opts = {};
 	f_opts.alias = "Комментарий";
 	pm.addField(new FieldText("comment_text",f_opts));
+	var f_opts = {};
+	f_opts.alias = "Комментарий";
+	pm.addField(new FieldText("comment_text2",f_opts));
 	var f_opts = {};
 	
 	pm.addField(new FieldJSON("users_ref",f_opts));

@@ -1,6 +1,6 @@
 -- VIEW: public.cash_flow_out_list
 
---DROP VIEW public.cash_flow_out_list;
+DROP VIEW public.cash_flow_out_list;
 
 CREATE OR REPLACE VIEW public.cash_flow_out_list AS
 	SELECT
@@ -12,6 +12,7 @@ CREATE OR REPLACE VIEW public.cash_flow_out_list AS
 		,fin_expense_types_ref(exp2) AS fin_expense_types2_ref
 		,fin_expense_types_ref(exp3) AS fin_expense_types3_ref
 		,t.comment_text
+		,t.comment_text2
 		,users_ref(users_ref_t) AS users_ref
 		,t.total
 	FROM public.cash_flow_out AS t
@@ -23,4 +24,4 @@ CREATE OR REPLACE VIEW public.cash_flow_out_list AS
 	ORDER BY t.date_time DESC
 	;
 	
-ALTER VIEW public.cash_flow_out_list OWNER TO ;
+-- ALTER VIEW public.cash_flow_out_list OWNER TO ;

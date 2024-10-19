@@ -1,1 +1,1 @@
-select * from fin_expense_types_items_list 
+select * from cash_flow_out_list limit 10; 

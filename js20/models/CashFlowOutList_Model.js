@@ -104,6 +104,15 @@ function CashFlowOutList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
+	filed_options.alias = 'Комментарий';
+	filed_options.autoInc = false;	
+	
+	options.fields.comment_text2 = new FieldText("comment_text2",filed_options);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
 	
 	filed_options.autoInc = false;	
 	

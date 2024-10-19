@@ -92,6 +92,15 @@ function CashFlowOut_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
+	filed_options.alias = 'Комментарий';
+	filed_options.autoInc = false;	
+	
+	options.fields.comment_text2 = new FieldText("comment_text2",filed_options);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
 	
 	filed_options.autoInc = false;	
 	
@@ -108,6 +117,9 @@ function CashFlowOut_Model(options){
 	options.fields.total.getValidator().setMaxLength('15');
 	
 			
+			
+			
+				
 			
 		CashFlowOut_Model.superclass.constructor.call(this,id,options);
 }

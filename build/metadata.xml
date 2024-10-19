@@ -4,7 +4,7 @@
 	<versions>
 		<version dateOpen="2022-12-06 19:12:32">1.001</version>
 		<version dateOpen="2022-12-06 19:12:32" dateClose="2023-07-11 16:07:04">1.001 
-		<lastBuild>2024-09-07 10:57:58</lastBuild></version>
+		<lastBuild>2024-10-19 10:35:56</lastBuild></version>
 		<version dateOpen="2023-07-20 10:07:22" dateClose="2023-07-24 08:07:47">1.002</version>
 		<version dateOpen="2023-07-24 10:07:28" dateClose="2023-07-24 14:07:30">1.003</version>
 		<version dateOpen="2023-07-25 06:07:57" dateClose="2023-07-25 07:07:04">1.004</version>
@@ -16,6 +16,7 @@
 		<version dateOpen="2024-09-03 13:58:12" dateClose="2024-09-03 15:09:27">1.010</version>
 		<version dateOpen="2024-09-05 08:50:05" dateClose="2024-09-05 13:48:32">1.011</version>
 		<version dateOpen="2024-09-07 06:53:12" dateClose="2024-09-07 10:57:59">1.012</version>
+		<version dateOpen="2024-10-19 09:41:21" dateClose="2024-10-19 10:35:57">1.013</version>
 	</versions>
 	<!--
 	<globalFilters>
@@ -1561,6 +1562,7 @@
 			<field id="fin_expense_type2_id" dataType="Int" required="TRUE" refTable="fin_expense_types" refField="id"/>
 			<field id="fin_expense_type3_id" dataType="Int" refTable="fin_expense_types" refField="id"/>
 			<field id="comment_text" dataType="Text" alias="Комментарий"/>
+			<field id="comment_text2" dataType="Text" alias="Комментарий"/>
 			<field id="user_id" dataType="Int" dbRequired="TRUE" refTable="users" refField="id"/>
 			<field id="total" dataType="Float" length="15" precision="2"/>
 			<index id="cash_flow_out_date_idx" unique="FALSE">
@@ -1588,6 +1590,7 @@
 			<field id="fin_expense_types2_ref" dataType="JSON"/>
 			<field id="fin_expense_types3_ref" dataType="JSON"/>
 			<field id="comment_text" dataType="Text" alias="Комментарий"/>
+			<field id="comment_text2" dataType="Text" alias="Комментарий"/>
 			<field id="users_ref" dataType="JSON"/>
 			<field id="total" dataType="Float" length="15" precision="2"/>
 		</model>

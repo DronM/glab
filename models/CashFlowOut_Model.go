@@ -23,6 +23,7 @@ type CashFlowOut struct {
 	Fin_expense_type2_id fields.ValInt `json:"fin_expense_type2_id" required:"true"`
 	Fin_expense_type3_id fields.ValInt `json:"fin_expense_type3_id"`
 	Comment_text fields.ValText `json:"comment_text" alias:"Комментарий"`
+	Comment_text2 fields.ValText `json:"comment_text2" alias:"Комментарий"`
 	User_id fields.ValInt `json:"user_id"`
 	Total fields.ValFloat `json:"total"`
 }
@@ -35,6 +36,7 @@ func (o *CashFlowOut) SetNull() {
 	o.Fin_expense_type2_id.SetNull()
 	o.Fin_expense_type3_id.SetNull()
 	o.Comment_text.SetNull()
+	o.Comment_text2.SetNull()
 	o.User_id.SetNull()
 	o.Total.SetNull()
 }
@@ -72,6 +74,7 @@ type CashFlowOut_old_keys struct {
 	Fin_expense_type2_id fields.ValInt `json:"fin_expense_type2_id"`
 	Fin_expense_type3_id fields.ValInt `json:"fin_expense_type3_id"`
 	Comment_text fields.ValText `json:"comment_text" alias:"Комментарий"`
+	Comment_text2 fields.ValText `json:"comment_text2" alias:"Комментарий"`
 	User_id fields.ValInt `json:"user_id"`
 	Total fields.ValFloat `json:"total"`
 }

@@ -24,6 +24,7 @@ type CashFlowOutList struct {
 	Fin_expense_types2_ref fields.ValJSON `json:"fin_expense_types2_ref"`
 	Fin_expense_types3_ref fields.ValJSON `json:"fin_expense_types3_ref"`
 	Comment_text fields.ValText `json:"comment_text" alias:"Комментарий"`
+	Comment_text2 fields.ValText `json:"comment_text2" alias:"Комментарий"`
 	Users_ref fields.ValJSON `json:"users_ref"`
 	Total fields.ValFloat `json:"total"`
 }
@@ -37,6 +38,7 @@ func (o *CashFlowOutList) SetNull() {
 	o.Fin_expense_types2_ref.SetNull()
 	o.Fin_expense_types3_ref.SetNull()
 	o.Comment_text.SetNull()
+	o.Comment_text2.SetNull()
 	o.Users_ref.SetNull()
 	o.Total.SetNull()
 }
