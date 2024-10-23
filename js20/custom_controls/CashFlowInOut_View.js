@@ -97,7 +97,7 @@ CashFlowInOut_View.prototype.onSelectDate = function(){
 	let cur = new Date();
 	if(v.getDate() != cur.getDate() || v.getMonth() != cur.getMonth() || v.getFullYear() != cur.getFullYear()){
 		gridDate = new Date(v);
-		gridDate.setHours(8);
+		gridDate.setHours(8);// fixed time
 	}
 	this.refreshGrid("cash_flow_in_list", filters, gridDate);
 	this.refreshGrid("cash_flow_out_list", filters, gridDate);
