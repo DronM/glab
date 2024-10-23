@@ -41,4 +41,10 @@
 1) CashFlowOut added new field: comment_text2 with arbitary comment.
 
 
+1.014
+1) rg_cash_flow_balance
+	check on 2024-08-02 should be 2960, not -
+
+
+
 

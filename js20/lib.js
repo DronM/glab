@@ -3040,7 +3040,6 @@ var contr=pm.getController();var pag=this.getPagination();if(pag){var pag_f=pag.
 else{pm.getField(contr.PARAM_FROM).unsetValue();}
 if(!isNaN(pag_cnt)){pm.setFieldValue(contr.PARAM_COUNT,pag_cnt);}
 else{pm.getField(contr.PARAM_COUNT).unsetValue();}}
-debugger
 this.condFilterToMethod(pm);this.orderingToMethod(pm);pm.run({"ok":function(resp){self.onGetData(resp);if(callBack){callBack.call(self);}},"fail":function(resp,erCode,erStr){self.onError(resp,erCode,erStr);if(onError){onError.call(self);}},"all":(onAll?function(){onAll.call(self);}:null)});}
 GridAjx.prototype.orderingToMethod=function(pm){var sort_cols,sort_dirs;var head=this.getHead();var contr=pm.getController();if(head&&pm.fieldExists(contr.PARAM_ORD_FIELDS)){for(var row in head.m_elements){var head_row=head.m_elements[row];for(var col in head_row.m_elements){if(head_row.m_elements[col].getSortable()){var sort_dir=head_row.m_elements[col].getSort();if(sort_dir=="asc"||sort_dir=="desc"){var sort_col=head_row.m_elements[col].getSortFieldId();if(!sort_col){var cols=head_row.m_elements[col].getColumns();for(var i=0;i<cols.length;i++){sort_cols=(sort_cols==undefined)?"":sort_cols;sort_cols+=(sort_cols=="")?"":contr.PARAM_FIELD_SEP_VAL;var sort_id;var sort_f=cols[i].getField();if(sort_f){var sort_dt=sort_f.getDataType();if(sort_dt==Field.prototype.DT_JSON||sort_dt==Field.prototype.DT_JSONB){var sort_s_opts=cols[i].getSearchOptions();if(sort_s_opts&&sort_s_opts.field){sort_id=sort_s_opts.field.getId();}else{sort_id=sort_f.getId()+"->>'descr'";}}}
 sort_cols+=sort_id?sort_id:(sort_f?sort_f.getId():cols[i].getId());sort_dirs=(sort_dirs==undefined)?"":sort_dirs;sort_dirs+=(sort_dirs=="")?"":contr.PARAM_FIELD_SEP_VAL;sort_dirs+=sort_dir;}}
@@ -3469,7 +3468,7 @@ if(!column){column=columns[colId];}
 if(column.getField()){let fId=(column.getCtrlBindField())?column.getCtrlBindField().getId():((column.getCtrlBindFieldId())?column.getCtrlBindFieldId():column.getField().getId());if(pm.fieldExists(fId)){comBind.push(new CommandBinding({"field":pm.getField(fId),"control":this.getElement(column.getId())}));}else{console.log("ViewGridEditInlineAjx.prototype.setWritePublicMethod: fieldID: "+fId+", no PublicMethod field")}}}
 this.setKeysPublicMethod(pm);}
 ViewGridEditInlineAjx.prototype.setReadBinds=function(pm){if(!pm){return;}
-let model=this.m_model;let columns=this.getGrid().getHead().getColumns();let bindings=[];for(let colId=0;colId<columns.length;colId++){let column=undefined;if(this.m_row){let cellObj=this.m_row.getElement(columns[colId].getId());if(cellObj){column=cellObj.getGridColumn();}}
+let objModel=pm.getController().getObjModelClass();let model=new objModel();let columns=this.getGrid().getHead().getColumns();let bindings=[];for(let colId=0;colId<columns.length;colId++){let column=undefined;if(this.m_row){let cellObj=this.m_row.getElement(columns[colId].getId());if(cellObj){column=cellObj.getGridColumn();}}
 if(!column){column=columns[colId];}
 if(column.getField()){bindings.push(new DataBinding({"field":model.getField(column.getField().getId()),"model":model,"control":this.getElement(column.getId())}));}}
 this.setDataBindings(bindings);this.onGetData(null,this.getCmd());}

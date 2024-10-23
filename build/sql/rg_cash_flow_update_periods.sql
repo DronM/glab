@@ -24,7 +24,7 @@ BEGIN
 	LOOP
 		UPDATE rg_cash_flow
 		SET
-			total = total + in_delta_total
+			total = coalesce(total, 0) + in_delta_total
 		WHERE 
 			date_time=v_loop_rg_period
 			AND cash_location_id = in_cash_location_id;
@@ -40,7 +40,7 @@ BEGIN
 			EXCEPTION WHEN OTHERS THEN
 				UPDATE rg_cash_flow
 				SET
-					total = total + in_delta_total
+					total = coalesce(total, 0) + in_delta_total
 				WHERE date_time = v_loop_rg_period
 				AND cash_location_id = in_cash_location_id;
 			END;
@@ -71,7 +71,7 @@ BEGIN
 		EXCEPTION WHEN OTHERS THEN
 			UPDATE rg_cash_flow
 			SET
-				total = total + in_delta_total
+				total = coalesce(total, 0) + in_delta_total
 			WHERE 
 				date_time=CURRENT_BALANCE_DATE_TIME
 				AND cash_location_id = in_cash_location_id;

@@ -23,7 +23,7 @@ BEGIN
 	LOOP
 		UPDATE rg_bank_flow
 		SET
-			total = total + in_delta_total
+			total = coalesce(total, 0) + in_delta_total
 		WHERE 
 			date_time=v_loop_rg_period
 			AND bank_account_id = in_bank_account_id;
@@ -39,7 +39,7 @@ BEGIN
 			EXCEPTION WHEN OTHERS THEN
 				UPDATE rg_bank_flow
 				SET
-					total = total + in_delta_total
+					total = coalesce(total, 0) + in_delta_total
 				WHERE date_time = v_loop_rg_period
 				AND bank_account_id = in_bank_account_id;
 			END;
@@ -54,7 +54,7 @@ BEGIN
 	CURRENT_BALANCE_DATE_TIME = reg_current_balance_time();
 	UPDATE rg_bank_flow
 	SET
-		total = total + in_delta_total
+		total = coalesce(total, 0) + in_delta_total
 	WHERE 
 		date_time=CURRENT_BALANCE_DATE_TIME
 		AND bank_account_id = in_bank_account_id;
@@ -70,7 +70,7 @@ BEGIN
 		EXCEPTION WHEN OTHERS THEN
 			UPDATE rg_bank_flow
 			SET
-				total = total + in_delta_total
+				total = coalesce(total, 0) + in_delta_total
 			WHERE 
 				date_time=CURRENT_BALANCE_DATE_TIME
 				AND bank_account_id = in_bank_account_id;

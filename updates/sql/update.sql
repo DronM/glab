@@ -22984,3 +22984,1125 @@ UPDATE permissions SET rules = '{
 		}
 	}
 }';
+
+
+-- ******************* update 23/10/2024 10:03:06 ******************
+-- FUNCTION: public.rg_cash_flow_update_periods(timestamp without time zone, integer, numeric)
+
+-- DROP FUNCTION IF EXISTS public.rg_cash_flow_update_periods(timestamp without time zone, integer, numeric);
+
+CREATE OR REPLACE FUNCTION public.rg_cash_flow_update_periods(
+	in_date_time timestamp without time zone,
+	in_cash_location_id integer,
+	in_delta_total numeric)
+    RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE
+	v_loop_rg_period timestamp;
+	v_calc_interval interval;			  			
+	CURRENT_BALANCE_DATE_TIME timestamp;
+	CALC_DATE_TIME timestamp;
+BEGIN
+	CALC_DATE_TIME = rg_calc_period('cash_flow'::reg_types);
+	v_loop_rg_period = rg_period('cash_flow'::reg_types,in_date_time);
+	v_calc_interval = rg_calc_interval('cash_flow'::reg_types);
+	--raise exception 'rg_cash_flow_update_periods';
+	LOOP
+		UPDATE rg_cash_flow
+		SET
+			total = coalesce(total, 0) + in_delta_total
+		WHERE 
+			date_time=v_loop_rg_period
+			AND cash_location_id = in_cash_location_id;
+			
+		IF NOT FOUND THEN
+			BEGIN
+				INSERT INTO rg_cash_flow (date_time
+				,cash_location_id
+				,total)				
+				VALUES (v_loop_rg_period
+				,in_cash_location_id
+				,in_delta_total);
+			EXCEPTION WHEN OTHERS THEN
+				UPDATE rg_cash_flow
+				SET
+					total = coalesce(total, 0) + in_delta_total
+				WHERE date_time = v_loop_rg_period
+				AND cash_location_id = in_cash_location_id;
+			END;
+		END IF;
+		v_loop_rg_period = v_loop_rg_period + v_calc_interval;
+		IF v_loop_rg_period > CALC_DATE_TIME THEN
+			EXIT;  -- exit loop
+		END IF;
+	END LOOP;
+	
+	--Current balance
+	CURRENT_BALANCE_DATE_TIME = reg_current_balance_time();
+	UPDATE rg_cash_flow
+	SET
+		total = total + in_delta_total
+	WHERE 
+		date_time=CURRENT_BALANCE_DATE_TIME
+		AND cash_location_id = in_cash_location_id;
+		
+	IF NOT FOUND THEN
+		BEGIN
+			INSERT INTO rg_cash_flow (date_time
+			,cash_location_id
+			,total)				
+			VALUES (CURRENT_BALANCE_DATE_TIME
+			,in_cash_location_id
+			,in_delta_total);
+		EXCEPTION WHEN OTHERS THEN
+			UPDATE rg_cash_flow
+			SET
+				total = coalesce(total, 0) + in_delta_total
+			WHERE 
+				date_time=CURRENT_BALANCE_DATE_TIME
+				AND cash_location_id = in_cash_location_id;
+		END;
+	END IF;					
+	
+END;
+$BODY$;
+
+ALTER FUNCTION public.rg_cash_flow_update_periods(timestamp without time zone, integer, numeric)
+    OWNER TO glab;
+
+
+
+-- ******************* update 23/10/2024 10:05:22 ******************
+-- FUNCTION: public.rg_bank_flow_update_periods(timestamp without time zone, integer, numeric)
+
+-- DROP FUNCTION IF EXISTS public.rg_bank_flow_update_periods(timestamp without time zone, integer, numeric);
+
+CREATE OR REPLACE FUNCTION public.rg_bank_flow_update_periods(
+	in_date_time timestamp without time zone,
+	in_bank_account_id integer,
+	in_delta_total numeric)
+    RETURNS void
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE
+	v_loop_rg_period timestamp;
+	v_calc_interval interval;			  			
+	CURRENT_BALANCE_DATE_TIME timestamp;
+	CALC_DATE_TIME timestamp;
+BEGIN
+	CALC_DATE_TIME = rg_calc_period('bank_flow'::reg_types);
+	v_loop_rg_period = rg_period('bank_flow'::reg_types,in_date_time);
+	v_calc_interval = rg_calc_interval('bank_flow'::reg_types);
+	LOOP
+		UPDATE rg_bank_flow
+		SET
+			total = coalesce(total, 0) + in_delta_total
+		WHERE 
+			date_time=v_loop_rg_period
+			AND bank_account_id = in_bank_account_id;
+			
+		IF NOT FOUND THEN
+			BEGIN
+				INSERT INTO rg_bank_flow (date_time
+				,bank_account_id
+				,total)				
+				VALUES (v_loop_rg_period
+				,in_bank_account_id
+				,in_delta_total);
+			EXCEPTION WHEN OTHERS THEN
+				UPDATE rg_bank_flow
+				SET
+					total = coalesce(total, 0) + in_delta_total
+				WHERE date_time = v_loop_rg_period
+				AND bank_account_id = in_bank_account_id;
+			END;
+		END IF;
+		v_loop_rg_period = v_loop_rg_period + v_calc_interval;
+		IF v_loop_rg_period > CALC_DATE_TIME THEN
+			EXIT;  -- exit loop
+		END IF;
+	END LOOP;
+	
+	--Current balance
+	CURRENT_BALANCE_DATE_TIME = reg_current_balance_time();
+	UPDATE rg_bank_flow
+	SET
+		total = coalesce(total, 0) + in_delta_total
+	WHERE 
+		date_time=CURRENT_BALANCE_DATE_TIME
+		AND bank_account_id = in_bank_account_id;
+		
+	IF NOT FOUND THEN
+		BEGIN
+			INSERT INTO rg_bank_flow (date_time
+			,bank_account_id
+			,total)				
+			VALUES (CURRENT_BALANCE_DATE_TIME
+			,in_bank_account_id
+			,in_delta_total);
+		EXCEPTION WHEN OTHERS THEN
+			UPDATE rg_bank_flow
+			SET
+				total = coalesce(total, 0) + in_delta_total
+			WHERE 
+				date_time=CURRENT_BALANCE_DATE_TIME
+				AND bank_account_id = in_bank_account_id;
+		END;
+	END IF;					
+	
+END;
+$BODY$;
+
+ALTER FUNCTION public.rg_bank_flow_update_periods(timestamp without time zone, integer, numeric)
+    OWNER TO glab;
+
+
+
+-- ******************* update 23/10/2024 10:17:55 ******************
+-- FUNCTION: public.rg_total_recalc_cash_flow()
+
+-- DROP FUNCTION public.rg_total_recalc_cash_flow();
+
+CREATE OR REPLACE FUNCTION public.rg_total_recalc_cash_flow(
+	)
+    RETURNS void
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+DECLARE
+	period_row RECORD;
+	v_act_date_time timestamp without time zone;
+	v_cur_period timestamp without time zone;
+BEGIN	
+	v_act_date_time = reg_current_balance_time();
+	SELECT date_time INTO v_cur_period FROM rg_calc_periods WHERE reg_type='material';
+--RAISE EXCEPTION 'v_cur_period=%',v_cur_period;	
+	FOR period_row IN
+		WITH
+		periods AS (
+			(SELECT
+				DISTINCT date_trunc('month', date_time) AS d,
+				cash_location_id
+			FROM ra_materials)
+			UNION		
+			(SELECT
+				date_time AS d,
+				cash_location_id
+			FROM rg_cash_flow WHERE date_time<=v_cur_period
+			)
+			ORDER BY d			
+		)
+		SELECT sub.d,sub.cash_location_id,sub.balance_fact,sub.balance_paper
+		FROM
+		(
+		SELECT
+			periods.d,
+			periods.cash_location_id,
+			COALESCE((
+				SELECT SUM(CASE WHEN deb THEN quant ELSE 0 END)-SUM(CASE WHEN NOT deb THEN quant ELSE 0 END)
+				FROM ra_materials AS ra WHERE ra.date_time <= last_month_day(periods.d::date)+'23:59:59'::interval
+				AND ra.cash_location_id=periods.cash_location_id
+			),0) AS balance_fact,
+			
+			(
+			SELECT SUM(quant) FROM rg_cash_flow WHERE date_time=periods.d
+			AND cash_location_id=periods.cash_location_id
+			) AS balance_paper
+			
+		FROM periods
+		) AS sub
+		WHERE sub.balance_fact<>sub.balance_paper ORDER BY sub.d	
+	LOOP
+		
+		/*UPDATE rg_cash_flow AS rg
+		SET quant = period_row.balance_fact
+		WHERE rg.date_time=period_row.d
+		AND rg.cash_location_id=period_row.cash_location_id;
+		
+		IF NOT FOUND THEN
+			INSERT INTO rg_cash_flow (date_time,cash_location_id,quant)
+			VALUES (period_row.d,period_row.cash_location_id,period_row.balance_fact);
+		END IF;		
+		*/
+		
+		DELETE FROM rg_cash_flow
+		WHERE date_time=period_row.d
+		AND cash_location_id=period_row.cash_location_id;
+
+		INSERT INTO rg_cash_flow (date_time,cash_location_id,quant)
+		VALUES (period_row.d,period_row.cash_location_id,period_row.balance_fact);
+	END LOOP;
+
+	--АКТУАЛЬНЫЕ ИТОГИ
+	DELETE FROM rg_cash_flow WHERE date_time>v_cur_period;
+	
+	INSERT INTO rg_cash_flow (date_time,material_id,cash_location_id,quant)
+	(
+	SELECT
+		v_act_date_time,
+		rg.cash_location_id,
+		COALESCE(rg.quant,0) +
+		COALESCE((
+		SELECT sum(ra.quant) FROM
+		ra_materials AS ra
+		WHERE ra.date_time BETWEEN v_cur_period AND last_month_day(v_cur_period::date)+'23:59:59'::interval
+			AND ra.cash_location_id=rg.cash_location_id
+			AND ra.deb=TRUE
+		),0) - 
+		COALESCE((
+		SELECT sum(ra.quant) FROM
+		ra_materials AS ra
+		WHERE ra.date_time BETWEEN v_cur_period AND last_month_day(v_cur_period::date)+'23:59:59'::interval
+			AND ra.cash_location_id=rg.cash_location_id
+			AND ra.deb=FALSE
+		),0)
+		
+	FROM rg_cash_flow AS rg
+	WHERE date_time=(v_cur_period-'1 month'::interval)
+	);	
+END;
+$BODY$;
+
+ALTER FUNCTION public.rg_total_recalc_cash_flow()
+    OWNER TO glab;
+
+
+
+-- ******************* update 23/10/2024 10:19:59 ******************
+-- FUNCTION: public.rg_total_recalc_cash_flow()
+
+-- DROP FUNCTION public.rg_total_recalc_cash_flow();
+
+CREATE OR REPLACE FUNCTION public.rg_total_recalc_cash_flow(
+	)
+    RETURNS void
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+DECLARE
+	period_row RECORD;
+	v_act_date_time timestamp without time zone;
+	v_cur_period timestamp without time zone;
+BEGIN	
+	v_act_date_time = reg_current_balance_time();
+	SELECT date_time INTO v_cur_period FROM rg_calc_periods WHERE reg_type='cash_flow';
+--RAISE EXCEPTION 'v_cur_period=%',v_cur_period;	
+	FOR period_row IN
+		WITH
+		periods AS (
+			(SELECT
+				DISTINCT date_trunc('month', date_time) AS d,
+				cash_location_id
+			FROM ra_cash_flow)
+			UNION		
+			(SELECT
+				date_time AS d,
+				cash_location_id
+			FROM rg_cash_flow WHERE date_time<=v_cur_period
+			)
+			ORDER BY d			
+		)
+		SELECT sub.d,sub.cash_location_id,sub.balance_fact,sub.balance_paper
+		FROM
+		(
+		SELECT
+			periods.d,
+			periods.cash_location_id,
+			COALESCE((
+				SELECT SUM(CASE WHEN deb THEN total ELSE 0 END)-SUM(CASE WHEN NOT deb THEN total ELSE 0 END)
+				FROM ra_cash_flow AS ra WHERE ra.date_time <= last_month_day(periods.d::date)+'23:59:59'::interval
+				AND ra.cash_location_id=periods.cash_location_id
+			),0) AS balance_fact,
+			
+			(
+			SELECT SUM(total) FROM rg_cash_flow WHERE date_time=periods.d
+			AND cash_location_id=periods.cash_location_id
+			) AS balance_paper
+			
+		FROM periods
+		) AS sub
+		WHERE sub.balance_fact<>sub.balance_paper ORDER BY sub.d	
+	LOOP
+		
+		/*UPDATE rg_cash_flow AS rg
+		SET total = period_row.balance_fact
+		WHERE rg.date_time=period_row.d
+		AND rg.cash_location_id=period_row.cash_location_id;
+		
+		IF NOT FOUND THEN
+			INSERT INTO rg_cash_flow (date_time,cash_location_id,total)
+			VALUES (period_row.d,period_row.cash_location_id,period_row.balance_fact);
+		END IF;		
+		*/
+		
+		DELETE FROM rg_cash_flow
+		WHERE date_time=period_row.d
+		AND cash_location_id=period_row.cash_location_id;
+
+		INSERT INTO rg_cash_flow (date_time,cash_location_id,total)
+		VALUES (period_row.d,period_row.cash_location_id,period_row.balance_fact);
+	END LOOP;
+
+	--АКТУАЛЬНЫЕ ИТОГИ
+	DELETE FROM rg_cash_flow WHERE date_time>v_cur_period;
+	
+	INSERT INTO rg_cash_flow (date_time,cash_location_id,total)
+	(
+	SELECT
+		v_act_date_time,
+		rg.cash_location_id,
+		COALESCE(rg.total,0) +
+		COALESCE((
+		SELECT sum(ra.total) FROM
+		ra_cash_flow AS ra
+		WHERE ra.date_time BETWEEN v_cur_period AND last_month_day(v_cur_period::date)+'23:59:59'::interval
+			AND ra.cash_location_id=rg.cash_location_id
+			AND ra.deb=TRUE
+		),0) - 
+		COALESCE((
+		SELECT sum(ra.total) FROM
+		ra_cash_flow AS ra
+		WHERE ra.date_time BETWEEN v_cur_period AND last_month_day(v_cur_period::date)+'23:59:59'::interval
+			AND ra.cash_location_id=rg.cash_location_id
+			AND ra.deb=FALSE
+		),0)
+		
+	FROM rg_cash_flow AS rg
+	WHERE date_time=(v_cur_period-'1 month'::interval)
+	);	
+END;
+$BODY$;
+
+ALTER FUNCTION public.rg_total_recalc_cash_flow()
+    OWNER TO glab;
+
+
+
+-- ******************* update 23/10/2024 10:48:31 ******************
+﻿-- Function: cash_flow_location_balance_list(in_cash_location_id int, in_date_time_from timestampTZ, in_date_time_to timestampTZ)
+
+-- DROP FUNCTION cash_flow_location_balance_list(in_cash_location_id int, in_date_time_from timestampTZ, in_date_time_to timestampTZ);
+
+CREATE OR REPLACE FUNCTION cash_flow_location_balance_list(in_cash_location_id int, in_date_time_from timestampTZ, in_date_time_to timestampTZ)
+  RETURNS TABLE(
+  	cash_location_id int,
+  	cash_location_name text,
+  	balance_start numeric(15,2),
+  	total_in numeric(15,2),
+  	total_transfer_in numeric(15,2),
+  	total_out numeric(15,2),
+  	total_transfer_out numeric(15,2),
+  	balance_end numeric(15,2)
+  ) AS
+$$
+	SELECT
+		sub.cash_location_id,
+		cash_locations.name AS cash_location_name,	
+		SUM(coalesce(sub.b_start, 0)),
+		SUM(coalesce(sub.total_in, 0)),
+		SUM(coalesce(sub.total_transfer_in, 0)),
+		SUM(coalesce(sub.total_out, 0)),
+		SUM(coalesce(sub.total_transfer_out, 0)),
+		SUM(coalesce(sub.b_start, 0)) + SUM(coalesce(sub.total_in, 0)) - SUM(coalesce(sub.total_out, 0))
+	FROM (
+		--start
+		(SELECT
+			rg.cash_location_id,
+			coalesce(rg.total,0) AS b_start,
+			0 AS total_in,
+			0 AS total_transfer_in,
+			0 AS total_out,
+			0 AS total_transfer_out,
+			0 AS b_end
+		FROM rg_cash_flow_balance(			
+			in_date_time_from::timestamp,
+			CASE
+				WHEN coalesce(in_cash_location_id, 0) = 0 THEN '{}'
+				ELSE ARRAY[in_cash_location_id]
+			END		
+		) AS rg
+		)
+		
+		UNION ALL
+		--total in/out
+		(SELECT
+			ra.cash_location_id,
+			0 AS b_start,
+			CASE
+				WHEN ra.deb THEN ra.total
+				ELSE 0
+			END AS total_in,
+			CASE
+				WHEN ra.deb AND ra.doc_type = 'cash_flow_transfers' THEN ra.total
+				ELSE 0
+			END AS total_transfer_in,
+			
+			CASE
+				WHEN ra.deb = FALSE THEN ra.total
+				ELSE 0
+			END AS total_out,
+			CASE
+				WHEN ra.deb = FALSE AND ra.doc_type = 'cash_flow_transfers' THEN ra.total				
+				ELSE 0
+			END AS total_transfer_out,
+			
+			0 AS b_end
+		FROM ra_cash_flow AS ra
+		WHERE (coalesce(in_cash_location_id, 0) = 0 OR in_cash_location_id = ra.cash_location_id)
+			AND ra.date_time BETWEEN in_date_time_from AND in_date_time_to
+		)
+		
+	) AS sub
+	LEFT JOIN cash_locations ON cash_locations.id = sub.cash_location_id
+	GROUP BY
+		sub.cash_location_id,
+		cash_locations.name
+	;
+$$
+  LANGUAGE sql VOLATILE called on null input
+  COST 100;
+ALTER FUNCTION cash_flow_location_balance_list(in_cash_location_id int, in_date_time_from timestampTZ, in_date_time_to timestampTZ) OWNER TO glab;
+
+
+-- ******************* update 23/10/2024 11:13:06 ******************
+﻿-- Function: cash_flow_location_balance_list(in_cash_location_id int, in_date_time_from timestampTZ, in_date_time_to timestampTZ)
+
+-- DROP FUNCTION cash_flow_location_balance_list(in_cash_location_id int, in_date_time_from timestampTZ, in_date_time_to timestampTZ);
+
+CREATE OR REPLACE FUNCTION cash_flow_location_balance_list(in_cash_location_id int, in_date_time_from timestampTZ, in_date_time_to timestampTZ)
+  RETURNS TABLE(
+  	cash_location_id int,
+  	cash_location_name text,
+  	balance_start numeric(15,2),
+  	total_in numeric(15,2),
+  	total_transfer_in numeric(15,2),
+  	total_out numeric(15,2),
+  	total_transfer_out numeric(15,2),
+  	balance_end numeric(15,2)
+  ) AS
+$$
+	SELECT
+		sub.cash_location_id,
+		cash_locations.name AS cash_location_name,	
+		SUM(coalesce(sub.b_start, 0)),
+		SUM(coalesce(sub.total_in, 0)),
+		SUM(coalesce(sub.total_transfer_in, 0)),
+		SUM(coalesce(sub.total_out, 0)),
+		SUM(coalesce(sub.total_transfer_out, 0)),
+		SUM(coalesce(sub.b_start, 0)) + SUM(coalesce(sub.total_in, 0)) - SUM(coalesce(sub.total_out, 0))
+	FROM (
+		--start
+		(SELECT
+			rg.cash_location_id,
+			coalesce(rg.total,0) AS b_start,
+			0 AS total_in,
+			0 AS total_transfer_in,
+			0 AS total_out,
+			0 AS total_transfer_out,
+			0 AS b_end
+		FROM rg_cash_flow_balance(			
+			in_date_time_from::timestamp,
+			CASE
+				WHEN coalesce(in_cash_location_id, 0) = 0 THEN '{}'
+				ELSE ARRAY[in_cash_location_id]
+			END		
+		) AS rg
+		)
+		
+		UNION ALL
+		--total in/out
+		(SELECT
+			ra.cash_location_id,
+			0 AS b_start,
+			CASE
+				WHEN ra.deb THEN ra.total
+				ELSE 0
+			END AS total_in,
+			CASE
+				WHEN ra.deb AND ra.doc_type = 'cash_flow_transfers' THEN ra.total
+				ELSE 0
+			END AS total_transfer_in,
+			
+			CASE
+				WHEN ra.deb = FALSE THEN ra.total
+				ELSE 0
+			END AS total_out,
+			CASE
+				WHEN ra.deb = FALSE AND ra.doc_type = 'cash_flow_transfers' THEN ra.total				
+				ELSE 0
+			END AS total_transfer_out,
+			
+			0 AS b_end
+		FROM ra_cash_flow AS ra
+		WHERE (coalesce(in_cash_location_id, 0) = 0 OR in_cash_location_id = ra.cash_location_id)
+			AND ra.date_time BETWEEN in_date_time_from AND in_date_time_to
+		)
+		
+	) AS sub
+	LEFT JOIN cash_locations ON cash_locations.id = sub.cash_location_id
+	GROUP BY
+		sub.cash_location_id,
+		cash_locations.name
+	;
+$$
+  LANGUAGE sql VOLATILE called on null input
+  COST 100;
+ALTER FUNCTION cash_flow_location_balance_list(in_cash_location_id int, in_date_time_from timestampTZ, in_date_time_to timestampTZ) OWNER TO glab;
+
+
+-- ******************* update 23/10/2024 11:48:27 ******************
+
+CREATE OR REPLACE FUNCTION rg_cash_flow_balance(in_date_time timestamp,
+	
+	IN in_cash_location_id_ar int[]
+					
+	)
+
+  RETURNS TABLE(
+	cash_location_id int
+	,
+	total  numeric(15,2)				
+	) AS
+$BODY$
+	WITH
+	cur_per AS (SELECT rg_period('cash_flow'::reg_types, in_date_time) AS v ),
+	
+	act_forward AS (
+		SELECT
+			rg_period_balance('cash_flow'::reg_types,in_date_time) - in_date_time >
+			(SELECT t.v FROM cur_per t) - in_date_time
+			AS v
+	),
+	
+	act_sg AS (SELECT CASE WHEN t.v THEN 1 ELSE -1 END AS v FROM act_forward t)
+
+	SELECT 
+	
+	sub.cash_location_id
+	,SUM(sub.total) AS total				
+	FROM(
+		(SELECT
+		
+		b.cash_location_id
+		,b.total				
+		FROM rg_cash_flow AS b
+		WHERE
+		
+		(
+			--date bigger than last calc period
+			(in_date_time > rg_period_balance('cash_flow'::reg_types,rg_calc_period('cash_flow'::reg_types)) AND b.date_time = (SELECT rg_current_balance_time()))
+			
+			OR (
+			--forward from previous period
+			( (SELECT t.v FROM act_forward t) AND b.date_time = (SELECT t.v FROM cur_per t)-rg_calc_interval('cash_flow'::reg_types)
+			)
+			--backward from current
+			OR			
+			( NOT (SELECT t.v FROM act_forward t) AND b.date_time = (SELECT t.v FROM cur_per t)
+			)
+			
+			)
+		)	
+		
+				
+		AND ( (in_cash_location_id_ar IS NULL OR ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL) OR (b.cash_location_id=ANY(in_cash_location_id_ar)))
+		
+		AND (
+		b.total<>0
+		)
+		)
+		
+		UNION ALL
+		
+		(SELECT
+		
+		act.cash_location_id
+		,CASE act.deb
+			WHEN TRUE THEN act.total * (SELECT t.v FROM act_sg t)
+			ELSE -act.total * (SELECT t.v FROM act_sg t)
+		END AS quant
+										
+		FROM doc_log
+		LEFT JOIN ra_cash_flow AS act ON act.doc_type=doc_log.doc_type AND act.doc_id=doc_log.doc_id
+		WHERE
+		(
+			--forward from previous period
+			( (SELECT t.v FROM act_forward t) AND
+					act.date_time >= (SELECT t.v FROM cur_per t)
+					AND act.date_time <= 
+						(SELECT l.date_time FROM doc_log l
+						WHERE date_trunc('second',l.date_time)<=date_trunc('second',in_date_time)
+						ORDER BY l.date_time DESC LIMIT 1
+						)
+					
+			)
+			--backward from current
+			OR			
+			( NOT (SELECT t.v FROM act_forward t) AND
+					act.date_time >= 
+						(SELECT l.date_time FROM doc_log l
+						WHERE date_trunc('second',l.date_time)>=date_trunc('second',in_date_time)
+						ORDER BY l.date_time ASC LIMIT 1
+						)			
+					AND act.date_time <= (SELECT t.v FROM cur_per t)
+			)
+		)
+			
+		
+		AND (in_cash_location_id_ar IS NULL OR ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL OR (act.cash_location_id=ANY(in_cash_location_id_ar)))
+		
+		AND (
+		
+		act.total<>0
+		)
+		ORDER BY doc_log.date_time,doc_log.id)
+	) AS sub
+	WHERE
+	 (ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL OR (sub.cash_location_id=ANY(in_cash_location_id_ar)))
+		
+	GROUP BY
+		
+		sub.cash_location_id
+	HAVING
+		
+		SUM(sub.total)<>0
+						
+	ORDER BY
+		
+		sub.cash_location_id;
+$BODY$
+  LANGUAGE sql VOLATILE CALLED ON NULL INPUT
+  COST 100;
+
+ALTER FUNCTION rg_cash_flow_balance(in_date_time timestamp,
+	
+	IN in_cash_location_id_ar int[]
+					
+	)
+ OWNER TO glab;
+
+
+
+
+-- ******************* update 23/10/2024 11:57:14 ******************
+
+CREATE OR REPLACE FUNCTION rg_cash_flow_balance(in_date_time timestamp,
+	
+	IN in_cash_location_id_ar int[]
+					
+	)
+
+  RETURNS TABLE(
+	cash_location_id int
+	,
+	total  numeric(15,2)				
+	) AS
+$BODY$
+	WITH
+	cur_per AS (SELECT rg_period('cash_flow'::reg_types, in_date_time) AS v ),
+	
+	act_forward AS (
+		SELECT
+			rg_period_balance('cash_flow'::reg_types,in_date_time) - in_date_time >
+			(SELECT t.v FROM cur_per t) - in_date_time
+			AS v
+	),
+	
+	act_sg AS (SELECT CASE WHEN t.v THEN 1 ELSE -1 END AS v FROM act_forward t)
+
+	SELECT 
+	
+	sub.cash_location_id
+	,SUM(sub.total) AS total				
+	FROM(
+		(SELECT
+		
+		b.cash_location_id
+		,coalesce(b.total,0) as total
+		FROM rg_cash_flow AS b
+		WHERE
+		
+		(
+			--date bigger than last calc period
+			(in_date_time > rg_period_balance('cash_flow'::reg_types,rg_calc_period('cash_flow'::reg_types)) AND b.date_time = (SELECT rg_current_balance_time()))
+			
+			OR (
+			--forward from previous period
+			( (SELECT t.v FROM act_forward t) AND b.date_time = (SELECT t.v FROM cur_per t)-rg_calc_interval('cash_flow'::reg_types)
+			)
+			--backward from current
+			OR			
+			( NOT (SELECT t.v FROM act_forward t) AND b.date_time = (SELECT t.v FROM cur_per t)
+			)
+			
+			)
+		)	
+		
+				
+		AND ( (in_cash_location_id_ar IS NULL OR ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL) OR (b.cash_location_id=ANY(in_cash_location_id_ar)))
+		
+		AND (
+		coalesce(b.total,0)<>0
+		)
+		)
+		
+		UNION ALL
+		
+		(SELECT
+		
+		act.cash_location_id
+		,CASE act.deb
+			WHEN TRUE THEN act.total * (SELECT t.v FROM act_sg t)
+			ELSE -act.total * (SELECT t.v FROM act_sg t)
+		END AS quant
+										
+		FROM doc_log
+		LEFT JOIN ra_cash_flow AS act ON act.doc_type=doc_log.doc_type AND act.doc_id=doc_log.doc_id
+		WHERE
+		(
+			--forward from previous period
+			( (SELECT t.v FROM act_forward t) AND
+					act.date_time >= (SELECT t.v FROM cur_per t)
+					AND act.date_time <= 
+						(SELECT l.date_time FROM doc_log l
+						WHERE date_trunc('second',l.date_time)<=date_trunc('second',in_date_time)
+						ORDER BY l.date_time DESC LIMIT 1
+						)
+					
+			)
+			--backward from current
+			OR			
+			( NOT (SELECT t.v FROM act_forward t) AND
+					act.date_time >= 
+						(SELECT l.date_time FROM doc_log l
+						WHERE date_trunc('second',l.date_time)>=date_trunc('second',in_date_time)
+						ORDER BY l.date_time ASC LIMIT 1
+						)			
+					AND act.date_time <= (SELECT t.v FROM cur_per t)
+			)
+		)
+			
+		
+		AND (in_cash_location_id_ar IS NULL OR ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL OR (act.cash_location_id=ANY(in_cash_location_id_ar)))
+		
+		AND (
+		
+		act.total<>0
+		)
+		ORDER BY doc_log.date_time,doc_log.id)
+	) AS sub
+	WHERE
+	 (ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL OR (sub.cash_location_id=ANY(in_cash_location_id_ar)))
+		
+	GROUP BY
+		
+		sub.cash_location_id
+	HAVING
+		
+		SUM(sub.total)<>0
+						
+	ORDER BY
+		
+		sub.cash_location_id;
+$BODY$
+  LANGUAGE sql VOLATILE CALLED ON NULL INPUT
+  COST 100;
+
+ALTER FUNCTION rg_cash_flow_balance(in_date_time timestamp,
+	
+	IN in_cash_location_id_ar int[]
+					
+	)
+ OWNER TO glab;
+
+
+
+
+-- ******************* update 23/10/2024 12:01:19 ******************
+
+CREATE OR REPLACE FUNCTION rg_cash_flow_balance(in_date_time timestamp,
+	
+	IN in_cash_location_id_ar int[]
+					
+	)
+
+  RETURNS TABLE(
+	cash_location_id int
+	,
+	total  numeric(15,2)				
+	) AS
+$BODY$
+	WITH
+	cur_per AS (SELECT rg_period('cash_flow'::reg_types, in_date_time) AS v ),
+	
+	act_forward AS (
+		SELECT
+			rg_period_balance('cash_flow'::reg_types,in_date_time) - in_date_time >
+			(SELECT t.v FROM cur_per t) - in_date_time
+			AS v
+	),
+	
+	act_sg AS (SELECT CASE WHEN t.v THEN 1 ELSE -1 END AS v FROM act_forward t)
+
+	SELECT 
+	
+	sub.cash_location_id
+	,SUM(sub.total) AS total				
+	FROM(
+		(SELECT
+		
+		b.cash_location_id
+		,coalesce(b.total,0) as total
+		FROM rg_cash_flow AS b
+		WHERE
+		
+		(
+			--date bigger than last calc period
+			(in_date_time > rg_period_balance('cash_flow'::reg_types,rg_calc_period('cash_flow'::reg_types)) AND b.date_time = (SELECT rg_current_balance_time()))
+			
+			OR (
+			--forward from previous period
+			( (SELECT t.v FROM act_forward t) AND b.date_time = (SELECT t.v FROM cur_per t)-rg_calc_interval('cash_flow'::reg_types)
+			)
+			--backward from current
+			OR			
+			( NOT (SELECT t.v FROM act_forward t) AND b.date_time = (SELECT t.v FROM cur_per t)
+			)
+			
+			)
+		)	
+		
+				
+		AND ( (in_cash_location_id_ar IS NULL OR ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL) OR (b.cash_location_id=ANY(in_cash_location_id_ar)))
+		
+		AND (
+		coalesce(b.total,0)<>0
+		)
+		)
+		
+		UNION ALL
+		
+		(SELECT
+		
+		act.cash_location_id
+		,CASE act.deb
+			WHEN TRUE THEN act.total * (SELECT t.v FROM act_sg t)
+			ELSE -act.total * (SELECT t.v FROM act_sg t)
+		END AS total
+										
+		FROM doc_log
+		LEFT JOIN ra_cash_flow AS act ON act.doc_type=doc_log.doc_type AND act.doc_id=doc_log.doc_id
+		WHERE
+		(
+			--forward from previous period
+			( (SELECT t.v FROM act_forward t) AND
+					act.date_time >= (SELECT t.v FROM cur_per t)
+					AND act.date_time <= 
+						(SELECT l.date_time FROM doc_log l
+						WHERE date_trunc('second',l.date_time)<=date_trunc('second',in_date_time)
+						ORDER BY l.date_time DESC LIMIT 1
+						)
+					
+			)
+			--backward from current
+			OR			
+			( NOT (SELECT t.v FROM act_forward t) AND
+					act.date_time >= 
+						(SELECT l.date_time FROM doc_log l
+						WHERE date_trunc('second',l.date_time)>=date_trunc('second',in_date_time)
+						ORDER BY l.date_time ASC LIMIT 1
+						)			
+					AND act.date_time <= (SELECT t.v FROM cur_per t)
+			)
+		)
+			
+		
+		AND (in_cash_location_id_ar IS NULL OR ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL OR (act.cash_location_id=ANY(in_cash_location_id_ar)))
+		
+		AND (
+		
+		act.total<>0
+		)
+		ORDER BY doc_log.date_time,doc_log.id)
+	) AS sub
+	WHERE
+	 (ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL OR (sub.cash_location_id=ANY(in_cash_location_id_ar)))
+		
+	GROUP BY
+		
+		sub.cash_location_id
+	HAVING
+		
+		SUM(sub.total)<>0
+						
+	ORDER BY
+		
+		sub.cash_location_id;
+$BODY$
+  LANGUAGE sql VOLATILE CALLED ON NULL INPUT
+  COST 100;
+
+ALTER FUNCTION rg_cash_flow_balance(in_date_time timestamp,
+	
+	IN in_cash_location_id_ar int[]
+					
+	)
+ OWNER TO glab;
+
+
+
+
+-- ******************* update 23/10/2024 12:07:13 ******************
+
+CREATE OR REPLACE FUNCTION rg_cash_flow_balance(in_date_time timestamp,
+	
+	IN in_cash_location_id_ar int[]
+					
+	)
+
+  RETURNS TABLE(
+	cash_location_id int
+	,
+	total  numeric(15,2)				
+	) AS
+$BODY$
+	SELECT
+		act.cash_location_id,
+		sum(CASE act.deb
+			WHEN TRUE THEN act.total
+			ELSE -act.total
+		END) AS total
+		
+	FROM ra_cash_flow AS act
+	WHERE
+		act.date_time < in_date_time
+		AND ( (in_cash_location_id_ar IS NULL OR ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL) OR (act.cash_location_id=ANY(in_cash_location_id_ar)))
+	GROUP BY act.cash_location_id	
+	;
+	/*
+	WITH
+	cur_per AS (SELECT rg_period('cash_flow'::reg_types, in_date_time) AS v ),
+	
+	act_forward AS (
+		SELECT
+			rg_period_balance('cash_flow'::reg_types,in_date_time) - in_date_time >
+			(SELECT t.v FROM cur_per t) - in_date_time
+			AS v
+	),
+	
+	act_sg AS (SELECT CASE WHEN t.v THEN 1 ELSE -1 END AS v FROM act_forward t)
+
+	SELECT 
+	
+	sub.cash_location_id
+	,SUM(sub.total) AS total				
+	FROM(
+		(SELECT
+		
+		b.cash_location_id
+		,coalesce(b.total,0) as total
+		FROM rg_cash_flow AS b
+		WHERE
+		
+		(
+			--date bigger than last calc period
+			(in_date_time > rg_period_balance('cash_flow'::reg_types,rg_calc_period('cash_flow'::reg_types)) AND b.date_time = (SELECT rg_current_balance_time()))
+			
+			OR (
+			--forward from previous period
+			( (SELECT t.v FROM act_forward t) AND b.date_time = (SELECT t.v FROM cur_per t)-rg_calc_interval('cash_flow'::reg_types)
+			)
+			--backward from current
+			OR			
+			( NOT (SELECT t.v FROM act_forward t) AND b.date_time = (SELECT t.v FROM cur_per t)
+			)
+			
+			)
+		)	
+		
+				
+		AND ( (in_cash_location_id_ar IS NULL OR ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL) OR (b.cash_location_id=ANY(in_cash_location_id_ar)))
+		
+		AND (
+		coalesce(b.total,0)<>0
+		)
+		)
+		
+		UNION ALL
+		
+		(SELECT
+		
+		act.cash_location_id
+		,CASE act.deb
+			WHEN TRUE THEN act.total * (SELECT t.v FROM act_sg t)
+			ELSE -act.total * (SELECT t.v FROM act_sg t)
+		END AS total
+										
+		FROM doc_log
+		LEFT JOIN ra_cash_flow AS act ON act.doc_type=doc_log.doc_type AND act.doc_id=doc_log.doc_id
+		WHERE
+		(
+			--forward from previous period
+			( (SELECT t.v FROM act_forward t) AND
+					act.date_time >= (SELECT t.v FROM cur_per t)
+					AND act.date_time <= 
+						(SELECT l.date_time FROM doc_log l
+						WHERE date_trunc('second',l.date_time)<=date_trunc('second',in_date_time)
+						ORDER BY l.date_time DESC LIMIT 1
+						)
+					
+			)
+			--backward from current
+			OR			
+			( NOT (SELECT t.v FROM act_forward t) AND
+					act.date_time >= 
+						(SELECT l.date_time FROM doc_log l
+						WHERE date_trunc('second',l.date_time)>=date_trunc('second',in_date_time)
+						ORDER BY l.date_time ASC LIMIT 1
+						)			
+					AND act.date_time <= (SELECT t.v FROM cur_per t)
+			)
+		)
+			
+		
+		AND (in_cash_location_id_ar IS NULL OR ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL OR (act.cash_location_id=ANY(in_cash_location_id_ar)))
+		
+		AND (
+		
+		act.total<>0
+		)
+		ORDER BY doc_log.date_time,doc_log.id)
+	) AS sub
+	WHERE
+	 (ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL OR (sub.cash_location_id=ANY(in_cash_location_id_ar)))
+		
+	GROUP BY
+		
+		sub.cash_location_id
+	HAVING
+		
+		SUM(sub.total)<>0
+						
+	ORDER BY
+		
+		sub.cash_location_id;
+	*/
+$BODY$
+  LANGUAGE sql VOLATILE CALLED ON NULL INPUT
+  COST 100;
+
+ALTER FUNCTION rg_cash_flow_balance(in_date_time timestamp,
+	
+	IN in_cash_location_id_ar int[]
+					
+	)
+ OWNER TO glab;

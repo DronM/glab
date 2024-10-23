@@ -27,7 +27,7 @@ $$
 		--start
 		(SELECT
 			rg.cash_location_id,
-			rg.total AS b_start,
+			coalesce(rg.total,0) AS b_start,
 			0 AS total_in,
 			0 AS total_transfer_in,
 			0 AS total_out,

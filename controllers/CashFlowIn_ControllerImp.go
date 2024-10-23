@@ -62,7 +62,7 @@ func (pm *CashFlowIn_Controller_get_report) Run(app gobizap.Applicationer, serv 
 		Cash_location_name string  `json:"cash_location_name"`
 		Balance_start      float64 `json:"balance_start"`
 		Total_in           float64 `json:"total_in"`
-		Total_transfer_in  float64 `json:"Total_transfer_in"`
+		Total_transfer_in  float64 `json:"total_transfer_in"`
 		Total_out          float64 `json:"total_out"`
 		Total_transfer_out float64 `json:"total_transfer_out"`
 		Balance_end        float64 `json:"balance_end"`
@@ -102,6 +102,7 @@ func (pm *CashFlowIn_Controller_get_report) Run(app gobizap.Applicationer, serv 
 		return gobizap.NewPublicMethodError(response.RESP_ER_INTERNAL, fmt.Sprintf("CashFlowIn_Controller_get_report: %v", err))
 	}
 	q_params := []interface{}{cash_location_id, date_from, date_to}
+	fmt.Println("q_params:", q_params)
 
 	query := `SELECT format_period_rus($1::date, $2::date, NULL)`
 	mh := &model.Model{ID: model.ModelID("RepHead"),
@@ -123,7 +124,7 @@ func (pm *CashFlowIn_Controller_get_report) Run(app gobizap.Applicationer, serv 
 			total_out,
 			total_transfer_out,
 			balance_end
-		FROM cash_flow_location_balance_list($1, $2, $3)`
+	FROM cash_flow_location_balance_list($1, $2, $3)`
 
 	m := &model.Model{ID: model.ModelID("RepBalanceList"),
 		Rows: make([]model.ModelRow, 0),
