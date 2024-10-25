@@ -50,3 +50,5 @@
 1) ViewGridEditInlineAjx.setReadBinds() found compromiss
 
 
+1.016
+1) EditNum.js: event onPaste: spaces are removed

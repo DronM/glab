@@ -1625,9 +1625,14 @@ extend(EditString,Edit);EditString.prototype.ATTR_DISABLED="readOnly";EditString
 function EditText(id,options){options=options||{};options.cmdClear=(options.cmdClear!=undefined)?options.cmdClear:false;EditText.superclass.constructor.call(this,id,options);this.setRows(options.rows||this.DEF_ROWS);}
 extend(EditText,EditString);EditText.prototype.DEF_TAG_NAME="TEXTAREA";EditText.prototype.DEF_ROWS="5";EditText.prototype.setRows=function(rows){if(rows)this.setAttr("rows",rows);}
 EditText.prototype.getRows=function(){return this.getAttr("rows");} 
-function EditNum(id,options){options=options||{};options.type=options.type||"text";EditNum.superclass.constructor.call(this,id,options);this.m_allowedChars=[8,0];}
+function EditNum(id,options){options=options||{};options.type=options.type||"text";options.events=options.events||{};let self=this;options.events.paste=function(e){self.correctPastedData(e);}
+EditNum.superclass.constructor.call(this,id,options);this.m_allowedChars=[8,0];}
 extend(EditNum,EditString);EditNum.prototype.m_allowedChars;EditNum.prototype.handleKeyPress=function(e){if(CommonHelper.inArray(e.which,this.m_allowedChars)==-1&&(e.which<48||e.which>57)){return false;}}
-EditNum.prototype.toDOM=function(parent){EditNum.superclass.toDOM.call(this,parent);var self=this;$(this.getNode()).keypress(function(e){return self.handleKeyPress(e);});} 
+EditNum.prototype.toDOM=function(parent){EditNum.superclass.toDOM.call(this,parent);var self=this;$(this.getNode()).keypress(function(e){return self.handleKeyPress(e);});}
+EditNum.prototype.correctPastedData=function(e){e.stopPropagation();e.preventDefault();var pasted_data;var cur_val;var clipboard_data=e.clipboardData||window.clipboardData;if(!clipboard_data){cur_val=this.getValue();pasted_data=cur_val;}
+else{pasted_data=clipboard_data.getData("Text").match(/\d+/g).map(Number).join("");pasted_data=pasted_data.replaceAll(" ","");}
+if(!cur_val){cur_val=this.getValue();}
+if(cur_val!=pasted_data){this.setValue(pasted_data);}} 
 function EditInt(id,options){options=options||{};options.validator=options.validator||new ValidatorInt(options);options.attrs=options.attrs||{};if(options.minValue){options.attrs.min=options.minValue;}
 if(options.maxValue){options.attrs.max=options.maxValue;}
 options.cmdClear=(options.cmdClear!=undefined)?options.cmdClear:false;options.cmdSelect=(options.cmdSelect!=undefined)?options.cmdSelect:options.cmdCalc;if(options.cmdSelect==undefined||options.cmdSelect===true){options.buttonSelect=options.buttonSelect||new ButtonCalc(id+":btn_open",{"winObj":options.winObj,"enabled":options.enabled,"editControl":this});}
