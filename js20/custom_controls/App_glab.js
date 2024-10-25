@@ -246,3 +246,7 @@ App_glab.prototype.startOperationMonitor = function(cont, onOk, onError){
 	});
 	return operation_id;
 }
+
+App_glab.prototype.getDefaultCashLocation = function(){
+	return new RefType({"keys": {"id": 1}, "descr":"Касса"});
+}

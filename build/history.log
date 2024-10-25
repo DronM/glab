@@ -52,3 +52,11 @@
 
 1.016
 1) EditNum.js: event onPaste: spaces are removed
+
+
+1.017
+1) App_glab.getDefaultCashLocation()
+	CashFlowOutList_View callcs App_glab function
+
+
+

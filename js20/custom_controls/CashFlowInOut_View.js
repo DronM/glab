@@ -114,6 +114,7 @@ CashFlowInOut_View.prototype.refreshGrid = function(gridId, filters, dateVal){
 		let gridModelId = grid.getModel().getId();
 		let gridModel = new window[gridModelId]();
 		gridModel.setFieldValue("date_time", dateVal);
+		gridModel.setFieldValue("cash_locations_ref", window.getApp().getDefaultCashLocation());
 		gridModel.recInsert();
 		gridOpts.models = {};
 		gridOpts.models[gridModelId] = gridModel;

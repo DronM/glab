@@ -99,7 +99,7 @@ function CashFlowOutList_View(id,options){
 									"ctrlClass":CashLocationEdit,
 									"ctrlOptions":{
 										"labelCaption":"",
-										"value": new RefType({"keys": {"id": 1}, "descr":"Касса"})
+										"value": window.getApp().getDefaultCashLocation()
 									},
 									"ctrlBindFieldId":"cash_location_id"
 								})
