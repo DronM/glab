@@ -11,20 +11,19 @@ CREATE OR REPLACE FUNCTION rg_cash_flow_balance(in_date_time timestamp,
 	total  numeric(15,2)				
 	) AS
 $BODY$
-	SELECT
-		act.cash_location_id,
-		sum(CASE act.deb
-			WHEN TRUE THEN act.total
-			ELSE -act.total
-		END) AS total
-		
-	FROM ra_cash_flow AS act
-	WHERE
-		act.date_time < in_date_time
-		AND ( (in_cash_location_id_ar IS NULL OR ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL) OR (act.cash_location_id=ANY(in_cash_location_id_ar)))
-	GROUP BY act.cash_location_id	
-	;
-	/*
+	-- SELECT
+	-- 	act.cash_location_id,
+	-- 	sum(CASE act.deb
+	-- 		WHEN TRUE THEN act.total
+	-- 		ELSE -act.total
+	-- 	END) AS total
+	--
+	-- FROM ra_cash_flow AS act
+	-- WHERE
+	-- 	act.date_time < in_date_time
+	-- 	AND ( (in_cash_location_id_ar IS NULL OR ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL) OR (act.cash_location_id=ANY(in_cash_location_id_ar)))
+	-- GROUP BY act.cash_location_id	
+	-- ;
 	WITH
 	cur_per AS (SELECT rg_period('cash_flow'::reg_types, in_date_time) AS v ),
 	
@@ -131,7 +130,6 @@ $BODY$
 	ORDER BY
 		
 		sub.cash_location_id;
-	*/
 $BODY$
   LANGUAGE sql VOLATILE CALLED ON NULL INPUT
   COST 100;

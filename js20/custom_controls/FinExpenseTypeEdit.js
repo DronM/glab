@@ -50,14 +50,14 @@ FinExpenseTypeEdit.prototype.setParentId = function(id) {
 	let cond_vals = id;
 	let cond_sgns = ((id=="null")? "i" : "e");
 	if(this.m_forBank===true){
-		cond_fields+= "@@for_bank"
-		cond_vals+=	"@@" + ((this.m_forBank)? "1":"0");
-		cond_sgns+= "@@e";
+		cond_fields+= "@@for_bank@@deleted"
+		cond_vals+=	"@@" + ((this.m_forBank)? "1":"0")+"@@0";
+		cond_sgns+= "@@e@@e";
 
 	}else if(this.m_forCash === true){
-		cond_fields+= "@@for_cash"
-		cond_vals+=	"@@" + ((this.m_forCash)? "1":"0");
-		cond_sgns+= "@@e";
+		cond_fields+= "@@for_cash@@deleted"
+		cond_vals+=	"@@" + ((this.m_forCash)? "1":"0")+"@@0";
+		cond_sgns+= "@@e@@e";
 	}
 	if(id != "null"){
 		cond_fields+= "@@lev";

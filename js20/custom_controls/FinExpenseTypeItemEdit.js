@@ -77,10 +77,10 @@ extend(FinExpenseTypeItemEdit, EditRef);
 FinExpenseTypeItemEdit.prototype.setParentId = function(id) {
 	this.m_parentId = id;
 	let pm = this.getAutoComplete().getPublicMethod("complete");
-	let cond_fields = "parent_id@@lev";
-	let cond_vals = id +"@@"+ this.m_lev;
+	let cond_fields = "parent_id@@lev@@deleted";
+	let cond_vals = id +"@@"+ this.m_lev+"@@0";
 	let cond_sgns = ((id=="null")? "i" : "e");
-	cond_sgns+= "@@e";
+	cond_sgns+= "@@e@@e";
 	pm.setFieldValue("cond_fields", cond_fields);
 	pm.setFieldValue("cond_vals", cond_vals); 
 	pm.setFieldValue("cond_sgns", cond_sgns); 

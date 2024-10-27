@@ -44,6 +44,7 @@
 1.014
 1) rg_cash_flow_balance
 	check on 2024-08-02 should be 2960, not -
+	Problem with time zone: document.date_time is time with timezone, doc_log.date_time and ra.date_time are time without timezone.
 
 
 1.015
@@ -59,4 +60,7 @@
 	CashFlowOutList_View callcs App_glab function
 
 
+1.018
+1) EditFloat onPaste event corrected to accept dot && comma.
+2) FinExpenseTypeEdit, FinExpenseTypeItemEdit added condition field to filter not deleted only.
 

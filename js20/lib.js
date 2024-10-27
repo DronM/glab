@@ -1644,7 +1644,11 @@ extend(EditFloat,EditInt);EditFloat.prototype.DEF_PRECISION=2;EditFloat.prototyp
 return res;}
 EditFloat.prototype.setValue=function(val){if(val==undefined){this.getNode().value="";}
 else{if(this.m_validator){val=this.m_validator.correctValue(val);}
-this.getNode().value=CommonHelper.numberFormat(val,this.m_precision,".","");}} 
+this.getNode().value=CommonHelper.numberFormat(val,this.m_precision,".","");}}
+EditFloat.prototype.correctPastedData=function(e){e.stopPropagation();e.preventDefault();var pasted_data;var cur_val;var clipboard_data=e.clipboardData||window.clipboardData;if(!clipboard_data){cur_val=this.getValue();pasted_data=cur_val;}
+else{pasted_data=clipboard_data.getData("Text").match(/\d+(?:[.,]\d+)?/g).join("");pasted_data=parseFloat(pasted_data);}
+if(!cur_val){cur_val=this.getValue();}
+if(cur_val!=pasted_data){this.setValue(pasted_data);}} 
 function EditMoney(id,options){options=options||{};options.attrs=options.attrs||{};options.attrs.maxlength="15";options.precision="2";EditMoney.superclass.constructor.call(this,id,options);}
 extend(EditMoney,EditFloat); 
 function EditPhone(id,options){options=options||{};options.editMask=options.editMask||window.getApp().getPhoneEditMask();options.events=options.events||{};options.formatterGetRawValue=true;options.formatterOptions={"prefix":"+7","delimiter":"-","phone":true,"phoneRegionCode":"ru"};var self=this;options.events.paste=function(e){self.correctPastedData(e);}
@@ -4590,9 +4594,9 @@ options.keyIds=options.keyIds||["id"];options.modelKeyFields=[options.model.getF
 extend(CashIncomeSourceEdit,EditSelectRef); 
 function FinExpenseTypeEdit(id,options){options=options||{};if(options.labelCaption!=""){options.labelCaption=options.labelCaption||"Статья:";}
 options.cmdInsert=(options.cmdInsert!=undefined)?options.cmdInsert:false;this.m_forCash=options.for_cash;this.m_forBank=options.for_bank;this.m_noFilter=options.no_filter;options.keyIds=options.keyIds||["id"];options.selectWinClass=FinExpenseTypeList_Form;options.selectDescrIds=options.selectDescrIds||["name"];options.editWinClass=null;options.acMinLengthForQuery=0;options.acController=new FinExpenseType_Controller(options.app);options.acModel=new FinExpenseTypeList_Model();options.acPatternFieldId=options.acPatternFieldId||"name";options.acKeyFields=options.acKeyFields||[options.acModel.getField("id")];options.acDescrFields=options.acDescrFields||[options.acModel.getField("name")];options.acICase=options.acICase||"1";options.acMid=options.acMid||"1";FinExpenseTypeEdit.superclass.constructor.call(this,id,options);this.setParentId("null");this.m_lev=options.lev;}
-extend(FinExpenseTypeEdit,EditRef);FinExpenseTypeEdit.prototype.setParentId=function(id){let pm=this.getAutoComplete().getPublicMethod("complete");let cond_fields="parent_id";let cond_vals=id;let cond_sgns=((id=="null")?"i":"e");if(this.m_forBank===true){cond_fields+="@@for_bank"
-cond_vals+="@@"+((this.m_forBank)?"1":"0");cond_sgns+="@@e";}else if(this.m_forCash===true){cond_fields+="@@for_cash"
-cond_vals+="@@"+((this.m_forCash)?"1":"0");cond_sgns+="@@e";}
+extend(FinExpenseTypeEdit,EditRef);FinExpenseTypeEdit.prototype.setParentId=function(id){let pm=this.getAutoComplete().getPublicMethod("complete");let cond_fields="parent_id";let cond_vals=id;let cond_sgns=((id=="null")?"i":"e");if(this.m_forBank===true){cond_fields+="@@for_bank@@deleted"
+cond_vals+="@@"+((this.m_forBank)?"1":"0")+"@@0";cond_sgns+="@@e@@e";}else if(this.m_forCash===true){cond_fields+="@@for_cash@@deleted"
+cond_vals+="@@"+((this.m_forCash)?"1":"0")+"@@0";cond_sgns+="@@e@@e";}
 if(id!="null"){cond_fields+="@@lev";cond_vals+="@@3";cond_sgns+="@@ne";}
 pm.setFieldValue("cond_fields",cond_fields);pm.setFieldValue("cond_vals",cond_vals);pm.setFieldValue("cond_sgns",cond_sgns);} 
 function FinExpenseTypeItemEdit(id,options){let self=this;options=options||{};if(options.labelCaption!=""){options.labelCaption=options.labelCaption||"Элемент:";}
@@ -4600,7 +4604,7 @@ options.cmdInsert=true;options.insertOnClick=function(){let nm=self.getNode().va
 let model=resp.getModel("InsertedKey");if(model&&model.getNextRow()){let new_id=model.getFieldValue("id");let n=self.getNode();DOMHelper.delClass(n,"null-ref");self.setValue(new RefType({"keys":{"id":new_id},"descr":nm}));self.setValid();}}});}}
 options.keyIds=options.keyIds||["id"];options.selectWinClass=FinExpenseTypeItemList_Form;options.selectDescrIds=options.selectDescrIds||["name"];options.selectWinParams=function(){return{"cond_fields":"parent2_id","cond_sgns":"e","cond_vals":self.m_parentId}}
 options.editWinClass=null;options.acMinLengthForQuery=0;options.acController=new FinExpenseType_Controller(options.app);options.acModel=new FinExpenseTypeList_Model();options.acPatternFieldId=options.acPatternFieldId||"name";options.acKeyFields=options.acKeyFields||[options.acModel.getField("id")];options.acDescrFields=options.acDescrFields||[options.acModel.getField("name")];options.acICase=options.acICase||"1";options.acMid=options.acMid||"1";FinExpenseTypeItemEdit.superclass.constructor.call(this,id,options);this.setParentId("null");this.m_lev=options.lev;}
-extend(FinExpenseTypeItemEdit,EditRef);FinExpenseTypeItemEdit.prototype.setParentId=function(id){this.m_parentId=id;let pm=this.getAutoComplete().getPublicMethod("complete");let cond_fields="parent_id@@lev";let cond_vals=id+"@@"+this.m_lev;let cond_sgns=((id=="null")?"i":"e");cond_sgns+="@@e";pm.setFieldValue("cond_fields",cond_fields);pm.setFieldValue("cond_vals",cond_vals);pm.setFieldValue("cond_sgns",cond_sgns);} 
+extend(FinExpenseTypeItemEdit,EditRef);FinExpenseTypeItemEdit.prototype.setParentId=function(id){this.m_parentId=id;let pm=this.getAutoComplete().getPublicMethod("complete");let cond_fields="parent_id@@lev@@deleted";let cond_vals=id+"@@"+this.m_lev+"@@0";let cond_sgns=((id=="null")?"i":"e");cond_sgns+="@@e@@e";pm.setFieldValue("cond_fields",cond_fields);pm.setFieldValue("cond_vals",cond_vals);pm.setFieldValue("cond_sgns",cond_sgns);} 
 function BankAccountEdit(id,options){options=options||{};options.model=new BankAccountList_Model();if(options.labelCaption!=""){options.labelCaption=options.labelCaption||"Расчетный счет:";}
 options.keyIds=options.keyIds||["id"];options.modelKeyFields=[options.model.getField("id")];options.modelDescrFields=[options.model.getField("name")];var contr=new BankAccount_Controller();options.readPublicMethod=contr.getPublicMethod("get_list");BankAccountEdit.superclass.constructor.call(this,id,options);}
 extend(BankAccountEdit,EditSelectRef); 
