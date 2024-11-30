@@ -21,8 +21,14 @@ type CashFlowOutList struct {
 	Cash_location_id fields.ValInt `json:"cash_location_id"`
 	Cash_locations_ref fields.ValJSON `json:"cash_locations_ref"`
 	Fin_expense_types1_ref fields.ValJSON `json:"fin_expense_types1_ref"`
+	Fin_expense_types1_descr fields.ValText `json:"fin_expense_types1_descr"`
+	Fin_expense_types1_id fields.ValInt `json:"fin_expense_types1_id"`
 	Fin_expense_types2_ref fields.ValJSON `json:"fin_expense_types2_ref"`
+	Fin_expense_types2_descr fields.ValText `json:"fin_expense_types2_descr"`
+	Fin_expense_types2_id fields.ValInt `json:"fin_expense_types2_id"`
 	Fin_expense_types3_ref fields.ValJSON `json:"fin_expense_types3_ref"`
+	Fin_expense_types3_descr fields.ValText `json:"fin_expense_types3_descr"`
+	Fin_expense_types3_id fields.ValInt `json:"fin_expense_types3_id"`
 	Comment_text fields.ValText `json:"comment_text" alias:"Комментарий"`
 	Comment_text2 fields.ValText `json:"comment_text2" alias:"Комментарий"`
 	Users_ref fields.ValJSON `json:"users_ref"`
@@ -35,8 +41,14 @@ func (o *CashFlowOutList) SetNull() {
 	o.Cash_location_id.SetNull()
 	o.Cash_locations_ref.SetNull()
 	o.Fin_expense_types1_ref.SetNull()
+	o.Fin_expense_types1_descr.SetNull()
+	o.Fin_expense_types1_id.SetNull()
 	o.Fin_expense_types2_ref.SetNull()
+	o.Fin_expense_types2_descr.SetNull()
+	o.Fin_expense_types2_id.SetNull()
 	o.Fin_expense_types3_ref.SetNull()
+	o.Fin_expense_types3_descr.SetNull()
+	o.Fin_expense_types3_id.SetNull()
 	o.Comment_text.SetNull()
 	o.Comment_text2.SetNull()
 	o.Users_ref.SetNull()

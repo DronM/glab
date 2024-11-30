@@ -1,146 +1,33 @@
+-- VIEW: public.cash_flow_out_list
 
-CREATE OR REPLACE FUNCTION rg_cash_flow_balance(in_date_time timestamp,
-	
-	IN in_cash_location_id_ar int[]
-					
-	)
+DROP VIEW public.cash_flow_out_list;
 
-  RETURNS TABLE(
-	cash_location_id int
-	,
-	total  numeric(15,2)				
-	) AS
-$BODY$
+CREATE OR REPLACE VIEW public.cash_flow_out_list AS
 	SELECT
-		act.cash_location_id,
-		sum(CASE act.deb
-			WHEN TRUE THEN act.total
-			ELSE -act.total
-		END) AS total
-		
-	FROM ra_cash_flow AS act
-	WHERE
-		act.date_time < in_date_time
-		AND ( (in_cash_location_id_ar IS NULL OR ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL) OR (act.cash_location_id=ANY(in_cash_location_id_ar)))
-	GROUP BY act.cash_location_id	
+		t.id
+		,t.date_time
+		,t.cash_location_id
+		,cash_locations_ref(cash_locations_ref_t) AS cash_locations_ref
+		,fin_expense_types_ref(exp1) AS fin_expense_types1_ref
+		,exp1.name AS fin_expense_types1_descr
+		,exp1.id AS fin_expense_types1_id
+		,fin_expense_types_ref(exp2) AS fin_expense_types2_ref
+		,exp2.name AS fin_expense_types2_descr
+		,exp2.id AS fin_expense_types2_id
+		,fin_expense_types_ref(exp3) AS fin_expense_types3_ref
+		,exp3.name AS fin_expense_types3_descr
+		,exp3.id AS fin_expense_types3_id
+		,t.comment_text
+		,t.comment_text2
+		,users_ref(users_ref_t) AS users_ref
+		,t.total
+	FROM public.cash_flow_out AS t
+	LEFT JOIN cash_locations AS cash_locations_ref_t ON cash_locations_ref_t.id = t.cash_location_id
+	LEFT JOIN users AS users_ref_t ON users_ref_t.id = t.user_id
+	LEFT JOIN fin_expense_types AS exp1 ON exp1.id = t.fin_expense_type1_id
+	LEFT JOIN fin_expense_types AS exp2 ON exp2.id = t.fin_expense_type2_id
+	LEFT JOIN fin_expense_types AS exp3 ON exp3.id = t.fin_expense_type3_id
+	ORDER BY t.date_time DESC
 	;
-	/*
-	WITH
-	cur_per AS (SELECT rg_period('cash_flow'::reg_types, in_date_time) AS v ),
 	
-	act_forward AS (
-		SELECT
-			rg_period_balance('cash_flow'::reg_types,in_date_time) - in_date_time >
-			(SELECT t.v FROM cur_per t) - in_date_time
-			AS v
-	),
-	
-	act_sg AS (SELECT CASE WHEN t.v THEN 1 ELSE -1 END AS v FROM act_forward t)
-
-	SELECT 
-	
-	sub.cash_location_id
-	,SUM(sub.total) AS total				
-	FROM(
-		(SELECT
-		
-		b.cash_location_id
-		,coalesce(b.total,0) as total
-		FROM rg_cash_flow AS b
-		WHERE
-		
-		(
-			--date bigger than last calc period
-			(in_date_time > rg_period_balance('cash_flow'::reg_types,rg_calc_period('cash_flow'::reg_types)) AND b.date_time = (SELECT rg_current_balance_time()))
-			
-			OR (
-			--forward from previous period
-			( (SELECT t.v FROM act_forward t) AND b.date_time = (SELECT t.v FROM cur_per t)-rg_calc_interval('cash_flow'::reg_types)
-			)
-			--backward from current
-			OR			
-			( NOT (SELECT t.v FROM act_forward t) AND b.date_time = (SELECT t.v FROM cur_per t)
-			)
-			
-			)
-		)	
-		
-				
-		AND ( (in_cash_location_id_ar IS NULL OR ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL) OR (b.cash_location_id=ANY(in_cash_location_id_ar)))
-		
-		AND (
-		coalesce(b.total,0)<>0
-		)
-		)
-		
-		UNION ALL
-		
-		(SELECT
-		
-		act.cash_location_id
-		,CASE act.deb
-			WHEN TRUE THEN act.total * (SELECT t.v FROM act_sg t)
-			ELSE -act.total * (SELECT t.v FROM act_sg t)
-		END AS total
-										
-		FROM doc_log
-		LEFT JOIN ra_cash_flow AS act ON act.doc_type=doc_log.doc_type AND act.doc_id=doc_log.doc_id
-		WHERE
-		(
-			--forward from previous period
-			( (SELECT t.v FROM act_forward t) AND
-					act.date_time >= (SELECT t.v FROM cur_per t)
-					AND act.date_time <= 
-						(SELECT l.date_time FROM doc_log l
-						WHERE date_trunc('second',l.date_time)<=date_trunc('second',in_date_time)
-						ORDER BY l.date_time DESC LIMIT 1
-						)
-					
-			)
-			--backward from current
-			OR			
-			( NOT (SELECT t.v FROM act_forward t) AND
-					act.date_time >= 
-						(SELECT l.date_time FROM doc_log l
-						WHERE date_trunc('second',l.date_time)>=date_trunc('second',in_date_time)
-						ORDER BY l.date_time ASC LIMIT 1
-						)			
-					AND act.date_time <= (SELECT t.v FROM cur_per t)
-			)
-		)
-			
-		
-		AND (in_cash_location_id_ar IS NULL OR ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL OR (act.cash_location_id=ANY(in_cash_location_id_ar)))
-		
-		AND (
-		
-		act.total<>0
-		)
-		ORDER BY doc_log.date_time,doc_log.id)
-	) AS sub
-	WHERE
-	 (ARRAY_LENGTH(in_cash_location_id_ar,1) IS NULL OR (sub.cash_location_id=ANY(in_cash_location_id_ar)))
-		
-	GROUP BY
-		
-		sub.cash_location_id
-	HAVING
-		
-		SUM(sub.total)<>0
-						
-	ORDER BY
-		
-		sub.cash_location_id;
-	*/
-$BODY$
-  LANGUAGE sql VOLATILE CALLED ON NULL INPUT
-  COST 100;
-
-ALTER FUNCTION rg_cash_flow_balance(in_date_time timestamp,
-	
-	IN in_cash_location_id_ar int[]
-					
-	)
- OWNER TO glab;
-
-
+-- ALTER VIEW public.cash_flow_out_list OWNER TO glab;

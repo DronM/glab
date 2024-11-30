@@ -86,6 +86,24 @@ function CashFlowInList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
+	filed_options.alias = 'Источник прихода';
+	filed_options.autoInc = false;	
+	
+	options.fields.cash_income_sources_descr = new FieldString("cash_income_sources_descr",filed_options);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
+	filed_options.alias = 'Источник прихода';
+	filed_options.autoInc = false;	
+	
+	options.fields.cash_income_source_id = new FieldInt("cash_income_source_id",filed_options);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
 	filed_options.alias = 'Комментарий';
 	filed_options.autoInc = false;	
 	

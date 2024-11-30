@@ -126,6 +126,9 @@ function CashFlowOutList_View(id,options){
 											
 											let par_id = f.id.getValue();											
 											let edit = self.getElement("grid").getEditViewObj();
+											if(!edit){
+												return;
+											}
 
 											let ctrl = edit.getElement("fin_expense_types2_ref");
 											ctrl.setParentId(par_id);
@@ -140,10 +143,16 @@ function CashFlowOutList_View(id,options){
 											if(ctrl_v && !ctrl_v.isNull() && ctrl_v.getKey() != par_id){
 												ctrl.reset();
 											}
-										}
-										
+										},
 									},
-									"ctrlBindFieldId":"fin_expense_type1_id"
+									"ctrlBindFieldId":"fin_expense_type1_id",
+									"searchOptions":{
+										"field":model.getField("fin_expense_types1_descr"),
+										"ctrlClass": EditString,
+										"searchType": "on_part",
+										"typeChange": false,
+										"condSgn": "ilk"
+									}
 								})
 							]
 						})
@@ -165,11 +174,21 @@ function CashFlowOutList_View(id,options){
 											this.setAttr("parent_id", f.parent_id.getValue());
 
 											let edit = self.getElement("grid").getEditViewObj();
+											if(!edit){
+												return;
+											}
 											edit.getElement("comment_text").setExpenseTypeId(f.id.getValue());
 										}
 										
 									},
-									"ctrlBindFieldId":"fin_expense_type2_id"
+									"ctrlBindFieldId":"fin_expense_type2_id",
+									"searchOptions":{
+										"field":model.getField("fin_expense_types2_descr"),
+										"ctrlClass": EditString,
+										"searchType": "on_part",
+										"typeChange": false,
+										"condSgn": "ilk"
+									}
 								})
 							]
 						})
@@ -189,7 +208,14 @@ function CashFlowOutList_View(id,options){
 											this.setAttr("lev", 3);
 										}
 									},
-									"ctrlBindFieldId":"fin_expense_type3_id"
+									"ctrlBindFieldId":"fin_expense_type3_id",
+									"searchOptions":{
+										"field":model.getField("fin_expense_types3_descr"),
+										"ctrlClass": EditString,
+										"searchType": "on_part",
+										"typeChange": false,
+										"condSgn": "ilk"
+									}
 								})
 							]
 						})

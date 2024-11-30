@@ -125,7 +125,10 @@ function CashFlowInList_View(id,options){
 									"ctrlOptions":{
 										"labelCaption":""
 									},
-									"ctrlBindFieldId":"cash_income_source_id"
+									"ctrlBindFieldId":"cash_income_source_id",
+									"searchOptions":{
+										"field":model.getField("cash_income_source_id")
+									}
 								})
 							]
 						})

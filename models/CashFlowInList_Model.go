@@ -22,6 +22,8 @@ type CashFlowInList struct {
 	Cash_locations_ref fields.ValJSON `json:"cash_locations_ref"`
 	Cash_flow_income_type fields.ValText `json:"cash_flow_income_type"`
 	Cash_income_sources_ref fields.ValJSON `json:"cash_income_sources_ref" alias:"Источник прихода"`
+	Cash_income_sources_descr fields.ValText `json:"cash_income_sources_descr" alias:"Источник прихода"`
+	Cash_income_source_id fields.ValInt `json:"cash_income_source_id" alias:"Источник прихода"`
 	Comment_text fields.ValText `json:"comment_text" alias:"Комментарий"`
 	Users_ref fields.ValJSON `json:"users_ref"`
 	Total fields.ValFloat `json:"total"`
@@ -34,6 +36,8 @@ func (o *CashFlowInList) SetNull() {
 	o.Cash_locations_ref.SetNull()
 	o.Cash_flow_income_type.SetNull()
 	o.Cash_income_sources_ref.SetNull()
+	o.Cash_income_sources_descr.SetNull()
+	o.Cash_income_source_id.SetNull()
 	o.Comment_text.SetNull()
 	o.Users_ref.SetNull()
 	o.Total.SetNull()

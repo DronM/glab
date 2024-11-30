@@ -64,3 +64,9 @@
 1) EditFloat onPaste event corrected to accept dot && comma.
 2) FinExpenseTypeEdit, FinExpenseTypeItemEdit added condition field to filter not deleted only.
 
+
+1.019
+1) CashFlowOutList_View, CashFlowInList_View filters on expense type fields.
+2) ModifTime timestamp instead of time string.
+
+

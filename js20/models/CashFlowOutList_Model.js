@@ -80,6 +80,24 @@ function CashFlowOutList_Model(options){
 	
 	filed_options.autoInc = false;	
 	
+	options.fields.fin_expense_types1_descr = new FieldString("fin_expense_types1_descr",filed_options);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
+	
+	filed_options.autoInc = false;	
+	
+	options.fields.fin_expense_types1_id = new FieldInt("fin_expense_types1_id",filed_options);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
+	
+	filed_options.autoInc = false;	
+	
 	options.fields.fin_expense_types2_ref = new FieldJSON("fin_expense_types2_ref",filed_options);
 	
 				
@@ -89,7 +107,43 @@ function CashFlowOutList_Model(options){
 	
 	filed_options.autoInc = false;	
 	
+	options.fields.fin_expense_types2_descr = new FieldString("fin_expense_types2_descr",filed_options);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
+	
+	filed_options.autoInc = false;	
+	
+	options.fields.fin_expense_types2_id = new FieldInt("fin_expense_types2_id",filed_options);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
+	
+	filed_options.autoInc = false;	
+	
 	options.fields.fin_expense_types3_ref = new FieldJSON("fin_expense_types3_ref",filed_options);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
+	
+	filed_options.autoInc = false;	
+	
+	options.fields.fin_expense_types3_descr = new FieldString("fin_expense_types3_descr",filed_options);
+	
+				
+	
+	var filed_options = {};
+	filed_options.primaryKey = false;	
+	
+	filed_options.autoInc = false;	
+	
+	options.fields.fin_expense_types3_id = new FieldInt("fin_expense_types3_id",filed_options);
 	
 				
 	

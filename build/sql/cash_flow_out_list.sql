@@ -9,8 +9,14 @@ CREATE OR REPLACE VIEW public.cash_flow_out_list AS
 		,t.cash_location_id
 		,cash_locations_ref(cash_locations_ref_t) AS cash_locations_ref
 		,fin_expense_types_ref(exp1) AS fin_expense_types1_ref
+		,exp1.name AS fin_expense_types1_descr
+		,exp1.id AS fin_expense_types1_id
 		,fin_expense_types_ref(exp2) AS fin_expense_types2_ref
+		,exp2.name AS fin_expense_types2_descr
+		,exp2.id AS fin_expense_types2_id
 		,fin_expense_types_ref(exp3) AS fin_expense_types3_ref
+		,exp3.name AS fin_expense_types3_descr
+		,exp3.id AS fin_expense_types3_id
 		,t.comment_text
 		,t.comment_text2
 		,users_ref(users_ref_t) AS users_ref

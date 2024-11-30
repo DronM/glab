@@ -382,13 +382,14 @@ throw Error(CommonHelper.longString(function () {/*
 
 <!-- CSS -->
 <xsl:template match="model[@id='Link']/row">	
-	<link rel="stylesheet" href="{concat(href,'?',$VERSION)}" type="text/css"/>
+	<!-- <link rel="stylesheet" href="{concat(href,'?',$VERSION)}" type="text/css"/> -->
+	<link rel="stylesheet" href="{concat(href, '?', modified)}" type="text/css"/>
 </xsl:template>
 
 <!-- Javascript -->
 <xsl:template match="model[@id='Script']/row">
-	<!-- type="{type}" -->
-	<script src="{concat(src,'?',$VERSION)}"></script>
+	<!-- <script src="{concat(src,'?',$VERSION)}"></script> -->
+	<script src="{concat(src, '?', modified)}"></script>
 </xsl:template>
 
 <xsl:template name="checkForError">

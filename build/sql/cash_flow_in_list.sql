@@ -13,6 +13,8 @@ CREATE OR REPLACE VIEW public.cash_flow_in_list AS
 		,t.total
 		,t.cash_flow_income_type
 		,cash_income_sources_ref(cash_income_sources_ref_t) AS cash_income_sources_ref
+		,cash_income_sources_ref_t.name AS cash_income_sources_descr
+		,t.cash_income_source_id
 	FROM public.cash_flow_in AS t
 	LEFT JOIN cash_locations AS cash_locations_ref_t ON cash_locations_ref_t.id = t.cash_location_id
 	LEFT JOIN cash_income_sources AS cash_income_sources_ref_t ON cash_income_sources_ref_t.id = t.cash_income_source_id
