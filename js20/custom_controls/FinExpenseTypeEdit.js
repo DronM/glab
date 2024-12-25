@@ -58,6 +58,10 @@ FinExpenseTypeEdit.prototype.setParentId = function(id) {
 		cond_fields+= "@@for_cash@@deleted"
 		cond_vals+=	"@@" + ((this.m_forCash)? "1":"0")+"@@0";
 		cond_sgns+= "@@e@@e";
+	}else {
+		cond_fields+= "@@deleted"
+		cond_vals+=	"@@0";
+		cond_sgns+= "@@e";
 	}
 	if(id != "null"){
 		cond_fields+= "@@lev";

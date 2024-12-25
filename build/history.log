@@ -70,3 +70,12 @@
 2) ModifTime timestamp instead of time string.
 
 
+1.020
+1) Do not show deleted FinExpenseTypeEdit 
+2) CashFlowOutList_View, CashFlowInList_View sort date asc TODO: cash_flow_out_lits.sql, cash_flow_in_list.sql change sorting!!!
+3) GridCmdExport added new param templ to print in custom excel template. 
+	GridCmdContainerAjx
+
+
+
+

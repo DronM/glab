@@ -4,7 +4,7 @@
 	<versions>
 		<version dateOpen="2022-12-06 19:12:32">1.001</version>
 		<version dateOpen="2022-12-06 19:12:32" dateClose="2023-07-11 16:07:04">1.001 
-		<lastBuild>2024-11-30 07:46:25</lastBuild></version>
+		<lastBuild>2024-12-25 06:16:08</lastBuild></version>
 		<version dateOpen="2023-07-20 10:07:22" dateClose="2023-07-24 08:07:47">1.002</version>
 		<version dateOpen="2023-07-24 10:07:28" dateClose="2023-07-24 14:07:30">1.003</version>
 		<version dateOpen="2023-07-25 06:07:57" dateClose="2023-07-25 07:07:04">1.004</version>
@@ -23,6 +23,7 @@
 		<version dateOpen="2024-10-25 16:09:03" dateClose="2024-10-25 16:09:17">1.017</version>
 		<version dateOpen="2024-10-27 10:01:06" dateClose="2024-10-27 10:01:16">1.018</version>
 		<version dateOpen="2024-11-30 06:56:49" dateClose="2024-11-30 07:46:27">1.019</version>
+		<version dateOpen="2024-12-24 17:19:22" dateClose="2024-12-25 06:16:16">1.020</version>
 	</versions>
 	<!--
 	<globalFilters>
@@ -1550,17 +1551,17 @@
 			<aggFunctions>
 				<aggFunction alias="total_total" expr="sum(total)"/>
 			</aggFunctions>
-			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
-			<field id="date_time" dataType="DateTimeTZ"/>
-			<field id="cash_location_id" dataType="Int"/>
-			<field id="cash_locations_ref" dataType="JSON"/>
-			<field id="cash_flow_income_type" dataType="String"/>
-			<field id="cash_income_sources_ref" dataType="JSON" alias="Источник прихода"/>
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" alias="ID"/>
+			<field id="date_time" dataType="DateTimeTZ" alias="Дата"/>
+			<field id="cash_location_id" dataType="Int" sysCol="TRUE"/>
+			<field id="cash_locations_ref" dataType="JSON" alias="Касса"/>
+			<field id="cash_flow_income_type" dataType="String" alias="Тип"/>
+			<field id="cash_income_sources_ref" dataType="JSON" alias="Источник прихода" sysCol="TRUE"/>
 			<field id="cash_income_sources_descr" dataType="String" alias="Источник прихода"/>
-			<field id="cash_income_source_id" dataType="Int" alias="Источник прихода"/>
+			<field id="cash_income_source_id" dataType="Int" alias="Источник прихода" sysCol="TRUE"/>
 			<field id="comment_text" dataType="Text" alias="Комментарий"/>
-			<field id="users_ref" dataType="JSON"/>
-			<field id="total" dataType="Float" length="15" precision="2"/>
+			<field id="users_ref" dataType="JSON" alias="Пользователь"/>
+			<field id="total" dataType="Float" length="15" precision="2" alias="Сумма"/>
 		</model>
 		<model id="CashFlowOut" parent="ModelSQL" dataTable="cash_flow_out" virtual="FALSE">
 			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
@@ -1590,23 +1591,23 @@
 			<aggFunctions>
 				<aggFunction alias="total_total" expr="sum(total)"/>
 			</aggFunctions>
-			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE"/>
-			<field id="date_time" dataType="DateTimeTZ"/>
-			<field id="cash_location_id" dataType="Int"/>
-			<field id="cash_locations_ref" dataType="JSON"/>
-			<field id="fin_expense_types1_ref" dataType="JSON"/>
-			<field id="fin_expense_types1_descr" dataType="String"/>
-			<field id="fin_expense_types1_id" dataType="Int"/>
-			<field id="fin_expense_types2_ref" dataType="JSON"/>
-			<field id="fin_expense_types2_descr" dataType="String"/>
-			<field id="fin_expense_types2_id" dataType="Int"/>
-			<field id="fin_expense_types3_ref" dataType="JSON"/>
-			<field id="fin_expense_types3_descr" dataType="String"/>
-			<field id="fin_expense_types3_id" dataType="Int"/>
+			<field id="id" dataType="Int" primaryKey="TRUE" autoInc="TRUE" alias="ID"/>
+			<field id="date_time" dataType="DateTimeTZ" alias="Дата"/>
+			<field id="cash_location_id" dataType="Int" sysCol="TRUE"/>
+			<field id="cash_locations_ref" dataType="JSON" alias="Касса"/>
+			<field id="fin_expense_types1_ref" dataType="JSON" sysCol="TRUE"/>
+			<field id="fin_expense_types1_descr" dataType="String" alias="Вид"/>
+			<field id="fin_expense_types1_id" dataType="Int" sysCol="TRUE"/>
+			<field id="fin_expense_types2_ref" dataType="JSON" sysCol="TRUE"/>
+			<field id="fin_expense_types2_descr" dataType="String" alias="Тип"/>
+			<field id="fin_expense_types2_id" dataType="Int" sysCol="TRUE"/>
+			<field id="fin_expense_types3_ref" dataType="JSON" sysCol="TRUE"/>
+			<field id="fin_expense_types3_descr" dataType="String" alias="Кому"/>
+			<field id="fin_expense_types3_id" dataType="Int" sysCol="TRUE"/>
 			<field id="comment_text" dataType="Text" alias="Комментарий"/>
-			<field id="comment_text2" dataType="Text" alias="Комментарий"/>
-			<field id="users_ref" dataType="JSON"/>
-			<field id="total" dataType="Float" length="15" precision="2"/>
+			<field id="comment_text2" dataType="Text" alias="Описание"/>
+			<field id="users_ref" dataType="JSON" alias="Пользователь"/>
+			<field id="total" dataType="Float" length="15" precision="2" alias="Сумма"/>
 		</model>
 		<model id="CashFlowOutCommentList" parent="ModelSQL" dataTable="cash_flow_out_comment_list" virtual="TRUE">
 			<field id="comment_text" dataType="Text" primaryKey="TRUE"/>

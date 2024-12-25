@@ -72,6 +72,7 @@ function CashFlowInList_View(id,options){
 		},*/
 		"commands":new GridCmdContainerAjx(id+":grid:cmd",{
 			"exportFileName" :"ПриходныеКассовыеОрдера",
+			// "templ": "CashFlowInList",
 			"filters": filters,
 			"cmdRefresh":!options.inOut
 		}),		
@@ -89,7 +90,7 @@ function CashFlowInList_View(id,options){
 								})
 							],
 							"sortable":true,
-							"sort":"desc"							
+							"sort":"asc"							
 						}),
 						,new GridCellHead(id+":grid:head:cash_locations_ref",{
 							"value":"Касса",

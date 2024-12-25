@@ -89,7 +89,7 @@ function CashFlowOutList_View(id,options){
 								})
 							],
 							"sortable":true,
-							"sort":"desc"							
+							"sort":"asc"							
 						}),
 						,new GridCellHead(id+":grid:head:cash_locations_ref",{
 							"value":"Касса",

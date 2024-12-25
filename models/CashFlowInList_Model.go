@@ -16,17 +16,17 @@ import (
 )
 
 type CashFlowInList struct {
-	Id fields.ValInt `json:"id" primaryKey:"true" autoInc:"true"`
-	Date_time fields.ValDateTimeTZ `json:"date_time" defOrder:"DESC"`
-	Cash_location_id fields.ValInt `json:"cash_location_id"`
-	Cash_locations_ref fields.ValJSON `json:"cash_locations_ref"`
-	Cash_flow_income_type fields.ValText `json:"cash_flow_income_type"`
-	Cash_income_sources_ref fields.ValJSON `json:"cash_income_sources_ref" alias:"Источник прихода"`
+	Id fields.ValInt `json:"id" primaryKey:"true" autoInc:"true" alias:"ID"`
+	Date_time fields.ValDateTimeTZ `json:"date_time" alias:"Дата" defOrder:"DESC"`
+	Cash_location_id fields.ValInt `json:"cash_location_id" sysCol:"true"`
+	Cash_locations_ref fields.ValJSON `json:"cash_locations_ref" alias:"Касса"`
+	Cash_flow_income_type fields.ValText `json:"cash_flow_income_type" alias:"Тип"`
+	Cash_income_sources_ref fields.ValJSON `json:"cash_income_sources_ref" alias:"Источник прихода" sysCol:"true"`
 	Cash_income_sources_descr fields.ValText `json:"cash_income_sources_descr" alias:"Источник прихода"`
-	Cash_income_source_id fields.ValInt `json:"cash_income_source_id" alias:"Источник прихода"`
+	Cash_income_source_id fields.ValInt `json:"cash_income_source_id" alias:"Источник прихода" sysCol:"true"`
 	Comment_text fields.ValText `json:"comment_text" alias:"Комментарий"`
-	Users_ref fields.ValJSON `json:"users_ref"`
-	Total fields.ValFloat `json:"total"`
+	Users_ref fields.ValJSON `json:"users_ref" alias:"Пользователь"`
+	Total fields.ValFloat `json:"total" alias:"Сумма"`
 }
 
 func (o *CashFlowInList) SetNull() {

@@ -16,23 +16,23 @@ import (
 )
 
 type CashFlowOutList struct {
-	Id fields.ValInt `json:"id" primaryKey:"true" autoInc:"true"`
-	Date_time fields.ValDateTimeTZ `json:"date_time" defOrder:"DESC"`
-	Cash_location_id fields.ValInt `json:"cash_location_id"`
-	Cash_locations_ref fields.ValJSON `json:"cash_locations_ref"`
-	Fin_expense_types1_ref fields.ValJSON `json:"fin_expense_types1_ref"`
-	Fin_expense_types1_descr fields.ValText `json:"fin_expense_types1_descr"`
-	Fin_expense_types1_id fields.ValInt `json:"fin_expense_types1_id"`
-	Fin_expense_types2_ref fields.ValJSON `json:"fin_expense_types2_ref"`
-	Fin_expense_types2_descr fields.ValText `json:"fin_expense_types2_descr"`
-	Fin_expense_types2_id fields.ValInt `json:"fin_expense_types2_id"`
-	Fin_expense_types3_ref fields.ValJSON `json:"fin_expense_types3_ref"`
-	Fin_expense_types3_descr fields.ValText `json:"fin_expense_types3_descr"`
-	Fin_expense_types3_id fields.ValInt `json:"fin_expense_types3_id"`
+	Id fields.ValInt `json:"id" primaryKey:"true" autoInc:"true" alias:"ID"`
+	Date_time fields.ValDateTimeTZ `json:"date_time" alias:"Дата" defOrder:"DESC"`
+	Cash_location_id fields.ValInt `json:"cash_location_id" sysCol:"true"`
+	Cash_locations_ref fields.ValJSON `json:"cash_locations_ref" alias:"Касса"`
+	Fin_expense_types1_ref fields.ValJSON `json:"fin_expense_types1_ref" sysCol:"true"`
+	Fin_expense_types1_descr fields.ValText `json:"fin_expense_types1_descr" alias:"Вид"`
+	Fin_expense_types1_id fields.ValInt `json:"fin_expense_types1_id" sysCol:"true"`
+	Fin_expense_types2_ref fields.ValJSON `json:"fin_expense_types2_ref" sysCol:"true"`
+	Fin_expense_types2_descr fields.ValText `json:"fin_expense_types2_descr" alias:"Тип"`
+	Fin_expense_types2_id fields.ValInt `json:"fin_expense_types2_id" sysCol:"true"`
+	Fin_expense_types3_ref fields.ValJSON `json:"fin_expense_types3_ref" sysCol:"true"`
+	Fin_expense_types3_descr fields.ValText `json:"fin_expense_types3_descr" alias:"Кому"`
+	Fin_expense_types3_id fields.ValInt `json:"fin_expense_types3_id" sysCol:"true"`
 	Comment_text fields.ValText `json:"comment_text" alias:"Комментарий"`
-	Comment_text2 fields.ValText `json:"comment_text2" alias:"Комментарий"`
-	Users_ref fields.ValJSON `json:"users_ref"`
-	Total fields.ValFloat `json:"total"`
+	Comment_text2 fields.ValText `json:"comment_text2" alias:"Описание"`
+	Users_ref fields.ValJSON `json:"users_ref" alias:"Пользователь"`
+	Total fields.ValFloat `json:"total" alias:"Сумма"`
 }
 
 func (o *CashFlowOutList) SetNull() {

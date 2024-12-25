@@ -32,7 +32,7 @@ function CashFlowInList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = true;	
-	
+	filed_options.alias = 'ID';
 	filed_options.autoInc = true;	
 	
 	options.fields.id = new FieldInt("id",filed_options);
@@ -41,7 +41,7 @@ function CashFlowInList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
-	
+	filed_options.alias = 'Дата';
 	filed_options.autoInc = false;	
 	
 	options.fields.date_time = new FieldDateTimeTZ("date_time",filed_options);
@@ -59,7 +59,7 @@ function CashFlowInList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
-	
+	filed_options.alias = 'Касса';
 	filed_options.autoInc = false;	
 	
 	options.fields.cash_locations_ref = new FieldJSON("cash_locations_ref",filed_options);
@@ -68,7 +68,7 @@ function CashFlowInList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
-	
+	filed_options.alias = 'Тип';
 	filed_options.autoInc = false;	
 	
 	options.fields.cash_flow_income_type = new FieldString("cash_flow_income_type",filed_options);
@@ -113,7 +113,7 @@ function CashFlowInList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
-	
+	filed_options.alias = 'Пользователь';
 	filed_options.autoInc = false;	
 	
 	options.fields.users_ref = new FieldJSON("users_ref",filed_options);
@@ -122,7 +122,7 @@ function CashFlowInList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
-	
+	filed_options.alias = 'Сумма';
 	filed_options.autoInc = false;	
 	
 	options.fields.total = new FieldFloat("total",filed_options);

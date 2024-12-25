@@ -32,7 +32,7 @@ function CashFlowOutList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = true;	
-	
+	filed_options.alias = 'ID';
 	filed_options.autoInc = true;	
 	
 	options.fields.id = new FieldInt("id",filed_options);
@@ -41,7 +41,7 @@ function CashFlowOutList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
-	
+	filed_options.alias = 'Дата';
 	filed_options.autoInc = false;	
 	
 	options.fields.date_time = new FieldDateTimeTZ("date_time",filed_options);
@@ -59,7 +59,7 @@ function CashFlowOutList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
-	
+	filed_options.alias = 'Касса';
 	filed_options.autoInc = false;	
 	
 	options.fields.cash_locations_ref = new FieldJSON("cash_locations_ref",filed_options);
@@ -77,7 +77,7 @@ function CashFlowOutList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
-	
+	filed_options.alias = 'Вид';
 	filed_options.autoInc = false;	
 	
 	options.fields.fin_expense_types1_descr = new FieldString("fin_expense_types1_descr",filed_options);
@@ -104,7 +104,7 @@ function CashFlowOutList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
-	
+	filed_options.alias = 'Тип';
 	filed_options.autoInc = false;	
 	
 	options.fields.fin_expense_types2_descr = new FieldString("fin_expense_types2_descr",filed_options);
@@ -131,7 +131,7 @@ function CashFlowOutList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
-	
+	filed_options.alias = 'Кому';
 	filed_options.autoInc = false;	
 	
 	options.fields.fin_expense_types3_descr = new FieldString("fin_expense_types3_descr",filed_options);
@@ -158,7 +158,7 @@ function CashFlowOutList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
-	filed_options.alias = 'Комментарий';
+	filed_options.alias = 'Описание';
 	filed_options.autoInc = false;	
 	
 	options.fields.comment_text2 = new FieldText("comment_text2",filed_options);
@@ -167,7 +167,7 @@ function CashFlowOutList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
-	
+	filed_options.alias = 'Пользователь';
 	filed_options.autoInc = false;	
 	
 	options.fields.users_ref = new FieldJSON("users_ref",filed_options);
@@ -176,7 +176,7 @@ function CashFlowOutList_Model(options){
 	
 	var filed_options = {};
 	filed_options.primaryKey = false;	
-	
+	filed_options.alias = 'Сумма';
 	filed_options.autoInc = false;	
 	
 	options.fields.total = new FieldFloat("total",filed_options);
